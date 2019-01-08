@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbjdl.account.repository.SubjectInfoRepository">
+	<resultMap id="BaseResultMap" type="SubjectInfo">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="SYSTEM_CODE" jdbcType="VARCHAR" property="systemCode" />
+	  <result column="SUBJECT_CODE" jdbcType="VARCHAR" property="subjectCode" />
+	  <result column="SUBJECT_NAME" jdbcType="VARCHAR" property="subjectName" />
+	  <result column="SUBJECT_LEVEL" jdbcType="INTEGER" property="subjectLevel" />
+	  <result column="PARENT_CODE" jdbcType="VARCHAR" property="parentCode" />
+	  <result column="LAST_LEVEL" jdbcType="BIT" property="lastLevel" />
+	  <result column="BALANCE_DIRECT" jdbcType="VARCHAR" property="balanceDirect" />
+	  <result column="BALANCE_SHOW" jdbcType="VARCHAR" property="balanceShow" />
+	  <result column="ASSIST_ACCOUNT" jdbcType="VARCHAR" property="assistAccount" />
+	  <result column="BASIC_SUBJECT" jdbcType="VARCHAR" property="basicSubject" />
+	  <result column="CURRENCY_CODE" jdbcType="VARCHAR" property="currencyCode" />
+	  <result column="ACCOUNT_UNIT" jdbcType="VARCHAR" property="accountUnit" />
+	  <result column="STATUS" jdbcType="VARCHAR" property="status" />
+	  <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+	  <result column="LAST_UPDATE_TIME" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <trim prefix="(" prefixOverrides="and" suffix=")">
+      	<if test="systemCode != null" >
+	      and SYSTEM_CODE = #{systemCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="subjectCode != null" >
+	      and SUBJECT_CODE = #{subjectCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="subjectName != null" >
+	      and SUBJECT_NAME = #{subjectName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="subjectLevel != null" >
+	      and SUBJECT_LEVEL = #{subjectLevel,jdbcType=INTEGER}
+	    </if>
+      	<if test="parentCode != null" >
+	      and PARENT_CODE = #{parentCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="lastLevel != null" >
+	      and LAST_LEVEL = #{lastLevel,jdbcType=BIT}
+	    </if>
+      	<if test="balanceDirect != null" >
+	      and BALANCE_DIRECT = #{balanceDirect,jdbcType=VARCHAR}
+	    </if>
+      	<if test="balanceShow != null" >
+	      and BALANCE_SHOW = #{balanceShow,jdbcType=VARCHAR}
+	    </if>
+      	<if test="assistAccount != null" >
+	      and ASSIST_ACCOUNT = #{assistAccount,jdbcType=VARCHAR}
+	    </if>
+      	<if test="basicSubject != null" >
+	      and BASIC_SUBJECT = #{basicSubject,jdbcType=VARCHAR}
+	    </if>
+      	<if test="currencyCode != null" >
+	      and CURRENCY_CODE = #{currencyCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="accountUnit != null" >
+	      and ACCOUNT_UNIT = #{accountUnit,jdbcType=VARCHAR}
+	    </if>
+      	<if test="status != null" >
+	      and STATUS = #{status,jdbcType=VARCHAR}
+	    </if>
+	  </trim>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID,
+    SYSTEM_CODE,
+    SUBJECT_CODE,
+    SUBJECT_NAME,
+    SUBJECT_LEVEL,
+    PARENT_CODE,
+    LAST_LEVEL,
+    BALANCE_DIRECT,
+    BALANCE_SHOW,
+    ASSIST_ACCOUNT,
+    BASIC_SUBJECT,
+    CURRENCY_CODE,
+    ACCOUNT_UNIT,
+    STATUS,
+    CREATE_TIME,
+    LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Base_Set_Clause">
+    <set>
+      <trim suffixOverrides=",">
+        SYSTEM_CODE = #{systemCode,jdbcType=VARCHAR},
+        SUBJECT_CODE = #{subjectCode,jdbcType=VARCHAR},
+        SUBJECT_NAME = #{subjectName,jdbcType=VARCHAR},
+        SUBJECT_LEVEL = #{subjectLevel,jdbcType=INTEGER},
+        PARENT_CODE = #{parentCode,jdbcType=VARCHAR},
+        LAST_LEVEL = #{lastLevel,jdbcType=BIT},
+        BALANCE_DIRECT = #{balanceDirect,jdbcType=VARCHAR},
+        BALANCE_SHOW = #{balanceShow,jdbcType=VARCHAR},
+        ASSIST_ACCOUNT = #{assistAccount,jdbcType=VARCHAR},
+        BASIC_SUBJECT = #{basicSubject,jdbcType=VARCHAR},
+        CURRENCY_CODE = #{currencyCode,jdbcType=VARCHAR},
+        ACCOUNT_UNIT = #{accountUnit,jdbcType=VARCHAR},
+        STATUS = #{status,jdbcType=VARCHAR},
+  		LAST_UPDATE_TIME = sysdate(),
+      </trim>
+    </set>
+  </sql>
+  <sql id="Selective_Column_List">
+    <if test="systemCode != null">
+      SYSTEM_CODE,
+    </if>
+    <if test="subjectCode != null">
+      SUBJECT_CODE,
+    </if>
+    <if test="subjectName != null">
+      SUBJECT_NAME,
+    </if>
+    <if test="subjectLevel != null">
+      SUBJECT_LEVEL,
+    </if>
+    <if test="parentCode != null">
+      PARENT_CODE,
+    </if>
+    <if test="lastLevel != null">
+      LAST_LEVEL,
+    </if>
+    <if test="balanceDirect != null">
+      BALANCE_DIRECT,
+    </if>
+    <if test="balanceShow != null">
+      BALANCE_SHOW,
+    </if>
+    <if test="assistAccount != null">
+      ASSIST_ACCOUNT,
+    </if>
+    <if test="basicSubject != null">
+      BASIC_SUBJECT,
+    </if>
+    <if test="currencyCode != null">
+      CURRENCY_CODE,
+    </if>
+    <if test="accountUnit != null">
+      ACCOUNT_UNIT,
+    </if>
+    <if test="status != null">
+      STATUS,
+    </if>
+      CREATE_TIME,
+      LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Selective_Value_List">
+    <if test="systemCode != null">
+      #{systemCode,jdbcType=VARCHAR},
+    </if>
+    <if test="subjectCode != null">
+      #{subjectCode,jdbcType=VARCHAR},
+    </if>
+    <if test="subjectName != null">
+      #{subjectName,jdbcType=VARCHAR},
+    </if>
+    <if test="subjectLevel != null">
+      #{subjectLevel,jdbcType=INTEGER},
+    </if>
+    <if test="parentCode != null">
+      #{parentCode,jdbcType=VARCHAR},
+    </if>
+    <if test="lastLevel != null">
+      #{lastLevel,jdbcType=BIT},
+    </if>
+    <if test="balanceDirect != null">
+      #{balanceDirect,jdbcType=VARCHAR},
+    </if>
+    <if test="balanceShow != null">
+      #{balanceShow,jdbcType=VARCHAR},
+    </if>
+    <if test="assistAccount != null">
+      #{assistAccount,jdbcType=VARCHAR},
+    </if>
+    <if test="basicSubject != null">
+      #{basicSubject,jdbcType=VARCHAR},
+    </if>
+    <if test="currencyCode != null">
+      #{currencyCode,jdbcType=VARCHAR},
+    </if>
+    <if test="accountUnit != null">
+      #{accountUnit,jdbcType=VARCHAR},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=VARCHAR},
+    </if>
+    sysdate(),
+    sysdate(),
+  </sql>
+  <select id="findList" parameterType="SubjectInfo" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from subject_info
+    <include refid="Example_Where_Clause" />
+    order by subject_code asc
+    <!-- order by CREATE_DATE -->
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from subject_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <select id="findMaxCodeByParentCode" parameterType="java.lang.String" resultType="java.lang.Integer">
+    select max(SUBJECT_CODE) from subject_info where SYSTEM_CODE = #{1} and PARENT_CODE = #{0} and status != 'DELETE'
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from subject_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="save" parameterType="SubjectInfo">
+    insert into subject_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Column_List"/>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Value_List"/>
+    </trim>
+  </insert>
+  <insert id="initSubjectForSystem" parameterType="java.lang.String">
+    insert into subject_info(system_code, subject_code, subject_name, subject_level, parent_code, last_level, BALANCE_DIRECT,
+    ASSIST_ACCOUNT,BASIC_SUBJECT, STATUS, CREATE_TIME, LAST_UPDATE_TIME) 
+	(select  #{0}, subject_code, subject_name, subject_level, parent_code, last_level, BALANCE_DIRECT,
+	ASSIST_ACCOUNT,BASIC_SUBJECT,STATUS, SYSDATE(), SYSDATE() from subject_info where SYSTEM_CODE = #{1} and status = 'NORMAL')
+  </insert>
+  <update id="update" parameterType="SubjectInfo">
+    update subject_info
+    <include refid="Base_Set_Clause"/>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  
+  
+   <select id="findListWithAssist" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from subject_info where SYSTEM_CODE = #{systemCode,jdbcType=VARCHAR} and assist_account is not null 
+    and LENGTH(trim(assist_account))>0 and status != 'DELETE'
+  </select>
+</mapper>

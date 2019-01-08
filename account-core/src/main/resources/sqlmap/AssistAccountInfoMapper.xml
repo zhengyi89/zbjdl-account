@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbjdl.account.repository.AssistAccountInfoRepository">
+	<resultMap id="BaseResultMap" type="AssistAccountInfo">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="SYSTEM_CODE" jdbcType="VARCHAR" property="systemCode" />
+	  <result column="ASSIST_CODE" jdbcType="VARCHAR" property="assistCode" />
+	  <result column="ASSIST_NAME" jdbcType="VARCHAR" property="assistName" />
+	  <result column="TAX_NUM" jdbcType="VARCHAR" property="taxNum" />
+	  <result column="ASSIST_TYPE" jdbcType="VARCHAR" property="assistType" />
+	  <result column="STATUS" jdbcType="VARCHAR" property="status" />
+	  <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+	  <result column="LAST_UPDATE_TIME" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <trim prefix="(" prefixOverrides="and" suffix=")">
+      	<if test="systemCode != null" >
+	      and SYSTEM_CODE = #{systemCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="assistCode != null" >
+	      and ASSIST_CODE = #{assistCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="assistName != null" >
+	      and ASSIST_NAME = #{assistName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="taxNum != null" >
+	      and TAX_NUM = #{taxNum,jdbcType=VARCHAR}
+	    </if>
+      	<if test="assistType != null" >
+	      and ASSIST_TYPE = #{assistType,jdbcType=VARCHAR}
+	    </if>
+      	<if test="status != null" >
+	      and STATUS = #{status,jdbcType=VARCHAR}
+	    </if>
+	  </trim>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID,
+    SYSTEM_CODE,
+    ASSIST_CODE,
+    ASSIST_NAME,
+    TAX_NUM,
+    ASSIST_TYPE,
+    STATUS,
+    CREATE_TIME,
+    LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Base_Set_Clause">
+    <set>
+      <trim suffixOverrides=",">
+        SYSTEM_CODE = #{systemCode,jdbcType=VARCHAR},
+        ASSIST_CODE = #{assistCode,jdbcType=VARCHAR},
+        ASSIST_NAME = #{assistName,jdbcType=VARCHAR},
+        TAX_NUM = #{taxNum,jdbcType=VARCHAR},
+        ASSIST_TYPE = #{assistType,jdbcType=VARCHAR},
+        STATUS = #{status,jdbcType=VARCHAR},
+  		LAST_UPDATE_TIME = sysdate(),
+      </trim>
+    </set>
+  </sql>
+  <sql id="Selective_Column_List">
+    <if test="systemCode != null">
+      SYSTEM_CODE,
+    </if>
+    <if test="assistCode != null">
+      ASSIST_CODE,
+    </if>
+    <if test="assistName != null">
+      ASSIST_NAME,
+    </if>
+    <if test="taxNum != null">
+      TAX_NUM,
+    </if>
+    <if test="assistType != null">
+      ASSIST_TYPE,
+    </if>
+    <if test="status != null">
+      STATUS,
+    </if>
+      CREATE_TIME,
+      LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Selective_Value_List">
+    <if test="systemCode != null">
+      #{systemCode,jdbcType=VARCHAR},
+    </if>
+    <if test="assistCode != null">
+      #{assistCode,jdbcType=VARCHAR},
+    </if>
+    <if test="assistName != null">
+      #{assistName,jdbcType=VARCHAR},
+    </if>
+    <if test="taxNum != null">
+      #{taxNum,jdbcType=VARCHAR},
+    </if>
+    <if test="assistType != null">
+      #{assistType,jdbcType=VARCHAR},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=VARCHAR},
+    </if>
+    sysdate(),
+    sysdate(),
+  </sql>
+  <select id="findList" parameterType="AssistAccountInfo" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from assist_account_info
+    <include refid="Example_Where_Clause" />
+    <!-- order by CREATE_DATE -->
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from assist_account_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from assist_account_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="save" parameterType="AssistAccountInfo">
+    insert into assist_account_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Column_List"/>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Value_List"/>
+    </trim>
+  </insert>
+  <update id="update" parameterType="AssistAccountInfo">
+    update assist_account_info
+    <include refid="Base_Set_Clause"/>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

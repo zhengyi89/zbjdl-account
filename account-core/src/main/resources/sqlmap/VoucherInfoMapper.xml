@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbjdl.account.repository.VoucherInfoRepository">
+	<resultMap id="BaseResultMap" type="VoucherInfo">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="system_code" jdbcType="VARCHAR" property="systemCode" />
+	  <result column="account_period" jdbcType="DATE" property="accountPeriod" />
+	  <result column="voucher_type" jdbcType="VARCHAR" property="voucherType" />
+	  <result column="serial_num" jdbcType="INTEGER" property="serialNum" />
+	  <result column="voucher_papers" jdbcType="INTEGER" property="voucherPapers" />
+	  <result column="voucher_source" jdbcType="VARCHAR" property="voucherSource" />
+	  <result column="source_num" jdbcType="VARCHAR" property="sourceNum" />
+	  <result column="template_flag" jdbcType="BIT" property="templateFlag" />
+	  <result column="template_name" jdbcType="VARCHAR" property="templateName" />
+	  <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
+	  <result column="creator_name" jdbcType="VARCHAR" property="creatorName" />
+	  <result column="auditor_id" jdbcType="BIGINT" property="auditorId" />
+	  <result column="auditor_name" jdbcType="VARCHAR" property="auditorName" />
+	  <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	  <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
+	  <result column="status" jdbcType="VARCHAR" property="status" />
+	  <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <trim prefix="(" prefixOverrides="and" suffix=")">
+      	<if test="systemCode != null" >
+	      and system_code = #{systemCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="accountPeriod != null" >
+	      and account_period = #{accountPeriod,jdbcType=DATE}
+	    </if>
+      	<if test="voucherType != null" >
+	      and voucher_type = #{voucherType,jdbcType=VARCHAR}
+	    </if>
+      	<if test="serialNum != null" >
+	      and serial_num = #{serialNum,jdbcType=INTEGER}
+	    </if>
+      	<if test="voucherPapers != null" >
+	      and voucher_papers = #{voucherPapers,jdbcType=INTEGER}
+	    </if>
+      	<if test="voucherSource != null" >
+	      and voucher_source = #{voucherSource,jdbcType=VARCHAR}
+	    </if>
+      	<if test="sourceNum != null" >
+	      and source_num = #{sourceNum,jdbcType=VARCHAR}
+	    </if>
+      	<if test="templateFlag != null" >
+	      and template_flag = #{templateFlag,jdbcType=BIT}
+	    </if>
+	    <if test="templateName != null" >
+	      and template_name = #{templateName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="creatorId != null" >
+	      and creator_id = #{creatorId,jdbcType=BIGINT}
+	    </if>
+      	<if test="creatorName != null" >
+	      and creator_name = #{creatorName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="auditorId != null" >
+	      and auditor_id = #{auditorId,jdbcType=BIGINT}
+	    </if>
+      	<if test="auditorName != null" >
+	      and auditor_name = #{auditorName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="auditTime != null" >
+	      and audit_time = #{auditTime,jdbcType=TIMESTAMP}
+	    </if>
+      	<if test="status != null" >
+	      and status = #{status,jdbcType=VARCHAR}
+	    </if>
+	  </trim>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id,
+    system_code,
+    account_period,
+    voucher_type,
+    serial_num,
+    voucher_papers,
+    voucher_source,
+    source_num,
+    template_flag,
+    template_name,
+    creator_id,
+    creator_name,
+    auditor_id,
+    auditor_name,
+    create_time,
+    audit_time,
+    status,
+    last_update_time,
+  </sql>
+  <sql id="Base_Set_Clause">
+    <set>
+      <trim suffixOverrides=",">
+        system_code = #{systemCode,jdbcType=VARCHAR},
+        account_period = #{accountPeriod,jdbcType=DATE},
+        voucher_type = #{voucherType,jdbcType=VARCHAR},
+        serial_num = #{serialNum,jdbcType=INTEGER},
+        voucher_papers = #{voucherPapers,jdbcType=INTEGER},
+        voucher_source = #{voucherSource,jdbcType=VARCHAR},
+        source_num = #{sourceNum,jdbcType=VARCHAR},
+        template_flag = #{templateFlag,jdbcType=BIT},
+        template_name = #{templateName,jdbcType=VARCHAR},
+        creator_id = #{creatorId,jdbcType=BIGINT},
+        creator_name = #{creatorName,jdbcType=VARCHAR},
+        auditor_id = #{auditorId,jdbcType=BIGINT},
+        auditor_name = #{auditorName,jdbcType=VARCHAR},
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+        status = #{status,jdbcType=VARCHAR},
+  		LAST_UPDATE_TIME = sysdate(),
+      </trim>
+    </set>
+  </sql>
+  <sql id="Selective_Column_List">
+    <if test="systemCode != null">
+      system_code,
+    </if>
+    <if test="accountPeriod != null">
+      account_period,
+    </if>
+    <if test="voucherType != null">
+      voucher_type,
+    </if>
+    <if test="serialNum != null">
+      serial_num,
+    </if>
+    <if test="voucherPapers != null">
+      voucher_papers,
+    </if>
+    <if test="voucherSource != null">
+      voucher_source,
+    </if>
+    <if test="sourceNum != null">
+      source_num,
+    </if>
+    <if test="templateFlag != null">
+      template_flag,
+    </if>
+    <if test="templateName != null">
+      template_name,
+    </if>
+    <if test="creatorId != null">
+      creator_id,
+    </if>
+    <if test="creatorName != null">
+      creator_name,
+    </if>
+    <if test="auditorId != null">
+      auditor_id,
+    </if>
+    <if test="auditorName != null">
+      auditor_name,
+    </if>
+      CREATE_TIME,
+    <if test="auditTime != null">
+      audit_time,
+    </if>
+    <if test="status != null">
+      status,
+    </if>
+      LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Selective_Value_List">
+    <if test="systemCode != null">
+      #{systemCode,jdbcType=VARCHAR},
+    </if>
+    <if test="accountPeriod != null">
+      #{accountPeriod,jdbcType=DATE},
+    </if>
+    <if test="voucherType != null">
+      #{voucherType,jdbcType=VARCHAR},
+    </if>
+    <if test="serialNum != null">
+      #{serialNum,jdbcType=INTEGER},
+    </if>
+    <if test="voucherPapers != null">
+      #{voucherPapers,jdbcType=INTEGER},
+    </if>
+    <if test="voucherSource != null">
+      #{voucherSource,jdbcType=VARCHAR},
+    </if>
+    <if test="sourceNum != null">
+      #{sourceNum,jdbcType=VARCHAR},
+    </if>
+    <if test="templateFlag != null">
+      #{templateFlag,jdbcType=BIT},
+    </if>
+     <if test="templateName != null">
+      #{templateName,jdbcType=VARCHAR},
+    </if>
+    <if test="creatorId != null">
+      #{creatorId,jdbcType=BIGINT},
+    </if>
+    <if test="creatorName != null">
+      #{creatorName,jdbcType=VARCHAR},
+    </if>
+    <if test="auditorId != null">
+      #{auditorId,jdbcType=BIGINT},
+    </if>
+    <if test="auditorName != null">
+      #{auditorName,jdbcType=VARCHAR},
+    </if>
+    sysdate(),
+    <if test="auditTime != null">
+      #{auditTime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=VARCHAR},
+    </if>
+    sysdate(),
+  </sql>
+  <select id="findList" parameterType="VoucherInfo" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from voucher_info
+    <include refid="Example_Where_Clause" />
+    <!-- order by CREATE_DATE -->
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from voucher_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <select id="findListByMonth" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from voucher_info
+    where system_code = #{0} and account_period like CONCAT('%',#{1},'%')
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from voucher_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="VoucherInfo">
+    insert into voucher_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Column_List"/>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Value_List"/>
+    </trim>
+  </insert>
+  <update id="update" parameterType="VoucherInfo">
+    update voucher_info
+    <include refid="Base_Set_Clause"/>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  
+  <select id="selectDefaultSerialNum" parameterType="java.lang.String" resultType="java.lang.String">
+    select max(serial_num)+1
+    from voucher_info
+    where system_code = #{0} and account_period like CONCAT(#{1},'%') and template_flag != 1
+  </select>
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd	
+	http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+    http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+	default-autowire="byName" default-lazy-init="true">
+
+	<dubbo:reference id="companyInfoService"
+		interface="com.zbjdl.account.service.CompanyInfoService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	<dubbo:reference id="assetClassInfoService"
+		interface="com.zbjdl.account.service.AssetClassInfoService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	<dubbo:reference id="assetInfoService.java"
+		interface="com.zbjdl.account.service.AssetInfoService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	<dubbo:reference id="assistAccountInfoService"
+		interface="com.zbjdl.account.service.AssistAccountInfoService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	<dubbo:reference id="deprecitionDetailService"
+		interface="com.zbjdl.account.service.DeprecitionDetailService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	<dubbo:reference id="invoiceInfoService"
+		interface="com.zbjdl.account.service.InvoiceInfoService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	<dubbo:reference id="subjectInfoService"
+		interface="com.zbjdl.account.service.SubjectInfoService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	<dubbo:reference id="systemInfoService"
+		interface="com.zbjdl.account.service.SystemInfoService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	<dubbo:reference id="taxInfoService"
+		interface="com.zbjdl.account.service.TaxInfoService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+
+	<dubbo:reference id="voucherInfoService"
+		interface="com.zbjdl.account.service.VoucherInfoService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	<dubbo:reference id="voucherSubInfoService"
+		interface="com.zbjdl.account.service.VoucherSubInfoService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	<dubbo:reference id="currencySubInfoService"
+		interface="com.zbjdl.account.service.CurrencyInfoService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	<dubbo:reference id="accountSettleInfoService"
+		interface="com.zbjdl.account.service.AccountSettleInfoService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	<dubbo:reference id="assetDeprecitionInfoService"
+		interface="com.zbjdl.account.service.AssetDeprecitionInfoService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+
+	<dubbo:reference id="userFacade"
+		interface="com.zbjdl.boss.admin.facade.UserFacade" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	
+	<dubbo:reference id="idGenerateService"
+		interface="com.zbjdl.common.utility.service.IdGenerateService" check="false" group="${service-group}" version="${service-version}">
+	</dubbo:reference>
+	
+</beans>

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbjdl.account.repository.CompanyInfoRepository">
+	<resultMap id="BaseResultMap" type="CompanyInfo">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+	  <result column="company_address" jdbcType="VARCHAR" property="companyAddress" />
+	  <result column="company_mobile" jdbcType="VARCHAR" property="companyMobile" />
+	  <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	  <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+	  <result column="status" jdbcType="VARCHAR" property="status" />
+	  <result column="accountant_id" jdbcType="BIGINT" property="accountantId" />
+	  <result column="accountant_name" jdbcType="VARCHAR" property="accountantName" />
+	  <result column="account_status" jdbcType="VARCHAR" property="accountStatus" />
+	  <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
+	  <result column="creator_name" jdbcType="VARCHAR" property="creatorName" />
+	  <result column="serve_begin_date" jdbcType="DATE" property="serveBeginDate" />
+	  <result column="serve_end_date" jdbcType="DATE" property="serveEndDate" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <trim prefix="(" prefixOverrides="and" suffix=")">
+      	<if test="companyName != null" >
+	      and company_name = #{companyName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="companyAddress != null" >
+	      and company_address = #{companyAddress,jdbcType=VARCHAR}
+	    </if>
+      	<if test="companyMobile != null" >
+	      and company_mobile = #{companyMobile,jdbcType=VARCHAR}
+	    </if>
+      	<if test="status != null" >
+	      and status = #{status,jdbcType=VARCHAR}
+	    </if>
+      	<if test="accountantId != null" >
+	      and accountant_id = #{accountantId,jdbcType=BIGINT}
+	    </if>
+      	<if test="accountantName != null" >
+	      and accountant_name = #{accountantName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="accountStatus != null" >
+	      and account_status = #{accountStatus,jdbcType=VARCHAR}
+	    </if>
+      	<if test="creatorId != null" >
+	      and creator_id = #{creatorId,jdbcType=BIGINT}
+	    </if>
+      	<if test="creatorName != null" >
+	      and creator_name = #{creatorName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="serveBeginDate != null" >
+	      and serve_begin_date = #{serveBeginDate,jdbcType=DATE}
+	    </if>
+      	<if test="serveEndDate != null" >
+	      and serve_end_date = #{serveEndDate,jdbcType=DATE}
+	    </if>
+	  </trim>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id,
+    company_name,
+    company_address,
+    company_mobile,
+    create_time,
+    last_update_time,
+    status,
+    accountant_id,
+    accountant_name,
+    account_status,
+    creator_id,
+    creator_name,
+    serve_begin_date,
+    serve_end_date,
+  </sql>
+  <sql id="Base_Set_Clause">
+    <set>
+      <trim suffixOverrides=",">
+        company_name = #{companyName,jdbcType=VARCHAR},
+        company_address = #{companyAddress,jdbcType=VARCHAR},
+        company_mobile = #{companyMobile,jdbcType=VARCHAR},
+  		LAST_UPDATE_TIME = sysdate(),
+        status = #{status,jdbcType=VARCHAR},
+        accountant_id = #{accountantId,jdbcType=BIGINT},
+        accountant_name = #{accountantName,jdbcType=VARCHAR},
+        account_status = #{accountStatus,jdbcType=VARCHAR},
+        creator_id = #{creatorId,jdbcType=BIGINT},
+        creator_name = #{creatorName,jdbcType=VARCHAR},
+        serve_begin_date = #{serveBeginDate,jdbcType=DATE},
+        serve_end_date = #{serveEndDate,jdbcType=DATE},
+      </trim>
+    </set>
+  </sql>
+  <sql id="Selective_Column_List">
+    <if test="companyName != null">
+      company_name,
+    </if>
+    <if test="companyAddress != null">
+      company_address,
+    </if>
+    <if test="companyMobile != null">
+      company_mobile,
+    </if>
+      CREATE_TIME,
+      LAST_UPDATE_TIME,
+    <if test="status != null">
+      status,
+    </if>
+    <if test="accountantId != null">
+      accountant_id,
+    </if>
+    <if test="accountantName != null">
+      accountant_name,
+    </if>
+    <if test="accountStatus != null">
+      account_status,
+    </if>
+    <if test="creatorId != null">
+      creator_id,
+    </if>
+    <if test="creatorName != null">
+      creator_name,
+    </if>
+    <if test="serveBeginDate != null">
+      serve_begin_date,
+    </if>
+    <if test="serveEndDate != null">
+      serve_end_date,
+    </if>
+  </sql>
+  <sql id="Selective_Value_List">
+    <if test="companyName != null">
+      #{companyName,jdbcType=VARCHAR},
+    </if>
+    <if test="companyAddress != null">
+      #{companyAddress,jdbcType=VARCHAR},
+    </if>
+    <if test="companyMobile != null">
+      #{companyMobile,jdbcType=VARCHAR},
+    </if>
+    sysdate(),
+    sysdate(),
+    <if test="status != null">
+      #{status,jdbcType=VARCHAR},
+    </if>
+    <if test="accountantId != null">
+      #{accountantId,jdbcType=BIGINT},
+    </if>
+    <if test="accountantName != null">
+      #{accountantName,jdbcType=VARCHAR},
+    </if>
+    <if test="accountStatus != null">
+      #{accountStatus,jdbcType=VARCHAR},
+    </if>
+    <if test="creatorId != null">
+      #{creatorId,jdbcType=BIGINT},
+    </if>
+    <if test="creatorName != null">
+      #{creatorName,jdbcType=VARCHAR},
+    </if>
+    <if test="serveBeginDate != null">
+      #{serveBeginDate,jdbcType=DATE},
+    </if>
+    <if test="serveEndDate != null">
+      #{serveEndDate,jdbcType=DATE},
+    </if>
+  </sql>
+  <select id="findList" parameterType="CompanyInfo" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from company_info
+    <include refid="Example_Where_Clause" />
+    <!-- order by CREATE_DATE -->
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from company_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from company_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="save" parameterType="CompanyInfo">
+    insert into company_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Column_List"/>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Value_List"/>
+    </trim>
+  </insert>
+  <update id="update" parameterType="CompanyInfo">
+    update company_info
+    <include refid="Base_Set_Clause"/>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

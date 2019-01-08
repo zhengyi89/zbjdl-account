@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbjdl.account.repository.TaxInfoRepository">
+	<resultMap id="BaseResultMap" type="TaxInfo">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="TAX_NAME" jdbcType="VARCHAR" property="taxName" />
+	  <result column="TAX_CODE" jdbcType="VARCHAR" property="taxCode" />
+	  <result column="TAX_SUBJECT" jdbcType="VARCHAR" property="taxSubject" />
+	  <result column="RATE" jdbcType="DECIMAL" property="rate" />
+	  <result column="TAX_RATE" jdbcType="DECIMAL" property="taxRate" />
+	  <result column="PARENT_ID" jdbcType="VARCHAR" property="parentId" />
+	  <result column="STATUS" jdbcType="VARCHAR" property="status" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <trim prefix="(" prefixOverrides="and" suffix=")">
+      	<if test="taxName != null" >
+	      and TAX_NAME = #{taxName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="taxCode != null" >
+	      and TAX_CODE = #{taxCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="taxSubject != null" >
+	      and TAX_SUBJECT = #{taxSubject,jdbcType=VARCHAR}
+	    </if>
+      	<if test="rate != null" >
+	      and RATE = #{rate,jdbcType=DECIMAL}
+	    </if>
+      	<if test="taxRate != null" >
+	      and TAX_RATE = #{taxRate,jdbcType=DECIMAL}
+	    </if>
+      	<if test="parentId != null" >
+	      and PARENT_ID = #{parentId,jdbcType=VARCHAR}
+	    </if>
+      	<if test="status != null" >
+	      and STATUS = #{status,jdbcType=VARCHAR}
+	    </if>
+	  </trim>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID,
+    TAX_NAME,
+    TAX_CODE,
+    TAX_SUBJECT,
+    RATE,
+    TAX_RATE,
+    PARENT_ID,
+    STATUS,
+  </sql>
+  <sql id="Base_Set_Clause">
+    <set>
+      <trim suffixOverrides=",">
+        TAX_NAME = #{taxName,jdbcType=VARCHAR},
+        TAX_CODE = #{taxCode,jdbcType=VARCHAR},
+        TAX_SUBJECT = #{taxSubject,jdbcType=VARCHAR},
+        RATE = #{rate,jdbcType=DECIMAL},
+        TAX_RATE = #{taxRate,jdbcType=DECIMAL},
+        PARENT_ID = #{parentId,jdbcType=VARCHAR},
+        STATUS = #{status,jdbcType=VARCHAR},
+      </trim>
+    </set>
+  </sql>
+  <sql id="Selective_Column_List">
+    <if test="taxName != null">
+      TAX_NAME,
+    </if>
+    <if test="taxCode != null">
+      TAX_CODE,
+    </if>
+    <if test="taxSubject != null">
+      TAX_SUBJECT,
+    </if>
+    <if test="rate != null">
+      RATE,
+    </if>
+    <if test="taxRate != null">
+      TAX_RATE,
+    </if>
+    <if test="parentId != null">
+      PARENT_ID,
+    </if>
+    <if test="status != null">
+      STATUS,
+    </if>
+  </sql>
+  <sql id="Selective_Value_List">
+    <if test="taxName != null">
+      #{taxName,jdbcType=VARCHAR},
+    </if>
+    <if test="taxCode != null">
+      #{taxCode,jdbcType=VARCHAR},
+    </if>
+    <if test="taxSubject != null">
+      #{taxSubject,jdbcType=VARCHAR},
+    </if>
+    <if test="rate != null">
+      #{rate,jdbcType=DECIMAL},
+    </if>
+    <if test="taxRate != null">
+      #{taxRate,jdbcType=DECIMAL},
+    </if>
+    <if test="parentId != null">
+      #{parentId,jdbcType=VARCHAR},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=VARCHAR},
+    </if>
+  </sql>
+  <select id="findList" parameterType="TaxInfo" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from tax_info
+    <include refid="Example_Where_Clause" />
+    <!-- order by CREATE_DATE -->
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from tax_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from tax_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="save" parameterType="TaxInfo">
+    insert into tax_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Column_List"/>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Value_List"/>
+    </trim>
+  </insert>
+  <update id="update" parameterType="TaxInfo">
+    update tax_info
+    <include refid="Base_Set_Clause"/>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

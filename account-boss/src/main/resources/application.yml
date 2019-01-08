@@ -1,0 +1,77 @@
+spring:
+    profiles:
+        active: default
+    mvc:
+        view:
+            prefix: /WEB-INF/views/
+            suffix: .jsp
+    datasource:
+        driverClassName: com.mysql.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://mysqldb.zbjdl.in/zbjdl_account?useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+        username: root
+        password: wK=QwJmR<592
+        # 配置监控统计拦截的filters，去掉后监控界面sql无法统计
+        filters: stat,slf4j
+        # 初始化大小，最小，最大
+        initialSize: 20
+        minIdle: 5
+        maxActive: 50
+        # 配置获取连接等待超时的时间
+        maxWait: 60000
+        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        minEvictableIdleTimeMillis: 30000
+        validationQuery: SELECT 1 FROM DUAL
+        testWhileIdle: true
+        testOnBorrow: false
+        # 通过connectProperties属性来打开mergeSql功能慢SQL记录
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+        # 合并多个DruidDataSource的监控数据
+        useGlobalDataSourceStat: true
+        #对于长时间不使用的连接强制关闭
+        removeAbandoned: true
+        #超过60分钟开始关闭空闲连接
+        removeAbandonedTimeout: 60
+        #将当前关闭动作记录到日志
+        logAbandoned: true
+
+
+# REDIS (RedisProperties)
+    redis:
+        host: redis.zbjdl.in
+        port: 6379
+        pool:
+            max-active: -1
+            max-idle: 8
+            min-idle: 8
+server:
+    contextPath: /account-boss
+    port: 8080
+
+service-group: zbjdl-service-group
+service-version: 1.0.0
+zbjdl:
+    dubbo:
+        app: account-boss
+        registry_address: registry.zbjdl.in:2181
+
+---
+
+spring:
+    profiles: development
+
+server:
+    port: 8093
+
+---
+spring:
+    profiles: production
+
+    datasource:
+        driverClassName: com.mysql.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        url: jdbc:mysql://mysqldb.zbjdl.in/zbjdl_account?useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+        username: account
+        password: wK=QwJmR<592

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbjdl.account.repository.SystemInfoRepository">
+	<resultMap id="BaseResultMap" type="SystemInfo">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="COMPANY_ID" jdbcType="BIGINT" property="companyId" />
+	  <result column="SYSTEM_CODE" jdbcType="VARCHAR" property="systemCode" />
+	  <result column="SYSTEM_NAME" jdbcType="VARCHAR" property="systemName" />
+	  <result column="SERVER_START_DATE" jdbcType="DATE" property="serverStartDate" />
+	  <result column="SERVER_MONTH" jdbcType="VARCHAR" property="serverMonth" />
+	  <result column="ACCOUNT_TYPE" jdbcType="VARCHAR" property="accountType" />
+	  <result column="INDUSTRY_TYPE" jdbcType="VARCHAR" property="industryType" />
+	  <result column="TAXPAYER_TYPE" jdbcType="VARCHAR" property="taxpayerType" />
+	  <result column="STANDARD_COIN" jdbcType="VARCHAR" property="standardCoin" />
+	  <result column="COMMON_SUBJECT_INIT" jdbcType="BIT" property="commonSubjectInit" />
+	  <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+	  <result column="LAST_UPDATE_TIME" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <trim prefix="(" prefixOverrides="and" suffix=")">
+      	<if test="companyId != null" >
+	      and COMPANY_ID = #{companyId,jdbcType=BIGINT}
+	    </if>
+      	<if test="systemCode != null" >
+	      and SYSTEM_CODE = #{systemCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="systemName != null" >
+	      and SYSTEM_NAME = #{systemName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="serverStartDate != null" >
+	      and SERVER_START_DATE = #{serverStartDate,jdbcType=DATE}
+	    </if>
+      	<if test="serverMonth != null" >
+	      and SERVER_MONTH = #{serverMonth,jdbcType=VARCHAR}
+	    </if>
+      	<if test="accountType != null" >
+	      and ACCOUNT_TYPE = #{accountType,jdbcType=VARCHAR}
+	    </if>
+      	<if test="industryType != null" >
+	      and INDUSTRY_TYPE = #{industryType,jdbcType=VARCHAR}
+	    </if>
+      	<if test="taxpayerType != null" >
+	      and TAXPAYER_TYPE = #{taxpayerType,jdbcType=VARCHAR}
+	    </if>
+      	<if test="standardCoin != null" >
+	      and STANDARD_COIN = #{standardCoin,jdbcType=VARCHAR}
+	    </if>
+      	<if test="commonSubjectInit != null" >
+	      and COMMON_SUBJECT_INIT = #{commonSubjectInit,jdbcType=BIT}
+	    </if>
+	  </trim>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID,
+    COMPANY_ID,
+    SYSTEM_CODE,
+    SYSTEM_NAME,
+    SERVER_START_DATE,
+    SERVER_MONTH,
+    ACCOUNT_TYPE,
+    INDUSTRY_TYPE,
+    TAXPAYER_TYPE,
+    STANDARD_COIN,
+    COMMON_SUBJECT_INIT,
+    CREATE_TIME,
+    LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Base_Set_Clause">
+    <set>
+      <trim suffixOverrides=",">
+        COMPANY_ID = #{companyId,jdbcType=BIGINT},
+        SYSTEM_CODE = #{systemCode,jdbcType=VARCHAR},
+        SYSTEM_NAME = #{systemName,jdbcType=VARCHAR},
+        SERVER_START_DATE = #{serverStartDate,jdbcType=DATE},
+        SERVER_MONTH = #{serverMonth,jdbcType=VARCHAR},
+        ACCOUNT_TYPE = #{accountType,jdbcType=VARCHAR},
+        INDUSTRY_TYPE = #{industryType,jdbcType=VARCHAR},
+        TAXPAYER_TYPE = #{taxpayerType,jdbcType=VARCHAR},
+        STANDARD_COIN = #{standardCoin,jdbcType=VARCHAR},
+        COMMON_SUBJECT_INIT = #{commonSubjectInit,jdbcType=BIT},
+  		LAST_UPDATE_TIME = sysdate(),
+      </trim>
+    </set>
+  </sql>
+  <sql id="Selective_Column_List">
+    <if test="companyId != null">
+      COMPANY_ID,
+    </if>
+    <if test="systemCode != null">
+      SYSTEM_CODE,
+    </if>
+    <if test="systemName != null">
+      SYSTEM_NAME,
+    </if>
+    <if test="serverStartDate != null">
+      SERVER_START_DATE,
+    </if>
+    <if test="serverMonth != null">
+      SERVER_MONTH,
+    </if>
+    <if test="accountType != null">
+      ACCOUNT_TYPE,
+    </if>
+    <if test="industryType != null">
+      INDUSTRY_TYPE,
+    </if>
+    <if test="taxpayerType != null">
+      TAXPAYER_TYPE,
+    </if>
+    <if test="standardCoin != null">
+      STANDARD_COIN,
+    </if>
+    <if test="commonSubjectInit != null">
+      COMMON_SUBJECT_INIT,
+    </if>
+      CREATE_TIME,
+      LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Selective_Value_List">
+    <if test="companyId != null">
+      #{companyId,jdbcType=BIGINT},
+    </if>
+    <if test="systemCode != null">
+      #{systemCode,jdbcType=VARCHAR},
+    </if>
+    <if test="systemName != null">
+      #{systemName,jdbcType=VARCHAR},
+    </if>
+    <if test="serverStartDate != null">
+      #{serverStartDate,jdbcType=DATE},
+    </if>
+    <if test="serverMonth != null">
+      #{serverMonth,jdbcType=VARCHAR},
+    </if>
+    <if test="accountType != null">
+      #{accountType,jdbcType=VARCHAR},
+    </if>
+    <if test="industryType != null">
+      #{industryType,jdbcType=VARCHAR},
+    </if>
+    <if test="taxpayerType != null">
+      #{taxpayerType,jdbcType=VARCHAR},
+    </if>
+    <if test="standardCoin != null">
+      #{standardCoin,jdbcType=VARCHAR},
+    </if>
+    <if test="commonSubjectInit != null">
+      #{commonSubjectInit,jdbcType=BIT},
+    </if>
+    sysdate(),
+    sysdate(),
+  </sql>
+  <select id="findList" parameterType="SystemInfo" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from system_info
+    <include refid="Example_Where_Clause" />
+    <!-- order by CREATE_DATE -->
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from system_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from system_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="save" parameterType="SystemInfo">
+    insert into system_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Column_List"/>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Value_List"/>
+    </trim>
+  </insert>
+  <update id="update" parameterType="SystemInfo">
+    update system_info
+    <include refid="Base_Set_Clause"/>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

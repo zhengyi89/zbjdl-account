@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbjdl.account.repository.AssetDeprecitionInfoRepository">
+	<resultMap id="BaseResultMap" type="AssetDeprecitionInfo">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="asset_id" jdbcType="BIGINT" property="assetId" />
+	  <result column="opening_net_worth" jdbcType="DECIMAL" property="openingNetWorth" />
+	  <result column="closing_net_worth" jdbcType="DECIMAL" property="closingNetWorth" />
+	  <result column="initial_worth" jdbcType="DECIMAL" property="initialWorth" />
+	  <result column="deprecition_amount" jdbcType="DECIMAL" property="deprecitionAmount" />
+	  <result column="deprecition_month" jdbcType="VARCHAR" property="deprecitionMonth" />
+	  <result column="status" jdbcType="VARCHAR" property="status" />
+	  <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	  <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <trim prefix="(" prefixOverrides="and" suffix=")">
+      	<if test="assetId != null" >
+	      and asset_id = #{assetId,jdbcType=BIGINT}
+	    </if>
+      	<if test="openingNetWorth != null" >
+	      and opening_net_worth = #{openingNetWorth,jdbcType=DECIMAL}
+	    </if>
+      	<if test="closingNetWorth != null" >
+	      and closing_net_worth = #{closingNetWorth,jdbcType=DECIMAL}
+	    </if>
+      	<if test="initialWorth != null" >
+	      and initial_worth = #{initialWorth,jdbcType=DECIMAL}
+	    </if>
+      	<if test="deprecitionAmount != null" >
+	      and deprecition_amount = #{deprecitionAmount,jdbcType=DECIMAL}
+	    </if>
+      	<if test="deprecitionMonth != null" >
+	      and deprecition_month = #{deprecitionMonth,jdbcType=VARCHAR}
+	    </if>
+      	<if test="status != null" >
+	      and status = #{status,jdbcType=VARCHAR}
+	    </if>
+	  </trim>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id,
+    asset_id,
+    opening_net_worth,
+    closing_net_worth,
+    initial_worth,
+    deprecition_amount,
+    deprecition_month,
+    status,
+    create_time,
+    last_update_time,
+  </sql>
+  <sql id="Base_Set_Clause">
+    <set>
+      <trim suffixOverrides=",">
+        asset_id = #{assetId,jdbcType=BIGINT},
+        opening_net_worth = #{openingNetWorth,jdbcType=DECIMAL},
+        closing_net_worth = #{closingNetWorth,jdbcType=DECIMAL},
+        initial_worth = #{initialWorth,jdbcType=DECIMAL},
+        deprecition_amount = #{deprecitionAmount,jdbcType=DECIMAL},
+        deprecition_month = #{deprecitionMonth,jdbcType=VARCHAR},
+        status = #{status,jdbcType=VARCHAR},
+  		LAST_UPDATE_TIME = sysdate(),
+      </trim>
+    </set>
+  </sql>
+  <sql id="Selective_Column_List">
+    <if test="assetId != null">
+      asset_id,
+    </if>
+    <if test="openingNetWorth != null">
+      opening_net_worth,
+    </if>
+    <if test="closingNetWorth != null">
+      closing_net_worth,
+    </if>
+    <if test="initialWorth != null">
+      initial_worth,
+    </if>
+    <if test="deprecitionAmount != null">
+      deprecition_amount,
+    </if>
+    <if test="deprecitionMonth != null">
+      deprecition_month,
+    </if>
+    <if test="status != null">
+      status,
+    </if>
+      CREATE_TIME,
+      LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Selective_Value_List">
+    <if test="assetId != null">
+      #{assetId,jdbcType=BIGINT},
+    </if>
+    <if test="openingNetWorth != null">
+      #{openingNetWorth,jdbcType=DECIMAL},
+    </if>
+    <if test="closingNetWorth != null">
+      #{closingNetWorth,jdbcType=DECIMAL},
+    </if>
+    <if test="initialWorth != null">
+      #{initialWorth,jdbcType=DECIMAL},
+    </if>
+    <if test="deprecitionAmount != null">
+      #{deprecitionAmount,jdbcType=DECIMAL},
+    </if>
+    <if test="deprecitionMonth != null">
+      #{deprecitionMonth,jdbcType=VARCHAR},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=VARCHAR},
+    </if>
+    sysdate(),
+    sysdate(),
+  </sql>
+  <select id="findList" parameterType="AssetDeprecitionInfo" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from asset_deprecition_info
+    <include refid="Example_Where_Clause" />
+    <!-- order by CREATE_DATE -->
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from asset_deprecition_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from asset_deprecition_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="save" parameterType="AssetDeprecitionInfo">
+    insert into asset_deprecition_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Column_List"/>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Value_List"/>
+    </trim>
+  </insert>
+  <update id="update" parameterType="AssetDeprecitionInfo">
+    update asset_deprecition_info
+    <include refid="Base_Set_Clause"/>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  
+  <select id="findPreDeprecition" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT adi.* FROM asset_deprecition_info adi , asset_info ai 
+    		WHERE ai.id = adi.asset_id and adi. status = 'INIT'
+    	and ai.SYSTEM_CODE = #{0} and adi.deprecition_month = #{1}
+  </select>
+</mapper>

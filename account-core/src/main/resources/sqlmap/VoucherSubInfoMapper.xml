@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbjdl.account.repository.VoucherSubInfoRepository">
+	<resultMap id="BaseResultMap" type="VoucherSubInfo">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="VOUCHER_ID" jdbcType="BIGINT" property="voucherId" />
+	  <result column="SUMMARY" jdbcType="VARCHAR" property="summary" />
+	  <result column="SUBJECT_CODE" jdbcType="VARCHAR" property="subjectCode" />
+	  <result column="BALANCE_DIRECT" jdbcType="VARCHAR" property="balanceDirect" />
+	  <result column="ASSIST_CODE" jdbcType="VARCHAR" property="assistCode" />
+	  <result column="AMOUNT" jdbcType="DECIMAL" property="amount" />
+	  <result column="DEBIT_AMOUNT" jdbcType="DECIMAL" property="debitAmount" />
+	  <result column="CREDIT_AMOUNT" jdbcType="DECIMAL" property="creditAmount" />
+	  <result column="DEL_FLAG" jdbcType="BIT" property="delFlag" />
+	  <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+	  <result column="LAST_UPDATE_TIME" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <trim prefix="(" prefixOverrides="and" suffix=")">
+      	<if test="voucherId != null" >
+	      and VOUCHER_ID = #{voucherId,jdbcType=BIGINT}
+	    </if>
+      	<if test="summary != null" >
+	      and SUMMARY = #{summary,jdbcType=VARCHAR}
+	    </if>
+      	<if test="subjectCode != null" >
+	      and SUBJECT_CODE = #{subjectCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="balanceDirect != null" >
+	      and BALANCE_DIRECT = #{balanceDirect,jdbcType=VARCHAR}
+	    </if>
+      	<if test="assistCode != null" >
+	      and ASSIST_CODE = #{assistCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="delFlag != null" >
+	      and DEL_FLAG = #{delFlag,jdbcType=BIT}
+	    </if>
+	  </trim>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID,
+    VOUCHER_ID,
+    SUMMARY,
+    SUBJECT_CODE,
+    BALANCE_DIRECT,
+    ASSIST_CODE,
+    AMOUNT,
+    DEBIT_AMOUNT,
+    CREDIT_AMOUNT,
+    DEL_FLAG,
+    CREATE_TIME,
+    LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Base_Set_Clause">
+    <set>
+      <trim suffixOverrides=",">
+        VOUCHER_ID = #{voucherId,jdbcType=BIGINT},
+        SUMMARY = #{summary,jdbcType=VARCHAR},
+        SUBJECT_CODE = #{subjectCode,jdbcType=VARCHAR},
+        BALANCE_DIRECT = #{balanceDirect,jdbcType=VARCHAR},
+        ASSIST_CODE = #{assistCode,jdbcType=VARCHAR},
+        AMOUNT = #{amount,jdbcType=DECIMAL},
+        DEBIT_AMOUNT = #{debitAmount,jdbcType=DECIMAL},
+        CREDIT_AMOUNT = #{creditAmount,jdbcType=DECIMAL},
+        DEL_FLAG = #{delFlag,jdbcType=BIT},
+  		LAST_UPDATE_TIME = sysdate(),
+      </trim>
+    </set>
+  </sql>
+  <sql id="Selective_Column_List">
+    <if test="voucherId != null">
+      VOUCHER_ID,
+    </if>
+    <if test="summary != null">
+      SUMMARY,
+    </if>
+    <if test="subjectCode != null">
+      SUBJECT_CODE,
+    </if>
+    <if test="balanceDirect != null">
+      BALANCE_DIRECT,
+    </if>
+    <if test="assistCode != null">
+      ASSIST_CODE,
+    </if>
+    <if test="amount != null">
+      AMOUNT,
+    </if>
+    <if test="debitAmount != null">
+      DEBIT_AMOUNT,
+    </if>
+    <if test="creditAmount != null">
+      CREDIT_AMOUNT,
+    </if>
+    <if test="delFlag != null">
+      DEL_FLAG,
+    </if>
+      CREATE_TIME,
+      LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Selective_Value_List">
+    <if test="voucherId != null">
+      #{voucherId,jdbcType=BIGINT},
+    </if>
+    <if test="summary != null">
+      #{summary,jdbcType=VARCHAR},
+    </if>
+    <if test="subjectCode != null">
+      #{subjectCode,jdbcType=VARCHAR},
+    </if>
+    <if test="balanceDirect != null">
+      #{balanceDirect,jdbcType=VARCHAR},
+    </if>
+    <if test="assistCode != null">
+      #{assistCode,jdbcType=VARCHAR},
+    </if>
+    <if test="amount != null">
+      #{amount,jdbcType=DECIMAL},
+    </if>
+    <if test="debitAmount != null">
+      #{debitAmount,jdbcType=DECIMAL},
+    </if>
+    <if test="creditAmount != null">
+      #{creditAmount,jdbcType=DECIMAL},
+    </if>
+    <if test="delFlag != null">
+      #{delFlag,jdbcType=BIT},
+    </if>
+    sysdate(),
+    sysdate(),
+  </sql>
+  <select id="findList" parameterType="VoucherSubInfo" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from voucher_sub_info
+    <include refid="Example_Where_Clause" />
+    <!-- order by CREATE_DATE -->
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from voucher_sub_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from voucher_sub_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="save" parameterType="VoucherSubInfo">
+    insert into voucher_sub_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Column_List"/>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Value_List"/>
+    </trim>
+  </insert>
+  <update id="update" parameterType="VoucherSubInfo">
+    update voucher_sub_info
+    <include refid="Base_Set_Clause"/>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+  
+  <select id="findListByMonth" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select vsi.*
+    from voucher_sub_info vsi, voucher_info vi
+    where vsi.voucher_id = vi.id and
+    system_code = #{0} and account_period like CONCAT('%',#{1},'%')
+  </select>
+  
+</mapper>

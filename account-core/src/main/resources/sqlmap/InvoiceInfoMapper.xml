@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbjdl.account.repository.InvoiceInfoRepository">
+	<resultMap id="BaseResultMap" type="InvoiceInfo">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="INVOICE_CODE" jdbcType="VARCHAR" property="invoiceCode" />
+	  <result column="INVOICE_NAME" jdbcType="VARCHAR" property="invoiceName" />
+	  <result column="COMPANY_NAME" jdbcType="VARCHAR" property="companyName" />
+	  <result column="INVOICE_TIME" jdbcType="TIMESTAMP" property="invoiceTime" />
+	  <result column="INVOICE_AMOUNT" jdbcType="DECIMAL" property="invoiceAmount" />
+	  <result column="STATUS" jdbcType="VARCHAR" property="status" />
+	  <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <trim prefix="(" prefixOverrides="and" suffix=")">
+      	<if test="invoiceCode != null" >
+	      and INVOICE_CODE = #{invoiceCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="invoiceName != null" >
+	      and INVOICE_NAME = #{invoiceName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="companyName != null" >
+	      and COMPANY_NAME = #{companyName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="invoiceTime != null" >
+	      and INVOICE_TIME = #{invoiceTime,jdbcType=TIMESTAMP}
+	    </if>
+      	<if test="invoiceAmount != null" >
+	      and INVOICE_AMOUNT = #{invoiceAmount,jdbcType=DECIMAL}
+	    </if>
+      	<if test="status != null" >
+	      and STATUS = #{status,jdbcType=VARCHAR}
+	    </if>
+	  </trim>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID,
+    INVOICE_CODE,
+    INVOICE_NAME,
+    COMPANY_NAME,
+    INVOICE_TIME,
+    INVOICE_AMOUNT,
+    STATUS,
+    CREATE_TIME,
+  </sql>
+  <sql id="Base_Set_Clause">
+    <set>
+      <trim suffixOverrides=",">
+        INVOICE_CODE = #{invoiceCode,jdbcType=VARCHAR},
+        INVOICE_NAME = #{invoiceName,jdbcType=VARCHAR},
+        COMPANY_NAME = #{companyName,jdbcType=VARCHAR},
+        INVOICE_TIME = #{invoiceTime,jdbcType=TIMESTAMP},
+        INVOICE_AMOUNT = #{invoiceAmount,jdbcType=DECIMAL},
+        STATUS = #{status,jdbcType=VARCHAR},
+      </trim>
+    </set>
+  </sql>
+  <sql id="Selective_Column_List">
+    <if test="invoiceCode != null">
+      INVOICE_CODE,
+    </if>
+    <if test="invoiceName != null">
+      INVOICE_NAME,
+    </if>
+    <if test="companyName != null">
+      COMPANY_NAME,
+    </if>
+    <if test="invoiceTime != null">
+      INVOICE_TIME,
+    </if>
+    <if test="invoiceAmount != null">
+      INVOICE_AMOUNT,
+    </if>
+    <if test="status != null">
+      STATUS,
+    </if>
+      CREATE_TIME,
+  </sql>
+  <sql id="Selective_Value_List">
+    <if test="invoiceCode != null">
+      #{invoiceCode,jdbcType=VARCHAR},
+    </if>
+    <if test="invoiceName != null">
+      #{invoiceName,jdbcType=VARCHAR},
+    </if>
+    <if test="companyName != null">
+      #{companyName,jdbcType=VARCHAR},
+    </if>
+    <if test="invoiceTime != null">
+      #{invoiceTime,jdbcType=TIMESTAMP},
+    </if>
+    <if test="invoiceAmount != null">
+      #{invoiceAmount,jdbcType=DECIMAL},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=VARCHAR},
+    </if>
+    sysdate(),
+  </sql>
+  <select id="findList" parameterType="InvoiceInfo" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from invoice_info
+    <include refid="Example_Where_Clause" />
+    <!-- order by CREATE_DATE -->
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from invoice_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from invoice_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="save" parameterType="InvoiceInfo">
+    insert into invoice_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Column_List"/>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Value_List"/>
+    </trim>
+  </insert>
+  <update id="update" parameterType="InvoiceInfo">
+    update invoice_info
+    <include refid="Base_Set_Clause"/>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

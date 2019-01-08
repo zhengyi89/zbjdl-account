@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbjdl.account.repository.CurrencyInfoRepository">
+	<resultMap id="BaseResultMap" type="CurrencyInfo">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="currency_code" jdbcType="VARCHAR" property="currencyCode" />
+	  <result column="currency_name" jdbcType="VARCHAR" property="currencyName" />
+	  <result column="exchange_rate" jdbcType="DECIMAL" property="exchangeRate" />
+	  <result column="system_code" jdbcType="VARCHAR" property="systemCode" />
+	  <result column="status" jdbcType="VARCHAR" property="status" />
+	  <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	  <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <trim prefix="(" prefixOverrides="and" suffix=")">
+      	<if test="currencyCode != null" >
+	      and currency_code = #{currencyCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="currencyName != null" >
+	      and currency_name = #{currencyName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="exchangeRate != null" >
+	      and exchange_rate = #{exchangeRate,jdbcType=DECIMAL}
+	    </if>
+      	<if test="systemCode != null" >
+	      and system_code = #{systemCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="status != null" >
+	      and status = #{status,jdbcType=VARCHAR}
+	    </if>
+	  </trim>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id,
+    currency_code,
+    currency_name,
+    exchange_rate,
+    system_code,
+    status,
+    create_time,
+    last_update_time,
+  </sql>
+  <sql id="Base_Set_Clause">
+    <set>
+      <trim suffixOverrides=",">
+        currency_code = #{currencyCode,jdbcType=VARCHAR},
+        currency_name = #{currencyName,jdbcType=VARCHAR},
+        exchange_rate = #{exchangeRate,jdbcType=DECIMAL},
+        system_code = #{systemCode,jdbcType=VARCHAR},
+        status = #{status,jdbcType=VARCHAR},
+  		LAST_UPDATE_TIME = sysdate(),
+      </trim>
+    </set>
+  </sql>
+  <sql id="Selective_Column_List">
+    <if test="currencyCode != null">
+      currency_code,
+    </if>
+    <if test="currencyName != null">
+      currency_name,
+    </if>
+    <if test="exchangeRate != null">
+      exchange_rate,
+    </if>
+    <if test="systemCode != null">
+      system_code,
+    </if>
+    <if test="status != null">
+      status,
+    </if>
+      CREATE_TIME,
+      LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Selective_Value_List">
+    <if test="currencyCode != null">
+      #{currencyCode,jdbcType=VARCHAR},
+    </if>
+    <if test="currencyName != null">
+      #{currencyName,jdbcType=VARCHAR},
+    </if>
+    <if test="exchangeRate != null">
+      #{exchangeRate,jdbcType=DECIMAL},
+    </if>
+    <if test="systemCode != null">
+      #{systemCode,jdbcType=VARCHAR},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=VARCHAR},
+    </if>
+    sysdate(),
+    sysdate(),
+  </sql>
+  <select id="findList" parameterType="CurrencyInfo" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from currency_info
+    <include refid="Example_Where_Clause" />
+    <!-- order by CREATE_DATE -->
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from currency_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from currency_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="save" parameterType="CurrencyInfo">
+    insert into currency_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Column_List"/>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Value_List"/>
+    </trim>
+  </insert>
+  <update id="update" parameterType="CurrencyInfo">
+    update currency_info
+    <include refid="Base_Set_Clause"/>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

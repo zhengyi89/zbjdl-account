@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="queryService" class="com.zbjdl.utils.query.impl.QueryServiceImpl">
+		<property name="dataSource" ref="dataSource" />
+		<property name="querys">
+			<map>
+				<entry key="queryCompanyList">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+								 	select * from company_info c
+								 	WHERE 1=1 
+								      /~accountantId: and c.accountant_id = {accountantId} ~/
+  									  order by c.id desc
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				
+				<entry key="queryCurrencyList">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+								 	select * from currency_info c
+								 	WHERE status <> 'DELETE'  
+								 	/~systemCode: and c.system_code = {systemCode,string} ~/
+  									order by c.id desc
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				<!-- 辅助核算 -->
+				<entry key="queryAssistAccountList">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+								 	select * from assist_account_info a
+								 	WHERE status <> 'DELETE'  
+								 	/~systemCode: and a.system_code = {systemCode,string} ~/
+  									order by a.id desc
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				<!-- 固定资产 -->
+				<entry key="queryAssetList">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+								 	SELECT
+										a.*, aci.asset_class_name , aai.ASSIST_NAME
+									FROM
+										asset_info a
+									JOIN asset_class_info aci ON a.SYSTEM_CODE = aci.SYSTEM_CODE
+									AND a.ASSET_class_CODE = aci.ASSET_CLASS_CODE
+									LEFT JOIN assist_account_info aai ON aai.SYSTEM_CODE = a.SYSTEM_CODE
+									AND aai.ASSIST_CODE = a.ASSIST_CODE
+									where 1 = 1
+								 	/~costType: and a.cost_type = {costType,string} ~/
+								 	/~systemCode: and a.system_code = {systemCode,string} ~/
+  									order by a.id desc
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				
+				<!-- 资产类别 -->
+				<entry key="queryAssetClassList">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+								 	select * from asset_class_info a
+								 	WHERE 1=1 
+								 	/~systemCode: and a.system_code = {systemCode,string} ~/
+  									order by a.id 
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				
+				<!-- 折旧明细 -->
+				<entry key="queryAssetDeprecitionRecord">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+								 	SELECT
+										asi.ASSET_CLASS_NAME,adi.*, ai.asset_name, ai.asset_code
+									FROM
+										asset_deprecition_info adi ,
+										asset_info ai ,
+										asset_class_info asi
+									WHERE
+										ai.id = adi.asset_id
+									AND asi.ASSET_class_code = ai.ASSET_class_code
+									AND asi.SYSTEM_CODE = ai.SYSTEM_CODE
+									AND adi. STATUS = 'NORMAL'
+								 	/~systemCode: and ai.system_code = {systemCode,string} ~/
+  									order by adi.asset_id desc, adi.id desc
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				
+				<!-- 科目类别 -->
+				<entry key="querySubjectList">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+								 	select * from subject_info
+								 	WHERE status <> 'DELETE' 
+								 	/~systemCode: and system_code = {systemCode,string} ~/
+								 	/~basicSubject: and basic_subject = {basicSubject,string} ~/
+  									order by subject_code asc
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				
+				<!-- 科目期初 -->
+				<entry key="querySubjectOpeningIndex">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+								 	SELECT asi.id , si.id subject_id , asi.year_debit_amount , asi.year_credit_amount , asi.opening_balance , 
+										asi.sum_amount , asi.year_opening_balance , si.subject_code , si.SUBJECT_NAME , 
+										si.SUBJECT_LEVEL , si.LAST_LEVEL , si.BALANCE_DIRECT , si.ASSIST_ACCOUNT , si.BASIC_SUBJECT 
+									FROM subject_info si left join account_settle_info asi on si.id = asi.subject_id
+									where 1=1
+									/~systemCode: and si.system_code = {systemCode,string} ~/
+									order by subject_code asc
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				
+				<entry key="queryVoucherList">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+								 	select vi.*, vsi.*, si.* from voucher_info vi, voucher_sub_info vsi , subject_info si
+								 	where vi.ID = vsi.VOUCHER_ID and vsi.subject_code = si.subject_code and vi.system_code = si.system_code
+								      /~systemCode: and vi.system_code = {systemCode,string} ~/
+  									  order by vi.id, vsi.id desc
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				
+				<entry key="queryVoucherTemplateList">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+								 	select vi.* from voucher_info vi
+								 	where template_flag = 1
+								      /~systemCode: and vi.system_code = {systemCode,string} ~/
+  									  order by vi.id desc
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				
+				<entry key="queryClosingVoucherList">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+								 	select vi.* from voucher_info vi
+								 	where template_flag = 1
+								      /~systemCode: and vi.system_code = {systemCode,string} ~/
+  									  order by vi.id desc
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				
+				<!-- 总账 -->
+				<entry key="queryLedgerIndex">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+									SELECT
+										aa.subject_code, aa.system_code, aa.balance_direct , aa.account_month , bb.sum_debit_amount , bb.sum_credit_amount , 
+										(aa.opening_balance - IFNULL(bb.sum_amount,0)) remain_amount,(IFNULL(bb.sum_debit_amount,0)+aa.year_debit_amount) 
+										year_debit_amount, (IFNULL(bb.sum_credit_amount,0)+aa.year_credit_amount) year_credit_amount
+									from (
+									 select asi.*,si.balance_direct, si.SUBJECT_CODE, si.SYSTEM_CODE 
+										from account_settle_info asi, subject_info si  where si.id = asi.subject_id 
+											/~systemCode: and system_code = {systemCode} ~/
+								 			/~subjectCode: and SUBJECT_CODE = {subjectCode} ~/
+									 		/~startdate: and account_month >= {startdate} ~/
+									 		/~enddate: and account_month <= {enddate} ~/
+										) aa 
+									left JOIN (
+									   select vi.system_code, vi.account_period, vsi.SUBJECT_CODE, sum(vsi.DEBIT_AMOUNT) sum_debit_amount,sum(vsi.CREDIT_AMOUNT) sum_credit_amount, sum(vsi.AMOUNT) sum_amount
+									     from voucher_info vi, voucher_sub_info vsi where vi.id = vsi.VOUCHER_ID GROUP BY vi.system_code, vsi.SUBJECT_CODE) bb
+									on aa.SUBJECT_CODE = bb.SUBJECT_CODE and aa.SYSTEM_CODE = bb.SYSTEM_CODE and aa.account_month = date_format(bb.account_period,'%Y-%m') 
+									order by aa.account_month asc
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				
+				<!-- 明细账 -->
+				<entry key="queryDetailAccount">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+								 	SELECT
+										date_format(account_period,'%Y-%m') account_period,SUMMARY, serial_num, CREDIT_AMOUNT, DEBIT_AMOUNT, BALANCE_DIRECT
+									FROM
+										voucher_info vi , voucher_sub_info vsi
+									WHERE vi.id = vsi.VOUCHER_ID
+								 		/~systemCode: and system_code = {systemCode} ~/
+								 		/~subjectCode: and SUBJECT_CODE = {subjectCode} ~/
+								 		/~startdate: and date_format(account_period,'%Y-%m') >= {startdate} ~/
+								 		/~enddate: and date_format(account_period,'%Y-%m') <= {enddate} ~/
+								 	GROUP BY vsi.id;
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				
+				
+				<!-- 凭证汇总表 -->
+				<entry key="queryVoucherSumm">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+									SELECT si.subject_code , si.subject_name , sum(debit_amount) debit_amount , sum(credit_amount) credit_amount
+									 FROM voucher_info vi , voucher_sub_info vsi , subject_info si 
+									WHERE vi.id = vsi.VOUCHER_ID and si.SYSTEM_CODE = vi.system_code and si.SUBJECT_CODE = vsi.SUBJECT_CODE 
+									/~systemCode: and vi.system_code = {systemCode} ~/
+							 		/~startdate: and date_format(account_period,'%Y-%m') >= {startdate} ~/
+							 		/~enddate: and date_format(account_period,'%Y-%m') <= {enddate} ~/
+									GROUP BY si.SUBJECT_CODE asc
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				
+				<!-- 科目余额表 -->
+				<entry key="querySubjectBalance">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+									SELECT
+										vsi.SUBJECT_CODE, si.SUBJECT_NAME, sum(vsi.DEBIT_AMOUNT) DEBIT_AMOUNT,sum(vsi.CREDIT_AMOUNT) CREDIT_AMOUNT,  
+										IF(si.BALANCE_DIRECT = 'DEBIT', opening_balance, '') OPENING_DEBIT_AMOUNT,IF(si.BALANCE_DIRECT = 'CREDIT', opening_balance, '') OPENING_CREDIT_AMOUNT,
+										IF(si.BALANCE_DIRECT = 'DEBIT', (IFNULL(opening_balance,0)+ IFNULL(sum(vsi.DEBIT_AMOUNT),0)-IFNULL(sum(vsi.CREDIT_AMOUNT),0)), '') CLOSING_DEBIT_AMOUNT,
+										IF(si.BALANCE_DIRECT = 'CREDIT', (IFNULL(opening_balance,0)+IFNULL(sum(vsi.CREDIT_AMOUNT),0)-IFNULL(sum(vsi.DEBIT_AMOUNT),0)), '') CLOSING_CREDIT_AMOUNT
+									FROM
+										voucher_info vi join 
+										voucher_sub_info vsi on vi.ID = vsi.VOUCHER_ID join
+										subject_info si on vi.system_code = si.SYSTEM_CODE and vsi.SUBJECT_CODE = si.SUBJECT_CODE left join  
+										account_settle_info asi on  asi.subject_id = si.ID and asi.account_month = date_format(vi.account_period,'%Y-%m')
+									where 1=1
+									/~systemCode: and vi.system_code = {systemCode} ~/
+									/~startdate: and date_format(account_period,'%Y-%m') >= {startdate} ~/
+								 	/~enddate: and date_format(account_period,'%Y-%m') <= {enddate} ~/
+									GROUP BY vsi.SUBJECT_CODE
+									order by SUBJECT_CODE asc
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+			
+				<!-- 辅助核算明细表 -->
+				<entry key="queryAssistAccountDetail">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+									SELECT
+										SUBJECT_CODE, serial_num, summary, DATE_FORMAT(vi.account_period, '%Y-%m') account_period,
+										sum(CREDIT_AMOUNT) debit_amount, SUM(DEBIT_AMOUNT) credit_amount, balance_direct
+									FROM
+										voucher_info vi , voucher_sub_info vsi
+									WHERE vi.id = vsi.VOUCHER_ID
+										/~systemCode: and vi.system_code = {systemCode} ~/
+										/~subjectCode: and vsi.subject_code = {subjectCode} ~/
+										/~assistCode: and vsi.assist_code = {assistCode} ~/
+									 	/~startdate: and date_format(account_period,'%Y-%m') >= {startdate} ~/
+								 		/~enddate: and date_format(account_period,'%Y-%m') <= {enddate} ~/
+									group by vsi.SUBJECT_CODE
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+
+				<!-- 辅助核算余额表 -->
+				<entry key="queryAssistAccountBalance">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+									SELECT
+										SUBJECT_CODE, DATE_FORMAT(vi.account_period, '%Y-%m') account_period,
+										sum(CREDIT_AMOUNT) CREDIT_AMOUNT, SUM(DEBIT_AMOUNT)
+									FROM
+										voucher_info vi , voucher_sub_info vsi
+									WHERE vi.id = vsi.VOUCHER_ID
+									/~systemCode: and vi.system_code = {systemCode} ~/
+									/~subjectCode: and vsi.subject_code = {subjectCode} ~/
+									/~assistCode: and vsi.assist_code = {assistCode} ~/
+								 	/~startdate: and date_format(account_period,'%Y-%m') >= {startdate} ~/
+								 	/~enddate: and date_format(account_period,'%Y-%m') <= {enddate} ~/
+									group by vsi.SUBJECT_CODE
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+				
+				<!-- 现金流量明细表 -->
+				<entry key="queryCashFlowDetail">
+					<bean class="com.zbjdl.utils.query.Query">
+						<property name="sql">
+							<value>
+                                <![CDATA[
+									SELECT
+										SUBJECT_CODE, DATE_FORMAT(vi.account_period, '%Y-%m') account_period,
+										sum(CREDIT_AMOUNT) CREDIT_AMOUNT, SUM(DEBIT_AMOUNT)
+									FROM
+										voucher_info vi , voucher_sub_info vsi
+									WHERE vi.id = vsi.VOUCHER_ID
+									/~systemCode: and vi.system_code = {systemCode} ~/
+								 	/~accountDate: and DATE_FORMAT(vi.account_period, '%Y-%m') = {accountDate} ~/
+									group by vsi.SUBJECT_CODE
+                                ]]>
+							</value>
+						</property>
+					</bean>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+</beans>

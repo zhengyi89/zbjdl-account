@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbjdl.account.repository.DeprecitionDetailRepository">
+	<resultMap id="BaseResultMap" type="DeprecitionDetail">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="ASSET_ID" jdbcType="VARCHAR" property="assetId" />
+	  <result column="DEPRECITION_TOTAL_AMOUNT" jdbcType="DECIMAL" property="deprecitionTotalAmount" />
+	  <result column="CLOSE_AMOUNT" jdbcType="DECIMAL" property="closeAmount" />
+	  <result column="SETTLE_TIME" jdbcType="DATE" property="settleTime" />
+	  <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+	  <result column="LAST_UPDATE_TIME" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <trim prefix="(" prefixOverrides="and" suffix=")">
+      	<if test="assetId != null" >
+	      and ASSET_ID = #{assetId,jdbcType=VARCHAR}
+	    </if>
+      	<if test="deprecitionTotalAmount != null" >
+	      and DEPRECITION_TOTAL_AMOUNT = #{deprecitionTotalAmount,jdbcType=DECIMAL}
+	    </if>
+      	<if test="closeAmount != null" >
+	      and CLOSE_AMOUNT = #{closeAmount,jdbcType=DECIMAL}
+	    </if>
+      	<if test="settleTime != null" >
+	      and SETTLE_TIME = #{settleTime,jdbcType=DATE}
+	    </if>
+	  </trim>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID,
+    ASSET_ID,
+    DEPRECITION_TOTAL_AMOUNT,
+    CLOSE_AMOUNT,
+    SETTLE_TIME,
+    CREATE_TIME,
+    LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Base_Set_Clause">
+    <set>
+      <trim suffixOverrides=",">
+        ASSET_ID = #{assetId,jdbcType=VARCHAR},
+        DEPRECITION_TOTAL_AMOUNT = #{deprecitionTotalAmount,jdbcType=DECIMAL},
+        CLOSE_AMOUNT = #{closeAmount,jdbcType=DECIMAL},
+        SETTLE_TIME = #{settleTime,jdbcType=DATE},
+  		LAST_UPDATE_TIME = sysdate(),
+      </trim>
+    </set>
+  </sql>
+  <sql id="Selective_Column_List">
+    <if test="assetId != null">
+      ASSET_ID,
+    </if>
+    <if test="deprecitionTotalAmount != null">
+      DEPRECITION_TOTAL_AMOUNT,
+    </if>
+    <if test="closeAmount != null">
+      CLOSE_AMOUNT,
+    </if>
+    <if test="settleTime != null">
+      SETTLE_TIME,
+    </if>
+      CREATE_TIME,
+      LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Selective_Value_List">
+    <if test="assetId != null">
+      #{assetId,jdbcType=VARCHAR},
+    </if>
+    <if test="deprecitionTotalAmount != null">
+      #{deprecitionTotalAmount,jdbcType=DECIMAL},
+    </if>
+    <if test="closeAmount != null">
+      #{closeAmount,jdbcType=DECIMAL},
+    </if>
+    <if test="settleTime != null">
+      #{settleTime,jdbcType=DATE},
+    </if>
+    sysdate(),
+    sysdate(),
+  </sql>
+  <select id="findList" parameterType="DeprecitionDetail" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from deprecition_detail
+    <include refid="Example_Where_Clause" />
+    <!-- order by CREATE_DATE -->
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from deprecition_detail
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from deprecition_detail
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="save" parameterType="DeprecitionDetail">
+    insert into deprecition_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Column_List"/>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Value_List"/>
+    </trim>
+  </insert>
+  <update id="update" parameterType="DeprecitionDetail">
+    update deprecition_detail
+    <include refid="Base_Set_Clause"/>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>

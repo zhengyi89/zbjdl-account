@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zbjdl.account.repository.AssetInfoRepository">
+	<resultMap id="BaseResultMap" type="AssetInfo">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="SYSTEM_CODE" jdbcType="VARCHAR" property="systemCode" />
+	  <result column="ASSET_CODE" jdbcType="VARCHAR" property="assetCode" />
+	  <result column="ASSET_NAME" jdbcType="VARCHAR" property="assetName" />
+	  <result column="ASSET_CLASS_CODE" jdbcType="VARCHAR" property="assetClassCode" />
+	  <result column="ASSIST_CODE" jdbcType="VARCHAR" property="assistCode" />
+	  <result column="SUBJECT_CODE1" jdbcType="VARCHAR" property="subjectCode1" />
+	  <result column="SUBJECT_CODE2" jdbcType="VARCHAR" property="subjectCode2" />
+	  <result column="SUBJECT_CODE3" jdbcType="VARCHAR" property="subjectCode3" />
+	  <result column="SUBJECT_CODE4" jdbcType="VARCHAR" property="subjectCode4" />
+	  <result column="SUBJECT_CODE5" jdbcType="VARCHAR" property="subjectCode5" />
+	  <result column="SUBJECT_CODE6" jdbcType="VARCHAR" property="subjectCode6" />
+	  <result column="INITIAL_WORTH" jdbcType="DECIMAL" property="initialWorth" />
+	  <result column="ASSET_WORTH" jdbcType="DECIMAL" property="assetWorth" />
+	  <result column="USE_AGE" jdbcType="INTEGER" property="useAge" />
+	  <result column="DEPRECITION_TYPE" jdbcType="VARCHAR" property="deprecitionType" />
+	  <result column="NET_SALVAGE" jdbcType="DECIMAL" property="netSalvage" />
+	  <result column="MONTH_LOSS_AMOUNT" jdbcType="DECIMAL" property="monthLossAmount" />
+	  <result column="BEGIN_DATE" jdbcType="DATE" property="beginDate" />
+	  <result column="COST_TYPE" jdbcType="VARCHAR" property="costType" />
+	  <result column="STATUS" jdbcType="VARCHAR" property="status" />
+	  <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+	  <result column="LAST_UPDATE_TIME" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <trim prefix="(" prefixOverrides="and" suffix=")">
+      	<if test="systemCode != null" >
+	      and SYSTEM_CODE = #{systemCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="assetCode != null" >
+	      and ASSET_CODE = #{assetCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="assetName != null" >
+	      and ASSET_NAME = #{assetName,jdbcType=VARCHAR}
+	    </if>
+      	<if test="assetClassCode != null" >
+	      and ASSET_CLASS_CODE = #{assetClassCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="assistCode != null" >
+	      and ASSIST_CODE = #{assistCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="subjectCode1 != null" >
+	      and SUBJECT_CODE1 = #{subjectCode1,jdbcType=VARCHAR}
+	    </if>
+      	<if test="subjectCode2 != null" >
+	      and SUBJECT_CODE2 = #{subjectCode2,jdbcType=VARCHAR}
+	    </if>
+      	<if test="subjectCode3 != null" >
+	      and SUBJECT_CODE3 = #{subjectCode3,jdbcType=VARCHAR}
+	    </if>
+      	<if test="subjectCode4 != null" >
+	      and SUBJECT_CODE4 = #{subjectCode4,jdbcType=VARCHAR}
+	    </if>
+      	<if test="subjectCode5 != null" >
+	      and SUBJECT_CODE5 = #{subjectCode5,jdbcType=VARCHAR}
+	    </if>
+      	<if test="subjectCode6 != null" >
+	      and SUBJECT_CODE6 = #{subjectCode6,jdbcType=VARCHAR}
+	    </if>
+      	<if test="initialWorth != null" >
+	      and INITIAL_WORTH = #{initialWorth,jdbcType=DECIMAL}
+	    </if>
+      	<if test="assetWorth != null" >
+	      and ASSET_WORTH = #{assetWorth,jdbcType=DECIMAL}
+	    </if>
+      	<if test="useAge != null" >
+	      and USE_AGE = #{useAge,jdbcType=INTEGER}
+	    </if>
+      	<if test="deprecitionType != null" >
+	      and DEPRECITION_TYPE = #{deprecitionType,jdbcType=VARCHAR}
+	    </if>
+      	<if test="netSalvage != null" >
+	      and NET_SALVAGE = #{netSalvage,jdbcType=DECIMAL}
+	    </if>
+      	<if test="monthLossAmount != null" >
+	      and MONTH_LOSS_AMOUNT = #{monthLossAmount,jdbcType=DECIMAL}
+	    </if>
+      	<if test="beginDate != null" >
+	      and BEGIN_DATE = #{beginDate,jdbcType=DATE}
+	    </if>
+      	<if test="costType != null" >
+	      and COST_TYPE = #{costType,jdbcType=VARCHAR}
+	    </if>
+      	<if test="status != null" >
+	      and STATUS = #{status,jdbcType=VARCHAR}
+	    </if>
+	  </trim>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ID,
+    SYSTEM_CODE,
+    ASSET_CODE,
+    ASSET_NAME,
+    ASSET_CLASS_CODE,
+    ASSIST_CODE,
+    SUBJECT_CODE1,
+    SUBJECT_CODE2,
+    SUBJECT_CODE3,
+    SUBJECT_CODE4,
+    SUBJECT_CODE5,
+    SUBJECT_CODE6,
+    INITIAL_WORTH,
+    ASSET_WORTH,
+    USE_AGE,
+    DEPRECITION_TYPE,
+    NET_SALVAGE,
+    MONTH_LOSS_AMOUNT,
+    BEGIN_DATE,
+    COST_TYPE,
+    STATUS,
+    CREATE_TIME,
+    LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Base_Set_Clause">
+    <set>
+      <trim suffixOverrides=",">
+        SYSTEM_CODE = #{systemCode,jdbcType=VARCHAR},
+        ASSET_CODE = #{assetCode,jdbcType=VARCHAR},
+        ASSET_NAME = #{assetName,jdbcType=VARCHAR},
+        ASSET_CLASS_CODE = #{assetClassCode,jdbcType=VARCHAR},
+        ASSIST_CODE = #{assistCode,jdbcType=VARCHAR},
+        SUBJECT_CODE1 = #{subjectCode1,jdbcType=VARCHAR},
+        SUBJECT_CODE2 = #{subjectCode2,jdbcType=VARCHAR},
+        SUBJECT_CODE3 = #{subjectCode3,jdbcType=VARCHAR},
+        SUBJECT_CODE4 = #{subjectCode4,jdbcType=VARCHAR},
+        SUBJECT_CODE5 = #{subjectCode5,jdbcType=VARCHAR},
+        SUBJECT_CODE6 = #{subjectCode6,jdbcType=VARCHAR},
+        INITIAL_WORTH = #{initialWorth,jdbcType=DECIMAL},
+        ASSET_WORTH = #{assetWorth,jdbcType=DECIMAL},
+        USE_AGE = #{useAge,jdbcType=INTEGER},
+        DEPRECITION_TYPE = #{deprecitionType,jdbcType=VARCHAR},
+        NET_SALVAGE = #{netSalvage,jdbcType=DECIMAL},
+        MONTH_LOSS_AMOUNT = #{monthLossAmount,jdbcType=DECIMAL},
+        BEGIN_DATE = #{beginDate,jdbcType=DATE},
+        COST_TYPE = #{costType,jdbcType=VARCHAR},
+        STATUS = #{status,jdbcType=VARCHAR},
+  		LAST_UPDATE_TIME = sysdate(),
+      </trim>
+    </set>
+  </sql>
+  <sql id="Selective_Column_List">
+    <if test="systemCode != null">
+      SYSTEM_CODE,
+    </if>
+    <if test="assetCode != null">
+      ASSET_CODE,
+    </if>
+    <if test="assetName != null">
+      ASSET_NAME,
+    </if>
+    <if test="assetClassCode != null">
+      ASSET_CLASS_CODE,
+    </if>
+    <if test="assistCode != null">
+      ASSIST_CODE,
+    </if>
+    <if test="subjectCode1 != null">
+      SUBJECT_CODE1,
+    </if>
+    <if test="subjectCode2 != null">
+      SUBJECT_CODE2,
+    </if>
+    <if test="subjectCode3 != null">
+      SUBJECT_CODE3,
+    </if>
+    <if test="subjectCode4 != null">
+      SUBJECT_CODE4,
+    </if>
+    <if test="subjectCode5 != null">
+      SUBJECT_CODE5,
+    </if>
+    <if test="subjectCode6 != null">
+      SUBJECT_CODE6,
+    </if>
+    <if test="initialWorth != null">
+      INITIAL_WORTH,
+    </if>
+    <if test="assetWorth != null">
+      ASSET_WORTH,
+    </if>
+    <if test="useAge != null">
+      USE_AGE,
+    </if>
+    <if test="deprecitionType != null">
+      DEPRECITION_TYPE,
+    </if>
+    <if test="netSalvage != null">
+      NET_SALVAGE,
+    </if>
+    <if test="monthLossAmount != null">
+      MONTH_LOSS_AMOUNT,
+    </if>
+    <if test="beginDate != null">
+      BEGIN_DATE,
+    </if>
+    <if test="costType != null">
+      COST_TYPE,
+    </if>
+    <if test="status != null">
+      STATUS,
+    </if>
+      CREATE_TIME,
+      LAST_UPDATE_TIME,
+  </sql>
+  <sql id="Selective_Value_List">
+    <if test="systemCode != null">
+      #{systemCode,jdbcType=VARCHAR},
+    </if>
+    <if test="assetCode != null">
+      #{assetCode,jdbcType=VARCHAR},
+    </if>
+    <if test="assetName != null">
+      #{assetName,jdbcType=VARCHAR},
+    </if>
+    <if test="assetClassCode != null">
+      #{assetClassCode,jdbcType=VARCHAR},
+    </if>
+    <if test="assistCode != null">
+      #{assistCode,jdbcType=VARCHAR},
+    </if>
+    <if test="subjectCode1 != null">
+      #{subjectCode1,jdbcType=VARCHAR},
+    </if>
+    <if test="subjectCode2 != null">
+      #{subjectCode2,jdbcType=VARCHAR},
+    </if>
+    <if test="subjectCode3 != null">
+      #{subjectCode3,jdbcType=VARCHAR},
+    </if>
+    <if test="subjectCode4 != null">
+      #{subjectCode4,jdbcType=VARCHAR},
+    </if>
+    <if test="subjectCode5 != null">
+      #{subjectCode5,jdbcType=VARCHAR},
+    </if>
+    <if test="subjectCode6 != null">
+      #{subjectCode6,jdbcType=VARCHAR},
+    </if>
+    <if test="initialWorth != null">
+      #{initialWorth,jdbcType=DECIMAL},
+    </if>
+    <if test="assetWorth != null">
+      #{assetWorth,jdbcType=DECIMAL},
+    </if>
+    <if test="useAge != null">
+      #{useAge,jdbcType=INTEGER},
+    </if>
+    <if test="deprecitionType != null">
+      #{deprecitionType,jdbcType=VARCHAR},
+    </if>
+    <if test="netSalvage != null">
+      #{netSalvage,jdbcType=DECIMAL},
+    </if>
+    <if test="monthLossAmount != null">
+      #{monthLossAmount,jdbcType=DECIMAL},
+    </if>
+    <if test="beginDate != null">
+      #{beginDate,jdbcType=DATE},
+    </if>
+    <if test="costType != null">
+      #{costType,jdbcType=VARCHAR},
+    </if>
+    <if test="status != null">
+      #{status,jdbcType=VARCHAR},
+    </if>
+    sysdate(),
+    sysdate(),
+  </sql>
+  <select id="findList" parameterType="AssetInfo" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from asset_info
+    <include refid="Example_Where_Clause" />
+    <!-- order by CREATE_DATE -->
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <trim suffixOverrides=",">
+      <include refid="Base_Column_List" />
+    </trim>
+    from asset_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </select>
+  <delete id="delete" parameterType="java.lang.Long">
+    delete from asset_info
+    where ID = #{id,jdbcType=DECIMAL}
+  </delete>
+  <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id"  parameterType="AssetInfo">
+    insert into asset_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Column_List"/>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <include refid="Selective_Value_List"/>
+    </trim>
+  </insert>
+  <update id="update" parameterType="AssetInfo">
+    update asset_info
+    <include refid="Base_Set_Clause"/>
+    where ID = #{id,jdbcType=DECIMAL}
+  </update>
+</mapper>
