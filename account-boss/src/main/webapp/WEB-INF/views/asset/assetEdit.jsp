@@ -84,7 +84,8 @@
 						<div class="form-group">
 							<label for="inputPassword3" class="col-lg-2 control-label">增加日期:</label>
 							<div class="col-lg-3">
-								<input type="text" name="beginDate" id="beginDate" class="form-control input_left"  onclick="WdatePicker()" value = "<fmt:formatDate value="${dto.beginDate}" dateStyle="default" />"/>
+								<input type="text" name="beginDate" id="beginDate" class="form-control input_left"  onclick="WdatePicker()"  onchange="computeOpening()"
+								value = "<fmt:formatDate value="${dto.beginDate}" dateStyle="default" />"/>
 							</div>
 						</div>
 						
@@ -156,7 +157,7 @@
 						<div class="form-group">
 						   <label for="inputPassword3" class="col-lg-2 control-label">原值:</label>
 						   <div class="col-lg-3">
-								<input type="text" class="form-control" value="${dto.assetWorth}" id="assetWorth" name="assetWorth" />
+								<input type="text" class="form-control" value="${dto.initialWorth}" id="initialWorth" name="initialWorth" />
 						   </div>
 						   <label for="inputPassword3" class="col-lg-2 control-label">预计使用期限:</label>
 						   <div class="col-lg-3">
@@ -195,7 +196,8 @@
 						<div class="form-group">
 							<label for="inputPassword3" class="col-lg-2 control-label">开始使用日期:</label>
 							<div class="col-lg-3">
-								<input type="text" name="startUseDate" id="startUseDate" class="form-control input_left"  onclick="WdatePicker()" value = "<fmt:formatDate value="${dto.beginDate}" dateStyle="default" />"/>
+								<input type="text" name="beginUseDate" id="beginUseDate" class="form-control input_left"  onclick="WdatePicker()" 
+									value = "<fmt:formatDate value="${dto.beginUseDate}" dateStyle="default"/>"  onchange="computeOpening()"/>
 							</div>
 						   	<label for="inputPassword3" class="col-lg-2 control-label">已折旧期数:</label>
 						   	<div class="col-lg-3">
@@ -206,11 +208,11 @@
 						<div class="form-group">
 						   	<label for="inputPassword3" class="col-lg-2 control-label">期初累计折旧:</label>
 						    <div class="col-lg-3">
-								<input type="text" class="form-control" value="${dto.openingBalance}" id="openingBalance" name="openingBalance" readonly/>
+								<input type="text" class="form-control" value="${dto.useAmount}" id="useAmount" name="useAmount" readonly/>
 							</div>
 							<label for="inputPassword3" class="col-lg-2 control-label">期初净值:</label>
 						    <div class="col-lg-3">
-								<input type="text" class="form-control" value="${dto.openingNetSalvage}" id="openingNetSalvage" name="openingNetSalvage" readonly/>
+								<input type="text" class="form-control" value="${dto.assetWorth}" id="assetWorth" name="assetWorth" readonly/>
 							</div>
 						</div>
 					</form>
@@ -229,16 +231,22 @@
 	<script type="text/javascript">
 		$(function(){
 			$(":radio").click(function(){
-				 console.log("您是..." + $(this).val());
+				 console.log("..." + $(this).val());
 				 if($(this).val()==0){
-					 
+					$("#hasUseAge").attr('readonly','readonly');
+					$("#assetWorth").attr('readonly','readonly');
+					$("#useAmount").attr('readonly','readonly');
+					computeOpening();
+					
 				 }else{
-					 
+					$("#hasUseAge").removeAttr('readonly');
+					$("#assetWorth").removeAttr('readonly');
+					$("#useAmount").removeAttr('readonly');
 				 }
 			});
 		})
 		
-		$("#assetWorth").bind("input propertychange",function(event){
+		$("#initialWorth").bind("input propertychange",function(event){
 			computeCost();
 		});
 		
@@ -252,7 +260,7 @@
 		
 		// 计算月折旧额
 		function computeCost(){
-			var v_asset_worth = $("#assetWorth").val();
+			var v_asset_worth = $("#initialWorth").val();
 			var v_net_salvage = $("#netSalvage").val();
 			var v_use_age = $("#useAge").val();
 			
@@ -262,6 +270,33 @@
 				$("#monthLossAmount").val(v_amount.toFixed(2));
 			}else{
 				$("#monthLossAmount").val('');
+			}
+			computeOpening();
+		}
+		
+		// 计算
+		function computeOpening(){
+			var v_month_lost = $("#monthLossAmount").val();
+			var v_start_use_date = $("#beginUseDate").val();
+			var v_begin_date = $("#beginDate").val();
+			var v_initial_worth = $("#initialWorth").val();
+			var v_net_salvage = $("#netSalvage").val();
+			
+			if(v_start_use_date!='' && v_month_lost!='' && v_begin_date!=''){
+				// 已折旧期数
+				v_start_use_date = stringToDate(v_start_use_date);
+				v_begin_date = stringToDate(v_begin_date);
+				var v_month = getIntervalMonth(v_start_use_date, v_begin_date);
+				console.log("dep----"+v_month);
+				var v_opening_dep = v_month_lost*v_month;
+				var v_opening_amount= v_initial_worth - v_opening_dep-v_net_salvage;
+				$("#hasUseAge").val(v_month);
+				$("#useAmount").val(v_opening_dep);
+				$("#assetWorth").val(v_opening_amount);
+			}else{
+				$("#hasUseAge").val('');
+				$("#assetWorth").val('');
+				$("#useAmount").val('');
 			}
 		}
 		
@@ -282,6 +317,30 @@
 				}
 			});
 		}
+		
+		
+		function getIntervalMonth(startDate,endDate){
+	        var startMonth = startDate.getMonth();
+	        var endMonth = endDate.getMonth();
+	        var intervalMonth = (endDate.getFullYear()*12+endMonth) - (startDate.getFullYear()*12+startMonth);
+	        return intervalMonth;
+		}
+		
+		function stringToDate(dateStr){
+		     var separator="-";
+		     var dateArr = dateStr.split(separator);
+		     var year = parseInt(dateArr[0]);
+		     var month;
+		     //处理月份为04这样的情况                         
+		     if(dateArr[1].indexOf("0") == 0){
+		         month = parseInt(dateArr[1].substring(1));
+		     }else{
+		          month = parseInt(dateArr[1]);
+		     }
+		     var date = new Date(year,month -1,1);
+		     return date;
+		 }
+	
 	</script>
 </body>
 </html>

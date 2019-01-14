@@ -77,12 +77,31 @@ public class VoucherInfoServiceImpl implements VoucherInfoService {
 
 	@Override
 	public List<VoucherInfoDto> findListByMonth(String systemCode, String accountMonth) {
-		return voucherInfoManager.findListByMonth(systemCode, accountMonth);
+		List<VoucherInfo> voucherInfoList  = voucherInfoManager.findListByMonth(systemCode, accountMonth);
+		List<VoucherInfoDto> voucherInfoDtoList = new ArrayList<VoucherInfoDto>();
+		for(VoucherInfo dto : voucherInfoList){
+			VoucherInfoDto respDto = new VoucherInfoDto();
+			BeanUtils.copyProperties(dto, respDto);
+			voucherInfoDtoList.add(respDto);
+		}
+		return voucherInfoDtoList;
 	}
 	
 	@Override
-	public String selectDefaultSerialNum(String systemCode, String accountMonth) {
+	public Integer selectDefaultSerialNum(String systemCode, String accountMonth) {
 		return voucherInfoManager.selectDefaultSerialNum(systemCode, accountMonth);
+	}
+
+	@Override
+	public List<VoucherInfoDto> findListMonthBetween(String systemCode, String startDate, String endDate) {
+		List<VoucherInfo> voucherInfoList  = voucherInfoManager.findListMonthBetween(systemCode, startDate, endDate);
+				List<VoucherInfoDto> voucherInfoDtoList = new ArrayList<VoucherInfoDto>();
+		for(VoucherInfo dto : voucherInfoList){
+			VoucherInfoDto respDto = new VoucherInfoDto();
+			BeanUtils.copyProperties(dto, respDto);
+			voucherInfoDtoList.add(respDto);
+		}
+		return voucherInfoDtoList;
 	}
 	
 }

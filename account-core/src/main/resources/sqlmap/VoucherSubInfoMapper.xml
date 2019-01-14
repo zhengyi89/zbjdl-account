@@ -172,7 +172,7 @@
     select vsi.*
     from voucher_sub_info vsi, voucher_info vi
     where vsi.voucher_id = vi.id and
-    system_code = #{0} and account_period like CONCAT('%',#{1},'%')
+    system_code = #{0} and account_period like CONCAT(#{1},'%')
   </select>
   
 </mapper>

@@ -18,25 +18,25 @@ import com.zbjdl.account.model.AccountSettleInfo;
 
 @Component
 public class AccountSettleInfoManagerImpl implements AccountSettleInfoManager {
-	
+
 	@Autowired
 	private AccountSettleInfoRepository accountSettleInfoRepository;
-	
+
 	@Override
 	public Integer save(AccountSettleInfo accountSettleInfo) {
 		return accountSettleInfoRepository.save(accountSettleInfo);
 	}
-	
+
 	@Override
 	public Integer update(AccountSettleInfo accountSettleInfo) {
 		return accountSettleInfoRepository.update(accountSettleInfo);
 	}
-	
+
 	@Override
 	public AccountSettleInfo selectById(Long id) {
 		return accountSettleInfoRepository.selectById(id);
 	}
-	
+
 	@Override
 	public List<AccountSettleInfo> findList(AccountSettleInfo accountSettleInfo) {
 		return accountSettleInfoRepository.findList(accountSettleInfo);
@@ -57,5 +57,23 @@ public class AccountSettleInfoManagerImpl implements AccountSettleInfoManager {
 		return accountSettleInfoRepository.findListByMonth(systemCode, accountMonth);
 	}
 
-}
+	@Override
+	public List<AccountSettleWithSubjectInfoDto> findBySubjectCode(String systemCode, String subjectCode) {
+		return accountSettleInfoRepository.findBySubjectCode(systemCode, subjectCode);
+	}
 
+	@Override
+	public Boolean isSettle(String systemCode, String accountMonth) {
+		return accountSettleInfoRepository.isSettle(systemCode, accountMonth);
+	}
+
+	@Override
+	public void deleteChildren(Long id) {
+		accountSettleInfoRepository.deleteChildren(id);
+	}
+
+	@Override
+	public List<AccountSettleWithSubjectInfoDto> findListByParentId(Long parentId) {
+		return accountSettleInfoRepository.findListByParentId(parentId);
+	}
+}

@@ -43,8 +43,8 @@
 				            <q:column title="待摊销费用金额" value="${initial_worth}" width="20%" />
 				            <q:column title="分摊期限" value="${use_age}" width="20%" />
 				            <q:column title="月分摊金额" value="${month_loss_amount}" width="20%" />
-				            <q:column title="已分摊期数" value="" width="20%" />
-				            <q:column title="期末余额" value="" width="20%" />
+				            <q:column title="已分摊期数" value="${has_use_age }" width="20%" />
+				            <q:column title="期末余额" value="${asset_worth }" width="20%" />
 				            <q:column title="状态" width="10%" >
 							  	${status}
 							</q:column>

@@ -233,7 +233,8 @@
   <select id="findListByMonth" parameterType="java.lang.String" resultMap="BaseResultMap">
     select *
     from voucher_info
-    where system_code = #{0} and account_period like CONCAT('%',#{1},'%')
+    where system_code = #{0} and account_period like CONCAT(#{1},'%') 
+    order by serial_num asc
   </select>
   <delete id="delete" parameterType="java.lang.Long">
     delete from voucher_info
@@ -254,9 +255,14 @@
     where ID = #{id,jdbcType=DECIMAL}
   </update>
   
-  <select id="selectDefaultSerialNum" parameterType="java.lang.String" resultType="java.lang.String">
+  <select id="selectDefaultSerialNum" parameterType="java.lang.String" resultType="java.lang.Integer">
     select max(serial_num)+1
     from voucher_info
     where system_code = #{0} and account_period like CONCAT(#{1},'%') and template_flag != 1
+  </select>
+  <select id="findListMonthBetween" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select * from voucher_info
+    where system_code = #{0} and date_format(account_period,'%Y-%m') &gt;= #{1}
+     and date_format(account_period,'%Y-%m') &lt;= #{2}
   </select>
 </mapper>

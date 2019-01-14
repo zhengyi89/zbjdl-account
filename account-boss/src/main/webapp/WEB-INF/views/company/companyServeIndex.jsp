@@ -58,7 +58,7 @@
 						<q:table queryService="queryService"
 							queryKey="queryCompanyList" formId="godownForma"
 							class="table table-striped table-bordered" pageSize="20">
-							<q:nodata>无符合条件的记录</q:nodata>
+							<q:nodata>暂无代帐客户，不能开始记账</q:nodata>
 							<q:param name="accountantId" value="${SESSION_USERINFO.userId}" />
 							<q:column title="序号" value="${_rowstatus.globalIndex}" with="10％" />
 				            <q:column title="公司名称" value="${company_name}" width="20%" />

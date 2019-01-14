@@ -13,11 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zbjdl.common.utils.BeanUtils;
-
 import com.zbjdl.account.manager.AssetInfoManager;
 import com.zbjdl.account.service.AssetInfoService;
 import com.zbjdl.account.model.AssetInfo;
 import com.zbjdl.account.dto.AssetInfoDto;
+import com.zbjdl.account.enumtype.AssetEnum;
 
 @Service("assetInfoService")
 public class AssetInfoServiceImpl implements AssetInfoService {
@@ -34,6 +34,7 @@ public class AssetInfoServiceImpl implements AssetInfoService {
 		}else {
 			AssetInfo assetInfo = new AssetInfo();
 			BeanUtils.copyProperties(assetInfoDto, assetInfo);
+			assetInfo.setStatus(AssetEnum.STATUS_USING.getCode());
 			assetInfoManager.save(assetInfo);
 			assetInfoDto.setId(assetInfo.getId());
 		}

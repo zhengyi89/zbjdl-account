@@ -10,9 +10,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.alibaba.fastjson.JSON;
+import com.zbjdl.account.dto.AssetDeprecitionInfoDto;
 import com.zbjdl.account.dto.AssetInfoDto;
 import com.zbjdl.account.dto.TaxInfoDto;
+import com.zbjdl.account.dto.request.FindPreDeprecitionInfoReqDto;
 import com.zbjdl.account.dto.request.VoucherInfoSaveReqDto;
+import com.zbjdl.account.enumtype.AssetEnum;
 import com.zbjdl.account.service.AssetClassInfoService;
 import com.zbjdl.account.service.AssetDeprecitionInfoService;
 import com.zbjdl.account.service.AssetInfoService;
@@ -63,15 +66,20 @@ public class WebApplicationTests {
 
 	@Test
 	public void assetInfoAddTest(){
-		assetDeprecitionInfoService.doDeprecition("000011", "2019-02");
+		FindPreDeprecitionInfoReqDto reqDto = new FindPreDeprecitionInfoReqDto();
+		reqDto.setDeprecitionMonth("2019-02");
+		reqDto.setSystemCode("000015");
+		reqDto.setCostType(AssetEnum.COST_TYPE_DEPRECITION.getCode());
+		List<AssetDeprecitionInfoDto>  deprecitionList = assetDeprecitionInfoService.findPreDeprecition(reqDto);
+		for (AssetDeprecitionInfoDto assetDeprecitionInfoDto : deprecitionList) {
+			System.out.println("----------"+JSON.toJSONString(assetDeprecitionInfoDto));
+		}
 	}
 	
 	@Test
 	public void productAddTest(){
-//		VoucherInfoSaveReqDto voucherInfoSaveReqDto = new VoucherInfoSaveReqDto();
-//		voucherInfoSaveReqDto.setSerialNum("1111");
-//		voucherInfoService.saveOrUpdate(voucherInfoSaveReqDto);
-//		System.out.println("---------------id--"+voucherInfoSaveReqDto.getId());
+		Integer aa = voucherInfoService.selectDefaultSerialNum("111","2");
+		System.out.println("--------"+aa);
 	}
 	@Test
 	public void idGenerateTest(){

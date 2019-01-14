@@ -26,5 +26,13 @@ public interface AccountSettleInfoManager {
 	List<AccountSettleWithSubjectInfoDto> findInitBySystemCode(String systemCode);
 
 	List<AccountSettleWithSubjectInfoDto> findListByMonth(String systemCode, String accountMonth);
+
+	List<AccountSettleWithSubjectInfoDto> findBySubjectCode(String systemCode, String subjectCode);
+
+	Boolean isSettle(String systemCode, String accountMonth);
+
+	void deleteChildren(Long id);
+
+	List<AccountSettleWithSubjectInfoDto> findListByParentId(Long parentId);
 	
 }

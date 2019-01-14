@@ -35,17 +35,24 @@
 						<div class="form-group">
 							<label class="control-label col-lg-2">会计期间（起始）</label>
 							<div class="col-lg-3">
-								<div class="input-group">
-									<input class="form-control form_datetime" type="text" id="startdate" name="startdate" readonly="readonly">
-									<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-			                    </div>
+								<select class="form-control" id="startdate" name="startdate">
+									<c:forEach items="${dateMap}" var="date">
+										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
+											${date.value } 
+										</option>
+									</c:forEach>
+								</select>
 							</div>
+							
 							<label class="col-lg-2 control-label">会计期间（结束）</label>
 							<div class="col-lg-3">
-								<div class="input-group">
-									<input class="form-control form_datetime" type="text" id="enddate" name="enddate" readonly="readonly">
-				                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-			                    </div>
+								<select class="form-control" id="enddate" name="enddate">
+									<c:forEach items="${dateMap}" var="date">
+										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
+											${date.value } 
+										</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">

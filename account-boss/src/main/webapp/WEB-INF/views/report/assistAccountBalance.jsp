@@ -43,17 +43,24 @@
 						<div class="form-group">
 							<label class="control-label col-lg-2">会计期间（起始）</label>
 							<div class="col-lg-3">
-								<div class="input-group">
-									<input class="form-control form_datetime" type="text" id="startdate" name="startdate" readonly="readonly">
-									<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-			                    </div>
+								<select class="form-control" id="startdate" name="startdate">
+									<c:forEach items="${dateMap}" var="date">
+										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
+											${date.value } 
+										</option>
+									</c:forEach>
+								</select>
 							</div>
+							
 							<label class="col-lg-2 control-label">会计期间（结束）</label>
 							<div class="col-lg-3">
-								<div class="input-group">
-									<input class="form-control form_datetime" type="text" id="enddate" name="enddate" readonly="readonly">
-				                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-			                    </div>
+								<select class="form-control" id="enddate" name="enddate">
+									<c:forEach items="${dateMap}" var="date">
+										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
+											${date.value } 
+										</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 						
@@ -77,15 +84,17 @@
 					<div class="panel-table">
 						<q:table queryService="queryService" queryKey="queryAssistAccountBalance" formId="godownForma"
 							class="table table-striped table-bordered" pageSize="20">
+							<q:sum title="总笔数(笔)" name="countnum"/>
+    						<q:sum title="总金额（元）" name="sumamount"/>
 							<q:nodata>无符合条件的记录</q:nodata>
 							<q:param name="systemCode" value="${SESSION_ACCOUNTINFO.systemCode}" />
-				            <q:column title="客户" value="${account_period}" width="20%" />
-				            <q:column title="期初余额(借方)" value="${serial_num}" width="20%" />
-				            <q:column title="期初余额(贷方)" value="${summary}" width="20%" />
-				            <q:column title="本期发生额(借方)" value="${amount}" width="20%" />
-				            <q:column title="本期发生额(贷方)" value="${amount}" width="20%" />
-				            <q:column title="期末余额(借方)" value="${balance_direct}" width="20%" />
-				            <q:column title="期末余额(贷方)" value="" width="20%" />
+				            <q:column title="客户" value="${assist_code}" width="20%" />
+				            <q:column title="期初余额(借方)" value="${opening_debit_amount}" width="20%" />
+				            <q:column title="期初余额(贷方)" value="${opening_credit_amount}" width="20%" />
+				            <q:column title="本期发生额(借方)" value="${debit_amount}" width="20%" />
+				            <q:column title="本期发生额(贷方)" value="${credit_amount}" width="20%" />
+				            <q:column title="期末余额(借方)" value="${closing_debit_amount}" width="20%" />
+				            <q:column title="期末余额(贷方)" value="${closing_credit_amount }" width="20%" />
 						</q:table>
 					</div>
 					

@@ -93,12 +93,16 @@
 						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[1].id}" id="id1" name="voucherSubInfoDtos[1].id" />
 						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[2].id}" id="id2" name="voucherSubInfoDtos[2].id" />
 						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[3].id}" id="id3" name="voucherSubInfoDtos[3].id" />
+						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[4].id}" id="id4" name="voucherSubInfoDtos[4].id" />
+						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[5].id}" id="id5" name="voucherSubInfoDtos[5].id" />
 						
 						
 						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[0].balanceDirect}" id="balanceDirect0" name="voucherSubInfoDtos[0].balanceDirect" />
 						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[1].balanceDirect}" id="balanceDirect1" name="voucherSubInfoDtos[1].balanceDirect" />
 						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[2].balanceDirect}" id="balanceDirect2" name="voucherSubInfoDtos[2].balanceDirect" />
 						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[3].balanceDirect}" id="balanceDirect3" name="voucherSubInfoDtos[3].balanceDirect" />
+						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[4].balanceDirect}" id="balanceDirect4" name="voucherSubInfoDtos[4].balanceDirect" />
+						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[5].balanceDirect}" id="balanceDirect5" name="voucherSubInfoDtos[5].balanceDirect" />
 						<table class="table table-bordered">
 					      <thead>
 					        <tr>
@@ -211,6 +215,56 @@
 					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[3].creditAmount}" id="creditAmount3" name="voucherSubInfoDtos[3].creditAmount" /></td>
 					        </tr>
 					        <tr>
+					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[4].summary}" id="summary4" name="voucherSubInfoDtos[4].summary" /></td>
+					           <td>
+								<select class="form-control" id="subjectCode4" name="voucherSubInfoDtos[4].subjectCode" onchange="selectSubject(4);">
+									<option></option>
+									<c:forEach items="${subjectList}" var="subject">
+										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[4].subjectCode }">selected</c:if>>
+											${subject.subjectCode } ${subject.subjectName }
+										</option>
+									</c:forEach>
+								</select>
+					          </td>
+					          <td>
+					          	<div class="form-group">
+									<label class="col-lg-4 control-label" id="assistName5"></label>
+									<div class="col-lg-8">
+										<select class="form-control" id="assistCode4" name="voucherSubInfoDtos[4].assistCode" readonly>
+										</select>
+									</div>
+									
+								</div>
+					          </td>
+					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[4].debitAmount}" id="debitAmount4" name="voucherSubInfoDtos[4].debitAmount" /></td>
+					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[4].creditAmount}" id="creditAmount4" name="voucherSubInfoDtos[4].creditAmount" /></td>
+					        </tr>
+					        <tr>
+					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[5].summary}" id="summary5" name="voucherSubInfoDtos[5].summary" /></td>
+					           <td>
+								<select class="form-control" id="subjectCode5" name="voucherSubInfoDtos[5].subjectCode" onchange="selectSubject(5);">
+									<option></option>
+									<c:forEach items="${subjectList}" var="subject">
+										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[5].subjectCode }">selected</c:if>>
+											${subject.subjectCode } ${subject.subjectName }
+										</option>
+									</c:forEach>
+								</select>
+					          </td>
+					          <td>
+					          	<div class="form-group">
+									<label class="col-lg-4 control-label" id="assistName5"></label>
+									<div class="col-lg-8">
+										<select class="form-control" id="assistCode5" name="voucherSubInfoDtos[5].assistCode" readonly>
+										</select>
+									</div>
+									
+								</div>
+					          </td>
+					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[5].debitAmount}" id="debitAmount5" name="voucherSubInfoDtos[5].debitAmount" /></td>
+					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[5].creditAmount}" id="creditAmount5" name="voucherSubInfoDtos[5].creditAmount" /></td>
+					        </tr>
+					        <tr>
 					          <th scope="row">合计:</th>
 					          <td></td>
 					          <td></td>
@@ -251,6 +305,14 @@
 			if(${not empty dto.voucherSubInfoDtos[3].assistCode }){
 				selectSubject(3);
 				$("#assistCode3").val('${dto.voucherSubInfoDtos[3].assistCode }');
+			}
+			if(${not empty dto.voucherSubInfoDtos[4].assistCode }){
+				selectSubject(4);
+				$("#assistCode4").val('${dto.voucherSubInfoDtos[4].assistCode }');
+			}
+			if(${not empty dto.voucherSubInfoDtos[5].assistCode }){
+				selectSubject(5);
+				$("#assistCode5").val('${dto.voucherSubInfoDtos[5].assistCode }');
 			}
 			
 		})

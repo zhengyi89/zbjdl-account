@@ -1,6 +1,6 @@
 package com.zbjdl.account.util;
 
-import com.zbjdl.account.enumtype.SystemInfoEnum;
+import com.zbjdl.account.enumtype.SystemEnum;
 import com.zbjdl.common.amount.Amount;
 
 /**
@@ -22,7 +22,7 @@ public class AccountUtils {
 		Amount amount = null;
 		debitAmount = debitAmount==null?new Amount():debitAmount;
 		creditAmount = creditAmount==null?new Amount():creditAmount;
-		if (SystemInfoEnum.CREDIT.getCode().equals(balanceDirect)) {
+		if (SystemEnum.CREDIT.getCode().equals(balanceDirect)) {
 			amount = creditAmount.subtract(debitAmount);
 		} else {
 			amount = debitAmount.subtract(creditAmount);

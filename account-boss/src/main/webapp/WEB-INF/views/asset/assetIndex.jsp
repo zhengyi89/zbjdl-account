@@ -39,14 +39,17 @@
 				            <q:column title="资产类别" value="${asset_class_name}" width="20%" />
 				            <q:column title="部门" value="${assist_name}" width="20%" />
 				            <q:column title="预计使用期限" value="${use_age}" width="20%" />
-				            <%-- <q:column title="开始使用日期" value="${use_age}" width="20%" /> --%>
+				            <q:column title="开始使用日期"  width="20%" >
+				            	<fmt:formatDate value="${begin_use_date}" pattern="yyyy-MM-dd" />
+				            </q:column>
 				            <q:column title="增加日期"  width="20%" >
 				            	<fmt:formatDate value="${begin_date}" pattern="yyyy-MM-dd" />
 				            </q:column>
-				            <q:column title="资产原值" value="${asset_worth}" width="20%" />
+				            <q:column title="资产原值" value="${initial_worth}" width="20%" />
 				            <q:column title="残值" value="${net_salvage}" width="20%" />
 				            <q:column title="月折旧额" value="${month_loss_amount}" width="20%" />
-				            <q:column title="已折旧期数" value="${use_age}" width="20%" />
+				            <q:column title="已折旧期数" value="${has_use_age}" width="20%" />
+				            <q:column title="期末净值" value="${asset_worth}" width="20%" />
 				            <%-- <q:column title="期末净值" value="${use_age}" width="20%" /> --%>
 				            <q:column title="状态" width="10%" >
 							  	${status}

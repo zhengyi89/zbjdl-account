@@ -21,7 +21,9 @@ public interface VoucherInfoManager {
 	
 	List<VoucherInfo> findList(VoucherInfo voucherInfo);
 
-	List<VoucherInfoDto> findListByMonth(String systemCode, String accountMonth);
+	List<VoucherInfo> findListByMonth(String systemCode, String accountMonth);
 
-	String selectDefaultSerialNum(String systemCode, String accountMonth);
+	Integer selectDefaultSerialNum(String systemCode, String accountMonth);
+
+	List<VoucherInfo> findListMonthBetween(String systemCode, String startDate, String endDate);
 }

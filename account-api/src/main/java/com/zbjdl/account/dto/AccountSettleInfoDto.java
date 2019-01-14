@@ -12,15 +12,18 @@ import com.zbjdl.common.amount.Amount;
 
 /**
  * AccountSettleInfoDto
+ * 
  * @author code-generator
  *
  */
-public class AccountSettleInfoDto implements Serializable{
+public class AccountSettleInfoDto implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private java.lang.Long id;
+	private java.lang.Long parentId;
 	private java.lang.Long subjectId;
 	private java.lang.String accountMonth;
+	private java.lang.String assistCode;
 	private com.zbjdl.common.amount.Amount debitAmount;
 	private com.zbjdl.common.amount.Amount creditAmount;
 	private com.zbjdl.common.amount.Amount openingBalance;
@@ -43,223 +46,266 @@ public class AccountSettleInfoDto implements Serializable{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 	/**
 	 * @return
 	 */
 	public Long getId() {
 		return this.id;
 	}
+
 	/**
 	 * 科目id
+	 * 
 	 * @param subjectId
 	 */
 	public void setSubjectId(java.lang.Long subjectId) {
 		this.subjectId = subjectId;
 	}
-	
+
 	/**
 	 * 科目id
+	 * 
 	 * @return
 	 */
 	public java.lang.Long getSubjectId() {
 		return this.subjectId;
 	}
+
 	/**
 	 * 记账月份
+	 * 
 	 * @param accountMonth
 	 */
 	public void setAccountMonth(java.lang.String accountMonth) {
 		this.accountMonth = accountMonth;
 	}
-	
+
 	/**
 	 * 记账月份
+	 * 
 	 * @return
 	 */
 	public java.lang.String getAccountMonth() {
 		return this.accountMonth;
 	}
+
 	/**
 	 * 借方金额
+	 * 
 	 * @param debitAmount
 	 */
 	public void setDebitAmount(com.zbjdl.common.amount.Amount debitAmount) {
 		this.debitAmount = debitAmount;
 	}
-	
+
 	/**
 	 * 借方金额
+	 * 
 	 * @return
 	 */
 	public com.zbjdl.common.amount.Amount getDebitAmount() {
-		return this.debitAmount==null?new Amount():this.debitAmount;
+		return this.debitAmount;
 	}
+
 	/**
 	 * 贷方金额
+	 * 
 	 * @param creditAmount
 	 */
 	public void setCreditAmount(com.zbjdl.common.amount.Amount creditAmount) {
-		this.creditAmount = creditAmount==null?new Amount():this.creditAmount;
+		this.creditAmount = creditAmount;
 	}
-	
+
 	/**
 	 * 贷方金额
+	 * 
 	 * @return
 	 */
 	public com.zbjdl.common.amount.Amount getCreditAmount() {
-		return this.creditAmount==null?new Amount(0):this.creditAmount;
+		return this.creditAmount == null ? new Amount(0) : this.creditAmount;
 	}
+
 	/**
 	 * 期初余额
+	 * 
 	 * @param openingBalance
 	 */
 	public void setOpeningBalance(com.zbjdl.common.amount.Amount openingBalance) {
 		this.openingBalance = openingBalance;
 	}
-	
+
 	/**
 	 * 期初余额
+	 * 
 	 * @return
 	 */
 	public com.zbjdl.common.amount.Amount getOpeningBalance() {
 		return this.openingBalance;
 	}
+
 	/**
 	 * 累积金额
+	 * 
 	 * @param sumAmount
 	 */
 	public void setSumAmount(com.zbjdl.common.amount.Amount sumAmount) {
 		this.sumAmount = sumAmount;
 	}
-	
+
 	/**
 	 * 累积金额
+	 * 
 	 * @return
 	 */
 	public com.zbjdl.common.amount.Amount getSumAmount() {
-		return this.sumAmount==null?new Amount():this.sumAmount;
+		return this.sumAmount;
 	}
+
 	/**
 	 * 年初余额
+	 * 
 	 * @param yearOpeningBalance
 	 */
 	public void setYearOpeningBalance(com.zbjdl.common.amount.Amount yearOpeningBalance) {
 		this.yearOpeningBalance = yearOpeningBalance;
 	}
-	
+
 	/**
 	 * 年初余额
+	 * 
 	 * @return
 	 */
 	public com.zbjdl.common.amount.Amount getYearOpeningBalance() {
-		return this.yearOpeningBalance==null?new Amount():yearOpeningBalance;
+		return this.yearOpeningBalance;
 	}
+
 	/**
 	 * 余额
+	 * 
 	 * @param sumRemainAmount
 	 */
 	public void setSumRemainAmount(com.zbjdl.common.amount.Amount sumRemainAmount) {
 		this.sumRemainAmount = sumRemainAmount;
 	}
-	
+
 	/**
 	 * 余额
+	 * 
 	 * @return
 	 */
 	public com.zbjdl.common.amount.Amount getSumRemainAmount() {
 		return this.sumRemainAmount;
 	}
+
 	/**
 	 * 本年累积借方
+	 * 
 	 * @param yearCreditAmount
 	 */
 	public void setYearCreditAmount(com.zbjdl.common.amount.Amount yearCreditAmount) {
 		this.yearCreditAmount = yearCreditAmount;
 	}
-	
+
 	/**
 	 * 本年累积借方
+	 * 
 	 * @return
 	 */
 	public com.zbjdl.common.amount.Amount getYearCreditAmount() {
-		return this.yearCreditAmount==null?new Amount():yearCreditAmount;
+		return this.yearCreditAmount;
 	}
+
 	/**
 	 * 累积贷方
+	 * 
 	 * @param yearDebitAmount
 	 */
 	public void setYearDebitAmount(com.zbjdl.common.amount.Amount yearDebitAmount) {
 		this.yearDebitAmount = yearDebitAmount;
 	}
-	
+
 	/**
 	 * 累积贷方
+	 * 
 	 * @return
 	 */
 	public com.zbjdl.common.amount.Amount getYearDebitAmount() {
-		return this.yearDebitAmount==null?new Amount():yearDebitAmount;
+		return this.yearDebitAmount;
 	}
+
 	/**
-	 * 结算类型 INIT：科目期初  SETTLE：结算 
+	 * 结算类型 INIT：科目期初 SETTLE：结算
+	 * 
 	 * @param settleType
 	 */
 	public void setSettleType(java.lang.String settleType) {
 		this.settleType = settleType;
 	}
-	
+
 	/**
-	 * 结算类型 INIT：科目期初  SETTLE：结算 
+	 * 结算类型 INIT：科目期初 SETTLE：结算
+	 * 
 	 * @return
 	 */
 	public java.lang.String getSettleType() {
 		return this.settleType;
 	}
+
 	/**
 	 * 状态
+	 * 
 	 * @param status
 	 */
 	public void setStatus(java.lang.String status) {
 		this.status = status;
 	}
-	
+
 	/**
 	 * 状态
+	 * 
 	 * @return
 	 */
 	public java.lang.String getStatus() {
 		return this.status;
 	}
+
 	/**
 	 * 创建时间
+	 * 
 	 * @param createTime
 	 */
 	public void setCreateTime(java.util.Date createTime) {
 		this.createTime = createTime;
 	}
-	
+
 	/**
 	 * 创建时间
+	 * 
 	 * @return
 	 */
 	public java.util.Date getCreateTime() {
 		return this.createTime;
 	}
+
 	/**
 	 * 最后修改时间
+	 * 
 	 * @param lastUpdateTime
 	 */
 	public void setLastUpdateTime(java.util.Date lastUpdateTime) {
 		this.lastUpdateTime = lastUpdateTime;
 	}
-	
+
 	/**
 	 * 最后修改时间
+	 * 
 	 * @return
 	 */
 	public java.util.Date getLastUpdateTime() {
 		return this.lastUpdateTime;
 	}
+
 	/**
 	 * 
 	 * @param extend
@@ -267,7 +313,7 @@ public class AccountSettleInfoDto implements Serializable{
 	public void setExtend(java.lang.String extend) {
 		this.extend = extend;
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -277,7 +323,7 @@ public class AccountSettleInfoDto implements Serializable{
 	}
 
 	public com.zbjdl.common.amount.Amount getClosingBalance() {
-		return closingBalance==null?new Amount():closingBalance;
+		return closingBalance;
 	}
 
 	public void setClosingBalance(com.zbjdl.common.amount.Amount closingBalance) {
@@ -285,16 +331,44 @@ public class AccountSettleInfoDto implements Serializable{
 	}
 
 	public com.zbjdl.common.amount.Amount getSumYearAmount() {
-		return sumYearAmount==null?new Amount():sumYearAmount;
+		return sumYearAmount == null ? new Amount() : this.sumYearAmount;
 	}
 
 	/**
 	 * 本年累积金额
+	 * 
 	 * @param sumYearAmount
 	 */
 	public void setSumYearAmount(com.zbjdl.common.amount.Amount sumYearAmount) {
 		this.sumYearAmount = sumYearAmount;
 	}
-	
-	
+
+	public java.lang.Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(java.lang.Long parentId) {
+		this.parentId = parentId;
+	}
+
+	public java.lang.String getAssistCode() {
+		return assistCode;
+	}
+
+	public void setAssistCode(java.lang.String assistCode) {
+		this.assistCode = assistCode;
+	}
+
+	public void amountInit(){
+		this.debitAmount = new Amount();
+		this.creditAmount = new Amount();
+		this.openingBalance = new Amount();
+		this.closingBalance = new Amount();
+		this.sumAmount = new Amount();
+		this.sumYearAmount = new Amount();
+		this.yearOpeningBalance = new Amount();
+		this.sumRemainAmount = new Amount();
+		this.yearCreditAmount = new Amount();
+		this.yearDebitAmount = new Amount();
+	}
 }

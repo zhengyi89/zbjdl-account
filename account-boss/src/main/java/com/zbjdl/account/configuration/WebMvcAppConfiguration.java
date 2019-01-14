@@ -45,8 +45,8 @@ public class WebMvcAppConfiguration extends WebMvcConfigurerAdapter {
 		// Token
 //		registry.addInterceptor(new AvoidDuplicateSubmissionInterceptor());
 //		
-//		registry.addInterceptor(new SessionInterceptor()).
-//		excludePathPatterns("/company/**").
-//		excludePathPatterns("/system/console");
+		registry.addInterceptor(new SessionInterceptor()).
+		excludePathPatterns("/company/**").
+		excludePathPatterns("/system/console");
 	}
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zbjdl.common.utils.BeanUtils;
+import com.zbjdl.common.utils.StringUtils;
 import com.zbjdl.account.manager.AccountSettleInfoManager;
 import com.zbjdl.account.service.AccountSettleInfoService;
 import com.zbjdl.account.model.AccountSettleInfo;
@@ -79,12 +80,63 @@ public class AccountSettleInfoServiceImpl implements AccountSettleInfoService {
 	}
 
 	@Override
-	public AccountSettleInfoDto findInitBySubjectAndMonth(Long subjectId, String prevMonth) {
+	public AccountSettleInfoDto findBySubjectIdAndMonth(Long subjectId, String prevMonth) {
 		AccountSettleInfoDto accountSettleInfoDto = new AccountSettleInfoDto();
 		accountSettleInfoDto.setAccountMonth(prevMonth);
 		accountSettleInfoDto.setSubjectId(subjectId);
 		List<AccountSettleInfoDto> list = this.findList(accountSettleInfoDto);
+		// 如果查询到辅助核算
+		if (list.size()>0) {
+			for (AccountSettleInfoDto accountSettleInfoDto2 : list) {
+				if (accountSettleInfoDto2.getParentId()==null) {
+					return accountSettleInfoDto2;
+				}
+			}
+		}
 		return list.isEmpty()?null:list.get(0);
+	}
+
+	@Override
+	public List<AccountSettleWithSubjectInfoDto> findBySubjectCode(String systemCode, String subjectCode) {
+		return accountSettleInfoManager.findBySubjectCode(systemCode,subjectCode);
+	}
+
+	@Override
+	public Boolean isSettle(String systemCode, String accountMonth) {
+		return accountSettleInfoManager.isSettle(systemCode, accountMonth);
+	}
+
+	@Override
+	public void deleteChildren(Long id) {
+		accountSettleInfoManager.deleteChildren(id);
+	}
+
+	@Override
+	public List<AccountSettleWithSubjectInfoDto> findListByParentId(Long parentId) {
+		return accountSettleInfoManager.findListByParentId(parentId);
+	}
+
+	@Override
+	public AccountSettleInfoDto findAssistRecord(Long subjectId, String assistCode, String nextMonth) {
+		AccountSettleInfoDto accountSettleInfoDto = new AccountSettleInfoDto();
+		accountSettleInfoDto.setAccountMonth(nextMonth);
+		accountSettleInfoDto.setSubjectId(subjectId);
+		if (StringUtils.isNotBlank(assistCode)) {
+			accountSettleInfoDto.setAssistCode(assistCode);
+		}
+		List<AccountSettleInfoDto> list = this.findList(accountSettleInfoDto);
+		
+		if (StringUtils.isNotBlank(assistCode)) {
+			return list.isEmpty()?null:list.get(0);
+		}else {
+			// 如果assistcode为空，返回汇总信息
+			for (AccountSettleInfoDto accountSettleInfoDto2 : list) {
+				if (accountSettleInfoDto2.getParentId()==null) {
+					return accountSettleInfoDto2;
+				}
+			}
+		}
+		return null;
 	}
 	
 }

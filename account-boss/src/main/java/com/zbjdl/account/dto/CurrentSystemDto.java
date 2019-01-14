@@ -1,6 +1,8 @@
 package com.zbjdl.account.dto;
 
 import java.io.Serializable;
+import java.util.Map;
+import java.util.TreeSet;
 
 public class CurrentSystemDto implements Serializable {
 
@@ -24,6 +26,10 @@ public class CurrentSystemDto implements Serializable {
 	private String latestMonth; // 最新记账月份
 	
 	private String accountType; // 企业性质
+	
+	private TreeSet<String> dateSet; 
+	
+	private Boolean accountStatus;
 
 	public String getSystemName() {
 		return systemName;
@@ -89,5 +95,20 @@ public class CurrentSystemDto implements Serializable {
 		this.accountType = accountType;
 	}
 
+	public TreeSet<String> getDateSet() {
+		return dateSet;
+	}
+
+	public void setDateSet(TreeSet<String> dateSet) {
+		this.dateSet = dateSet;
+	}
+
+	public Boolean getAccountStatus() {
+		return accountStatus;
+	}
+
+	public void setAccountStatus(Boolean accountStatus) {
+		this.accountStatus = accountStatus;
+	}
 	
 }

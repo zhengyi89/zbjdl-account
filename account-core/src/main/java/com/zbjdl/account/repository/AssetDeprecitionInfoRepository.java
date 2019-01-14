@@ -8,6 +8,7 @@ package com.zbjdl.account.repository;
 
 import java.util.List;
 
+import com.zbjdl.account.dto.request.FindPreDeprecitionInfoReqDto;
 import com.zbjdl.account.model.AssetDeprecitionInfo;
 import com.zbjdl.common.respository.mybatis.GenericRepository;
 
@@ -23,6 +24,6 @@ public interface AssetDeprecitionInfoRepository extends GenericRepository {
 
 	void doDeprecition(String systemCode, String accountMonth);
 
-	List<AssetDeprecitionInfo> findPreDeprecition(String systemCode, String accountMonth);
+	List<AssetDeprecitionInfo> findPreDeprecition(FindPreDeprecitionInfoReqDto reqDto);
 	
 }

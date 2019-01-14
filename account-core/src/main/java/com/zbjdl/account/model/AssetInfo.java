@@ -28,10 +28,12 @@ public class AssetInfo {
 	private com.zbjdl.common.amount.Amount initialWorth;
 	private com.zbjdl.common.amount.Amount assetWorth;
 	private java.lang.Integer useAge;
+	private java.lang.Integer hasUseAge;
 	private java.lang.String deprecitionType;
 	private com.zbjdl.common.amount.Amount netSalvage;
 	private com.zbjdl.common.amount.Amount monthLossAmount;
 	private java.util.Date beginDate;
+	private java.util.Date beginUseDate;
 	private java.lang.String costType;
 	private java.lang.String status;
 	private java.util.Date createTime;
@@ -231,7 +233,7 @@ public class AssetInfo {
 		return this.initialWorth;
 	}
 	/**
-	 * 资产价值
+	 * 资产当前价值
 	 * @param assetWorth
 	 */
 	public void setAssetWorth(com.zbjdl.common.amount.Amount assetWorth) {
@@ -239,7 +241,7 @@ public class AssetInfo {
 	}
 	
 	/**
-	 * 资产价值
+	 * 资产当前价值
 	 * @return
 	 */
 	public com.zbjdl.common.amount.Amount getAssetWorth() {
@@ -259,6 +261,21 @@ public class AssetInfo {
 	 */
 	public java.lang.Integer getUseAge() {
 		return this.useAge;
+	}
+	/**
+	 * 
+	 * @param hasUseAge
+	 */
+	public void setHasUseAge(java.lang.Integer hasUseAge) {
+		this.hasUseAge = hasUseAge;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public java.lang.Integer getHasUseAge() {
+		return this.hasUseAge;
 	}
 	/**
 	 * 折旧方法
@@ -306,7 +323,7 @@ public class AssetInfo {
 		return this.monthLossAmount;
 	}
 	/**
-	 * 折旧开始时间
+	 * 创建时间
 	 * @param beginDate
 	 */
 	public void setBeginDate(java.util.Date beginDate) {
@@ -314,11 +331,26 @@ public class AssetInfo {
 	}
 	
 	/**
-	 * 折旧开始时间
+	 * 创建时间
 	 * @return
 	 */
 	public java.util.Date getBeginDate() {
 		return this.beginDate;
+	}
+	/**
+	 * 开始使用时间
+	 * @param beginUseDate
+	 */
+	public void setBeginUseDate(java.util.Date beginUseDate) {
+		this.beginUseDate = beginUseDate;
+	}
+	
+	/**
+	 * 开始使用时间
+	 * @return
+	 */
+	public java.util.Date getBeginUseDate() {
+		return this.beginUseDate;
 	}
 	/**
 	 * 损耗类型

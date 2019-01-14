@@ -27,6 +27,7 @@ import com.zbjdl.account.service.AssetDeprecitionInfoService;
 import com.zbjdl.account.service.AssetInfoService;
 import com.zbjdl.account.service.AssistAccountInfoService;
 import com.zbjdl.account.service.SubjectInfoService;
+import com.zbjdl.common.amount.Amount;
 
 /**
  * AssetInfoController
@@ -81,6 +82,10 @@ public class AssetInfoController extends AccountBaseController {
 		if (id != null) {
 			AssetInfoDto assetInfoDto = assetInfoService.selectById(id);
 			mav.addObject("dto", assetInfoDto);
+		}else{
+			AssetInfoDto assetInfoDto = new AssetInfoDto();
+			assetInfoDto.setNetSalvage(new Amount());
+			mav.addObject("dto", assetInfoDto);
 		}
 
 		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
@@ -104,6 +109,9 @@ public class AssetInfoController extends AccountBaseController {
 	public ModelAndView assetInfoSave(AssetInfoDto assetInfoDto, BindingResult bindingResult) {
 		assetInfoDto.setSystemCode(getCurrentSystemInfo().getSystemCode());
 		logger.info("save AssetInfo, param is : {}", JSON.toJSONString(assetInfoDto));
+		if (assetInfoDto.getAssetWorth()==null) {
+			assetInfoDto.setAssetWorth(assetInfoDto.getInitialWorth());
+		}
 		assetInfoDto = assetInfoService.saveOrUpdate(assetInfoDto);
 		String pageIndex;
 		if (AssetEnum.COST_TYPE_DEPRECITION.getCode().equals(assetInfoDto.getCostType())) {

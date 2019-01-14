@@ -37,17 +37,24 @@
 						<div class="form-group">
 							<label class="control-label col-lg-2">会计期间（起始）</label>
 							<div class="col-lg-3">
-								<div class="input-group">
-									<input class="form-control form_datetime" type="text" id="startdate" name="startdate" readonly="readonly">
-									<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-			                    </div>
+								<select class="form-control" id="startdate" name="startdate">
+									<c:forEach items="${dateMap}" var="date">
+										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
+											${date.value } 
+										</option>
+									</c:forEach>
+								</select>
 							</div>
+							
 							<label class="col-lg-2 control-label">会计期间（结束）</label>
 							<div class="col-lg-3">
-								<div class="input-group">
-									<input class="form-control form_datetime" type="text" id="enddate" name="enddate" readonly="readonly">
-				                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-			                    </div>
+								<select class="form-control" id="enddate" name="enddate">
+									<c:forEach items="${dateMap}" var="date">
+										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
+											${date.value } 
+										</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 						<div class="form-group">
@@ -68,7 +75,7 @@
 				<div class="panel-heading">查询结果</div>
 				<div class="panel-body">
 					<div class="panel-table">
-						<q:table queryService="queryService" queryKey="queryDetailAccount" formId="godownForma"
+						<q:table id="tab" queryService="queryService" queryKey="queryDetailAccount" formId="godownForma"
 							class="table table-striped table-bordered" pageSize="20">
 							<q:nodata>无符合条件的记录</q:nodata>
 							<q:param name="systemCode" value="${SESSION_ACCOUNTINFO.systemCode}" />
@@ -78,7 +85,9 @@
 				            <q:column title="借方" value="${debit_amount}" width="20%" />
 				            <q:column title="贷方" value="${credit_amount}" width="20%" />
 				            <q:column title="方向" value="${_textResource.getSysText('ACCOUNT_BALANCE_DIRECT', balance_direct)}" width="20%" />
-				            <q:column title="余额" value="" width="20%" />
+				            <q:column title="实际发生额" value="${amount }" width="20%" hidden=""/>
+				            <q:column title="期初余额" value="${opening_balance }" width="20%" hidden=""/>
+				            <q:column title="余额" value="" width="20%"/>
 						</q:table>
 					</div>
 					
@@ -87,6 +96,50 @@
 		</div>
 	</div>
 	<script type="text/javascript">
+	$(function(){
+		
+		var v_opening_amount = 0;
+		var v_account_month;
+		var v_amount;
+		var v_next = false;
+		
+		$('#tab tr').each(function(i){ // 遍历 tr
+			$(this).children('td').each(function(j){  // 遍历 tr 的各个 td
+				//console.log("第"+(i+1)+"行，第"+(j+1)+"个td的值："+$(this).text()+"。");
+				if(j==0){
+					if(i==1){
+						v_account_month = $(this).text();
+					}else{
+						if(v_account_month!=$(this).text()){
+							v_next = true;
+							v_account_month = $(this).text();
+						}
+					}
+					
+				}
+				if(j==6){
+					v_amount = $(this).text();
+				}
+				if(j==7){
+					if(i==1){
+						v_opening_amount = $(this).text();
+					}else{
+						if(v_next){
+							v_opening_amount = $(this).text();
+							v_next = false;
+						}
+					}
+				}
+				if(j==8){
+					v_opening_amount = Number(v_opening_amount)+Number(v_amount);
+					v_opening_amount = v_opening_amount.toFixed(2);
+					$(this).text(v_opening_amount);
+				}
+			});
+		});
+	})
+	
+	
 	$('.form_datetime').datetimepicker({
         format: 'yyyy-mm',
         autoclose: true,

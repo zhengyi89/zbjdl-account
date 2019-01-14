@@ -6,14 +6,13 @@
 
 package com.zbjdl.account.dto;
 
-
 /**
  * AccountSettleInfoDto
  * 
  * @author code-generator
  *
  */
-public class AccountSettleWithSubjectInfoDto extends AccountSettleInfoDto{
+public class AccountSettleWithSubjectInfoDto extends AccountSettleInfoDto {
 	private static final long serialVersionUID = 1L;
 
 	private String subjectCode;
@@ -22,7 +21,7 @@ public class AccountSettleWithSubjectInfoDto extends AccountSettleInfoDto{
 	private java.lang.String assistAccount;
 	private java.lang.Boolean lastLevel;
 	private java.lang.String parentCode;
-	
+
 	public String getSubjectCode() {
 		return subjectCode;
 	}
@@ -71,5 +70,4 @@ public class AccountSettleWithSubjectInfoDto extends AccountSettleInfoDto{
 		this.parentCode = parentCode;
 	}
 
-	
 }

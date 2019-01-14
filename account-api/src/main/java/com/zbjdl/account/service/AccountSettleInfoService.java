@@ -25,6 +25,16 @@ public interface AccountSettleInfoService {
 
 	List<AccountSettleWithSubjectInfoDto> findListByMonth(String systemCode, String accountMonth);
 
-	AccountSettleInfoDto findInitBySubjectAndMonth(Long subjectId, String prevMonth);
+	AccountSettleInfoDto findBySubjectIdAndMonth(Long subjectId, String prevMonth);
+
+	List<AccountSettleWithSubjectInfoDto> findBySubjectCode(String systemCode, String subjectCode);
+
+	Boolean isSettle(String systemCode, String accountMonth);
+
+	void deleteChildren(Long id);
+
+	List<AccountSettleWithSubjectInfoDto> findListByParentId(Long parentId);
+
+	AccountSettleInfoDto findAssistRecord(Long subjectId, String assistCode, String accountMonth);
 	
 }

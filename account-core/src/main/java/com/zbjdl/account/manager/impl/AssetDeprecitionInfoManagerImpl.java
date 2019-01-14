@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.zbjdl.account.repository.AssetDeprecitionInfoRepository;
+import com.zbjdl.account.dto.request.FindPreDeprecitionInfoReqDto;
 import com.zbjdl.account.manager.AssetDeprecitionInfoManager;
 import com.zbjdl.account.model.AssetDeprecitionInfo;
 
@@ -43,8 +44,8 @@ public class AssetDeprecitionInfoManagerImpl implements AssetDeprecitionInfoMana
 
 
 	@Override
-	public List<AssetDeprecitionInfo> findPreDeprecition(String systemCode, String accountMonth) {
-		return assetDeprecitionInfoRepository.findPreDeprecition(systemCode, accountMonth);
+	public List<AssetDeprecitionInfo> findPreDeprecition(FindPreDeprecitionInfoReqDto reqDto) {
+		return assetDeprecitionInfoRepository.findPreDeprecition(reqDto);
 	}
 
 }

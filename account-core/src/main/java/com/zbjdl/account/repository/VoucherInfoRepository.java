@@ -8,7 +8,7 @@ package com.zbjdl.account.repository;
 
 import java.util.List;
 
-import com.zbjdl.account.dto.VoucherInfoDto;
+import com.zbjdl.account.model.VoucherInfo;
 import com.zbjdl.common.respository.mybatis.GenericRepository;
 
 import org.springframework.stereotype.Repository;
@@ -21,8 +21,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VoucherInfoRepository extends GenericRepository {
 
-	List<VoucherInfoDto> findListByMonth(String systemCode, String accountMonth);
+	List<VoucherInfo> findListByMonth(String systemCode, String accountMonth);
 
-	String selectDefaultSerialNum(String systemCode, String accountMonth);
+	Integer selectDefaultSerialNum(String systemCode, String accountMonth);
+
+	List<VoucherInfo> findListMonthBetween(String systemCode, String startDate, String endDate);
 	
 }

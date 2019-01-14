@@ -18,6 +18,7 @@ public class AccountSettleInfoSaveReqDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private java.lang.Long id;
+	private java.lang.Long parentId;
 	private java.lang.Long subjectId;
 	private java.lang.String accountMonth;
 	private java.lang.String assistCode;
@@ -295,7 +296,13 @@ public class AccountSettleInfoSaveReqDto implements Serializable {
 	public void setAssistCode(java.lang.String assistCode) {
 		this.assistCode = assistCode;
 	}
-	
-	
+
+	public java.lang.Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(java.lang.Long parentId) {
+		this.parentId = parentId;
+	}
 
 }

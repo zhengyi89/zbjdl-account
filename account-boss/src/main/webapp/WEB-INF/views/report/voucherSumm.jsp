@@ -22,21 +22,27 @@
 					<form class="cmxform form-horizontal" action="${ctx}/report/voucherSumm" method="get"
 						method="get" id="companyForm" name="companyForm">
 						
-						<!-- 第二组查询条件 -->
 						<div class="form-group">
 							<label class="control-label col-lg-2">会计期间（起始）</label>
 							<div class="col-lg-3">
-								<div class="input-group">
-									<input class="form-control form_datetime" type="text" id="startdate" name="startdate" readonly="readonly">
-									<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-			                    </div>
+								<select class="form-control" id="startdate" name="startdate">
+									<c:forEach items="${dateMap}" var="date">
+										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
+											${date.value } 
+										</option>
+									</c:forEach>
+								</select>
 							</div>
+							
 							<label class="col-lg-2 control-label">会计期间（结束）</label>
 							<div class="col-lg-3">
-								<div class="input-group">
-									<input class="form-control form_datetime" type="text" id="enddate" name="enddate" readonly="readonly">
-				                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-			                    </div>
+								<select class="form-control" id="enddate" name="enddate">
+									<c:forEach items="${dateMap}" var="date">
+										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
+											${date.value } 
+										</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 						
@@ -56,6 +62,10 @@
 			
 			<div class="panel panel-default">
 				<div class="panel-heading">查询结果</div>
+				<div class="panel-heading" >
+					凭证总张数:<input title="凭证总张数"  type="button"value="${rows }" disabled="disabled" style=" border:none;" />张&nbsp;&nbsp;&nbsp;&nbsp;
+		    		附件总张数:<input title="附件总张数"  type="button" value="${papers }"  disabled="disabled" style=" border:none;" />张&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
 				<div class="panel-body">
 					<div class="panel-table">
 						<q:table queryService="queryService" queryKey="queryVoucherSumm" formId="godownForma"

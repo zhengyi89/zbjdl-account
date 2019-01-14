@@ -6,7 +6,7 @@ package com.zbjdl.account.enumtype;
  * @author zhengy
  * @date: 2018年11月23日 下午5:24:35
  */
-public enum SystemInfoEnum {
+public enum SystemEnum {
 	/*
 	 * 会计制度
 	 */
@@ -37,8 +37,8 @@ public enum SystemInfoEnum {
 	 * @return
 	 */
 	public static boolean isEnum(String code) {
-		SystemInfoEnum[] items = SystemInfoEnum.values();
-		for (SystemInfoEnum item : items) {
+		SystemEnum[] items = SystemEnum.values();
+		for (SystemEnum item : items) {
 			if (item.name().equals(code)) {
 				return true;
 			}
@@ -46,9 +46,9 @@ public enum SystemInfoEnum {
 		return false;
 	}
 
-	public static SystemInfoEnum toEnum(String code) {
-		SystemInfoEnum[] items = SystemInfoEnum.values();
-		for (SystemInfoEnum item : items) {
+	public static SystemEnum toEnum(String code) {
+		SystemEnum[] items = SystemEnum.values();
+		for (SystemEnum item : items) {
 			if (item.getCode().equals(code)) {
 				return item;
 			}
@@ -56,7 +56,7 @@ public enum SystemInfoEnum {
 		return null;
 	}
 
-	private SystemInfoEnum(String code, String msg) {
+	private SystemEnum(String code, String msg) {
 		this.code = code;
 		this.msg = msg;
 	}

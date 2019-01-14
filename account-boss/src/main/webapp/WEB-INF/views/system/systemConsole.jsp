@@ -27,6 +27,20 @@
 							</div>
 						</div>
 						
+						<div class="form-group">
+							<label class="col-lg-2 control-label">当前会计期间：</label>
+							<div class="col-lg-3">
+								<select class="form-control" id="accountMonth" name="accountMonth" onchange="changeAccountMonth()">
+									<c:forEach items="${SESSION_ACCOUNTINFO.dateSet}" var="date">
+										<option value="${date}" <c:if test="${date == SESSION_ACCOUNTINFO.accountMonth }">selected</c:if>>
+											${date } 
+										</option>
+									</c:forEach>
+								</select>
+							</div>
+							
+						</div>
+						
 						 <%-- <div class="form-group">
 							<label class="col-lg-2 control-label">服务开始时间</label>
 							<div class="col-lg-3">
@@ -55,7 +69,20 @@
 	</div>
 	
     <script type="text/javascript">
-    
+    function changeAccountMonth(){
+		var v_accountMonth = $("#accountMonth").val();
+		console.log("templateName+"+v_accountMonth)
+		$.ajax({
+			type : 'POST',
+			url : '${pageContext.request.contextPath}/system/changeAccountMonth',
+			data:'accountMonth='+v_accountMonth,
+			async: false,
+			success : function(data) {
+				console.log("--------+"+data.code)
+				window.location.replace("${pageContext.request.contextPath}/system/console?belongSystem=-9992002&_menuId=70&_firstMenuId=-2002");
+			}
+		});
+	}
     </script>
   </body>
 </html>

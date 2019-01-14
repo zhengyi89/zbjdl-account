@@ -3,7 +3,9 @@
 <mapper namespace="com.zbjdl.account.repository.AccountSettleInfoRepository">
 	<resultMap id="BaseResultMap" type="AccountSettleInfo">
 	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="parent_id" jdbcType="BIGINT" property="parentId" />
 	  <result column="subject_id" jdbcType="BIGINT" property="subjectId" />
+	  <result column="assist_code" jdbcType="VARCHAR" property="assistCode" />
 	  <result column="account_month" jdbcType="VARCHAR" property="accountMonth" />
 	  <result column="debit_amount" jdbcType="DECIMAL" property="debitAmount" />
 	  <result column="credit_amount" jdbcType="DECIMAL" property="creditAmount" />
@@ -22,7 +24,9 @@
   </resultMap>
 	<resultMap id="BaseResultWithSubjectMap" type="com.zbjdl.account.dto.AccountSettleWithSubjectInfoDto">
 	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="parent_id" jdbcType="BIGINT" property="parentId" />
 	  <result column="subject_id" jdbcType="BIGINT" property="subjectId" />
+	  <result column="assist_code" jdbcType="VARCHAR" property="assistCode" />
 	  <result column="account_month" jdbcType="VARCHAR" property="accountMonth" />
 	  <result column="debit_amount" jdbcType="DECIMAL" property="debitAmount" />
 	  <result column="credit_amount" jdbcType="DECIMAL" property="creditAmount" />
@@ -49,8 +53,14 @@
   <sql id="Example_Where_Clause">
     <where>
       <trim prefix="(" prefixOverrides="and" suffix=")">
+      	<if test="parentId != null" >
+	      and parent_id = #{parentId,jdbcType=BIGINT}
+	    </if>
       	<if test="subjectId != null" >
 	      and subject_id = #{subjectId,jdbcType=BIGINT}
+	    </if>
+      	<if test="assistCode != null" >
+	      and assist_code = #{assistCode,jdbcType=VARCHAR}
 	    </if>
       	<if test="accountMonth != null" >
 	      and account_month = #{accountMonth,jdbcType=VARCHAR}
@@ -96,7 +106,9 @@
   </sql>
   <sql id="Base_Column_List">
     id,
+    parent_id,
     subject_id,
+    assist_code,
     account_month,
     debit_amount,
     credit_amount,
@@ -116,7 +128,9 @@
   <sql id="Base_Set_Clause">
     <set>
       <trim suffixOverrides=",">
+        parent_id = #{parentId,jdbcType=BIGINT},
         subject_id = #{subjectId,jdbcType=BIGINT},
+        assist_code = #{assistCode,jdbcType=VARCHAR},
         account_month = #{accountMonth,jdbcType=VARCHAR},
         debit_amount = #{debitAmount,jdbcType=DECIMAL},
         credit_amount = #{creditAmount,jdbcType=DECIMAL},
@@ -135,8 +149,14 @@
     </set>
   </sql>
   <sql id="Selective_Column_List">
+    <if test="parentId != null">
+      parent_id,
+    </if>
     <if test="subjectId != null">
       subject_id,
+    </if>
+    <if test="assistCode != null">
+      assist_code,
     </if>
     <if test="accountMonth != null">
       account_month,
@@ -181,8 +201,14 @@
       LAST_UPDATE_TIME,
   </sql>
   <sql id="Selective_Value_List">
+    <if test="parentId != null">
+      #{parentId,jdbcType=BIGINT},
+    </if>
     <if test="subjectId != null">
       #{subjectId,jdbcType=BIGINT},
+    </if>
+    <if test="assistCode != null">
+      #{assistCode,jdbcType=VARCHAR},
     </if>
     <if test="accountMonth != null">
       #{accountMonth,jdbcType=VARCHAR},
@@ -245,21 +271,27 @@
   </select>
   <select id="findInitBySystemCode" parameterType="java.lang.String" resultMap="BaseResultWithSubjectMap">
     select a.*, s.subject_code, s.balance_direct, s.basic_subject, s.assist_account, s.LAST_LEVEL, s.PARENT_CODE
-    from account_settle_info a, subject_info s where a.subject_id = s.id
+    from account_settle_info a, subject_info s where a.subject_id = s.id  and a.parent_id is null
     and settle_type = 'INIT' 
     and s.system_code = #{systemCode,jdbcType=VARCHAR}
   </select>
   <select id="findListByMonth" parameterType="java.lang.String" resultMap="BaseResultWithSubjectMap">
     select a.*, s.subject_code, s.balance_direct, s.basic_subject, s.assist_account, s.LAST_LEVEL, s.PARENT_CODE
-    from account_settle_info a, subject_info s where a.subject_id = s.id
+    from account_settle_info a, subject_info s where a.subject_id = s.id and  a.parent_id is null
     and s.system_code = #{0}
     and a.account_month = #{1}
+    order by LENGTH(SUBJECT_CODE) desc
   </select>
-  <delete id="delete" parameterType="java.lang.Long">
+  <select id="findListByParentId" parameterType="java.lang.Long" resultMap="BaseResultWithSubjectMap">
+    select a.*, s.subject_code, s.balance_direct, s.basic_subject, s.assist_account, s.LAST_LEVEL, s.PARENT_CODE
+    from account_settle_info a, subject_info s where a.subject_id = s.id 
+    and a.parent_id = #{parentId,jdbcType=DECIMAL}
+  </select>
+  <delete id="deleteChildren" parameterType="java.lang.Long">
     delete from account_settle_info
-    where ID = #{id,jdbcType=DECIMAL}
+    where parent_id = #{parentId,jdbcType=DECIMAL}
   </delete>
-  <insert id="save" parameterType="AccountSettleInfo">
+  <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="AccountSettleInfo">
     insert into account_settle_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <include refid="Selective_Column_List"/>
@@ -276,7 +308,28 @@
   
    <insert id="initSubjectOpening" parameterType="java.lang.String">
     INSERT into account_settle_info (subject_id, account_month,debit_amount,credit_amount,opening_balance,closing_balance,sum_amount,
-	year_opening_balance,status,settle_type, create_time,last_update_time )
-	(select id,#{1},0,0,0,0,0,0,'','INIT',SYSDATE(),SYSDATE() from subject_info where system_code = #{0})
+	year_opening_balance,year_credit_amount,year_debit_amount,status,settle_type, create_time,last_update_time )
+	(select id,#{1},0,0,0,0,0,0,0,0,'','INIT',SYSDATE(),SYSDATE() from subject_info where system_code = #{0})
   </insert>
+  
+  
+  <select id="findBySubjectCode" parameterType="java.lang.String" resultMap="BaseResultWithSubjectMap">
+    select a.*, s.subject_code, s.balance_direct, s.basic_subject, s.assist_account, s.LAST_LEVEL, s.PARENT_CODE
+    from account_settle_info a, subject_info s where a.subject_id = s.id and a.parent_id is null
+    and s.system_code = #{0} and s.subject_code = #{1}
+  </select>
+  
+  <select id="isSettle" parameterType="java.lang.String" resultType="java.lang.Boolean">
+	  	SELECT
+			count(1)
+		FROM
+			account_settle_info asi ,
+			subject_info si
+		WHERE
+			si.id = asi.subject_id
+		AND asi. STATUS = 'SETTLE'
+		 and asi.parent_id is null
+		AND si.system_code = #{0}
+		AND account_month = #{1}
+  </select>
 </mapper>

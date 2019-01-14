@@ -1,5 +1,6 @@
 package com.zbjdl.account.controller;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,17 +22,21 @@ import com.zbjdl.account.controller.frame.AccountBaseController;
 import com.zbjdl.account.dto.AccountSettleInfoDto;
 import com.zbjdl.account.dto.AccountSettleWithSubjectInfoDto;
 import com.zbjdl.account.dto.AssistAccountInfoDto;
+import com.zbjdl.account.dto.AssistAccountSettleInfoDto;
 import com.zbjdl.account.dto.SubjectInfoDto;
 import com.zbjdl.account.dto.SystemInfoDto;
+import com.zbjdl.account.dto.VoucherInfoDto;
 import com.zbjdl.account.dto.VoucherSubInfoDto;
 import com.zbjdl.account.dto.request.AccountSettleInfoSaveReqDto;
 import com.zbjdl.account.dto.request.AccountSettleWithAssistSaveReqDto;
+import com.zbjdl.account.dto.request.FindPreDeprecitionInfoReqDto;
+import com.zbjdl.account.dto.response.AccountSettleCheckRespDto;
 import com.zbjdl.account.dto.response.BaseRespDto;
 import com.zbjdl.account.dto.response.TrialBalanceRespDto;
 import com.zbjdl.account.enumtype.AccountSettleStatusEnum;
 import com.zbjdl.account.enumtype.DataStatusEnum;
 import com.zbjdl.account.enumtype.ReturnEnum;
-import com.zbjdl.account.enumtype.SystemInfoEnum;
+import com.zbjdl.account.enumtype.SystemEnum;
 import com.zbjdl.account.service.AccountSettleInfoService;
 import com.zbjdl.account.service.AssetDeprecitionInfoService;
 import com.zbjdl.account.service.AssistAccountInfoService;
@@ -74,7 +79,7 @@ public class AccountSettleInfoController extends AccountBaseController {
 
 	@Autowired
 	private VoucherSubInfoService voucherSubInfoService;
-	
+
 	@Autowired
 	private AssetDeprecitionInfoService assetDeprecitionInfoService;
 
@@ -99,7 +104,7 @@ public class AccountSettleInfoController extends AccountBaseController {
 		}
 		return mav;
 	}
-	
+
 	/*
 	 * 编辑保存
 	 */
@@ -110,7 +115,7 @@ public class AccountSettleInfoController extends AccountBaseController {
 		// 根据subjectid查询
 		SubjectInfoDto subjectInfo = subjectInfoService.selectById(accountSettleSaveReqDto.getSubjectId());
 
-		if (SystemInfoEnum.DEBIT.getCode().equals(subjectInfo.getBalanceDirect())) {
+		if (SystemEnum.DEBIT.getCode().equals(subjectInfo.getBalanceDirect())) {
 			// 科目方向－借方，年初余额＝期初余额－（本年累积借方－本年累积贷方）
 			accountSettleSaveReqDto.setYearOpeningBalance(accountSettleSaveReqDto.getOpeningBalance().subtract(
 					accountSettleSaveReqDto.getYearDebitAmount().subtract(accountSettleSaveReqDto.getYearCreditAmount())));
@@ -120,13 +125,15 @@ public class AccountSettleInfoController extends AccountBaseController {
 					accountSettleSaveReqDto.getYearCreditAmount().subtract(accountSettleSaveReqDto.getYearDebitAmount())));
 		}
 
-//		Amount amount = AccountUtils.getRealAmount(subjectInfo.getBalanceDirect(), accountSettleSaveReqDto.getYearDebitAmount(),
-//				accountSettleSaveReqDto.getYearCreditAmount());
-//		accountSettleSaveReqDto.setSumAmount(amount);
+		// Amount amount =
+		// AccountUtils.getRealAmount(subjectInfo.getBalanceDirect(),
+		// accountSettleSaveReqDto.getYearDebitAmount(),
+		// accountSettleSaveReqDto.getYearCreditAmount());
+		// accountSettleSaveReqDto.setSumAmount(amount);
 		accountSettleSaveReqDto.setAccountMonth(getCurrentSystemInfo().getStartMonth());
 
 		// 设置年度累积
-//		accountSettleSaveReqDto.setSumRemainAmount(amount);
+		// accountSettleSaveReqDto.setSumRemainAmount(amount);
 
 		accountSettleSaveReqDto.setSettleType(DataStatusEnum.INIT.getCode());
 
@@ -147,7 +154,7 @@ public class AccountSettleInfoController extends AccountBaseController {
 		// 根据subjectid查询
 		SubjectInfoDto subjectInfo = subjectInfoService.selectById(accountSettleSaveReqDto.getSubjectId());
 
-		if (SystemInfoEnum.DEBIT.getCode().equals(subjectInfo.getBalanceDirect())) {
+		if (SystemEnum.DEBIT.getCode().equals(subjectInfo.getBalanceDirect())) {
 			// 科目方向－借方，年初余额＝期初余额－（本年累积借方－本年累积贷方）
 			accountSettleSaveReqDto.setYearOpeningBalance(accountSettleSaveReqDto.getOpeningBalance().subtract(
 					accountSettleSaveReqDto.getDebitAmount().subtract(accountSettleSaveReqDto.getCreditAmount())));
@@ -197,7 +204,7 @@ public class AccountSettleInfoController extends AccountBaseController {
 			sumCreditAmount = sumCreditAmount.add(accountSettleInfoSaveReqDto.getCreditAmount());
 			sumOpeningBalance = sumOpeningBalance.add(accountSettleInfoSaveReqDto.getOpeningBalance());
 
-			if (SystemInfoEnum.DEBIT.getCode().equals(subjectInfo.getBalanceDirect())) {
+			if (SystemEnum.DEBIT.getCode().equals(subjectInfo.getBalanceDirect())) {
 				// 科目方向－借方，年初余额＝期初余额－（本年累积借方－本年累积贷方）
 				accountSettleInfoSaveReqDto.setYearOpeningBalance(accountSettleInfoSaveReqDto.getOpeningBalance().subtract(
 						accountSettleInfoSaveReqDto.getDebitAmount().subtract(accountSettleInfoSaveReqDto.getCreditAmount())));
@@ -228,9 +235,27 @@ public class AccountSettleInfoController extends AccountBaseController {
 		// 设置年度累积
 		saveDto.setYearCreditAmount(sumCreditAmount);
 		saveDto.setYearDebitAmount(sumDebitAmount);
-		saveDto.setSumRemainAmount(sumAmount);
+		// saveDto.setSumRemainAmount(sumAmount);
 
 		accountSettleInfoService.saveOrUpdate(saveDto);
+
+		// 删除
+		accountSettleInfoService.deleteChildren(saveDto.getId());
+		for (AccountSettleInfoSaveReqDto accountSettleInfoSaveReqDto : accountSettleWithAssistSaveReqDto.getAccountSettleInfoSaveReqDto()) {
+			accountSettleInfoSaveReqDto.setSumAmount(AccountUtils.getRealAmount(subjectInfo.getBalanceDirect(),
+					accountSettleInfoSaveReqDto.getDebitAmount(), accountSettleInfoSaveReqDto.getCreditAmount()));
+			accountSettleInfoSaveReqDto.setParentId(saveDto.getId());
+			accountSettleInfoSaveReqDto.setAccountMonth(getCurrentSystemInfo().getStartMonth());
+
+			AccountSettleInfoDto dto = new AccountSettleInfoDto();
+			BeanUtils.copyProperties(accountSettleInfoSaveReqDto, dto);
+			dto.setSubjectId(accountSettleWithAssistSaveReqDto.getSubjectId());
+			dto.setClosingBalance(new Amount());
+			dto.setYearCreditAmount(dto.getCreditAmount());
+			dto.setYearDebitAmount(dto.getDebitAmount());
+			dto.setSettleType(DataStatusEnum.INIT.getCode());
+			accountSettleInfoService.saveOrUpdate(dto);
+		}
 
 		BaseRespDto respDto = new BaseRespDto(ReturnEnum.SUCCESS);
 
@@ -306,12 +331,42 @@ public class AccountSettleInfoController extends AccountBaseController {
 	@RequestMapping(value = "/check", method = RequestMethod.GET)
 	@ResponseBody
 	public Object check() {
-		BaseRespDto baseRespDto = new BaseRespDto(ReturnEnum.SUCCESS);
+		AccountSettleCheckRespDto baseRespDto = new AccountSettleCheckRespDto(ReturnEnum.SUCCESS);
 
-		// 1.凭证漏审
-		// 2.结转损益
-		// 3.资产负债表
-		// 4.凭证断号
+		/*
+		 * 1.凭证漏审
+		 */
+		// 查询当期所有凭证
+		List<VoucherInfoDto> voucherList = voucherInfoService.findListByMonth(getCurrentSystemInfo().getSystemCode(),
+				getCurrentSystemInfo().getAccountMonth());
+		for (VoucherInfoDto voucherInfoDto : voucherList) {
+			// 根据审核人id判断未审
+			if (voucherInfoDto.getAuditorId() == null) {
+				baseRespDto.setVoucherAuditFlag(false);
+				baseRespDto.setCode(ReturnEnum.FAILD.getCode());
+				break;
+			}
+		}
+		/*
+		 * 2.结转损益
+		 */
+
+		/*
+		 * 3.资产负债表
+		 */
+
+		/*
+		 * 4.凭证断号
+		 */
+		Integer serNum = 1;
+		for (VoucherInfoDto voucherInfoDto : voucherList) {
+			// 根据审核人id判断未审
+			if (voucherInfoDto.getSerialNum() != serNum++) {
+				baseRespDto.setVocherSerialNumFlag(false);
+				baseRespDto.setCode(ReturnEnum.FAILD.getCode());
+				break;
+			}
+		}
 		// 5.计提固定资产折旧
 
 		// 1.往来挂账
@@ -339,7 +394,21 @@ public class AccountSettleInfoController extends AccountBaseController {
 		List<AccountSettleWithSubjectInfoDto> AccountSettleWithSubjectInfoDtoList = accountSettleInfoService.findListByMonth(systemCode,
 				getCurrentSystemInfo().getAccountMonth());
 		for (AccountSettleWithSubjectInfoDto accountSettleWithSubjectInfoDto : AccountSettleWithSubjectInfoDtoList) {
+			// 重置 creditAmont 和 debitAmont 值
+			accountSettleWithSubjectInfoDto.setCreditAmount(new Amount());
+			accountSettleWithSubjectInfoDto.setDebitAmount(new Amount());
 			map.put(accountSettleWithSubjectInfoDto.getSubjectCode(), accountSettleWithSubjectInfoDto);
+
+			// 存在辅助核算
+			if (StringUtils.isNotBlank(accountSettleWithSubjectInfoDto.getAssistAccount())) {
+				List<AccountSettleWithSubjectInfoDto> list = accountSettleInfoService.findListByParentId(accountSettleWithSubjectInfoDto
+						.getId());
+				for (AccountSettleWithSubjectInfoDto assistAccountSettleInfoDto : list) {
+					assistAccountSettleInfoDto.setParentId(accountSettleWithSubjectInfoDto.getId());
+					map.put(accountSettleWithSubjectInfoDto.getSubjectCode() + "-" + assistAccountSettleInfoDto.getAssistCode(),
+							assistAccountSettleInfoDto);
+				}
+			}
 		}
 
 		// 查询当月凭证
@@ -349,9 +418,30 @@ public class AccountSettleInfoController extends AccountBaseController {
 		// 汇总凭证
 		for (VoucherSubInfoDto voucherSubInfoDto : voucherSubInfoDtos) {
 			AccountSettleWithSubjectInfoDto accountSettleInfoDto = map.get(voucherSubInfoDto.getSubjectCode());
-			if (accountSettleInfoDto!=null) {
+			if (accountSettleInfoDto != null) {
 				accountSettleInfoDto.setDebitAmount(accountSettleInfoDto.getDebitAmount().add(voucherSubInfoDto.getDebitAmount()));
 				accountSettleInfoDto.setCreditAmount(accountSettleInfoDto.getCreditAmount().add(voucherSubInfoDto.getCreditAmount()));
+			}
+
+			// 如果是辅助核算, 汇总
+			if (StringUtils.isNotBlank(voucherSubInfoDto.getAssistCode())) {
+				AccountSettleWithSubjectInfoDto accountSettleInfoDto1 = map.get(voucherSubInfoDto.getSubjectCode() + "-"
+						+ voucherSubInfoDto.getAssistCode());
+				if (accountSettleInfoDto1 == null) {
+					accountSettleInfoDto1 = new AccountSettleWithSubjectInfoDto();
+					accountSettleInfoDto1.setParentId(accountSettleInfoDto.getId());
+					accountSettleInfoDto1.setSubjectId(accountSettleInfoDto.getSubjectId());
+					accountSettleInfoDto1.setAccountMonth(accountSettleInfoDto.getAccountMonth());
+					accountSettleInfoDto1.amountInit();
+					accountSettleInfoDto1.setDebitAmount(voucherSubInfoDto.getDebitAmount());
+					accountSettleInfoDto1.setCreditAmount(voucherSubInfoDto.getCreditAmount());
+					accountSettleInfoDto1.setAssistCode(voucherSubInfoDto.getAssistCode());
+					map.put(accountSettleInfoDto.getSubjectCode() + "-" + voucherSubInfoDto.getAssistCode(), accountSettleInfoDto1);
+				} else {
+					accountSettleInfoDto1.setDebitAmount(accountSettleInfoDto1.getDebitAmount().add(voucherSubInfoDto.getDebitAmount()));
+					accountSettleInfoDto1.setCreditAmount(accountSettleInfoDto1.getCreditAmount().add(voucherSubInfoDto.getCreditAmount()));
+				}
+
 			}
 		}
 
@@ -364,6 +454,14 @@ public class AccountSettleInfoController extends AccountBaseController {
 			AccountSettleInfoDto saveDto = new AccountSettleInfoDto();
 			BeanUtils.copyProperties(ad, saveDto);
 			saveDto.setStatus(AccountSettleStatusEnum.SETTLE.getCode());
+
+			if (entry.getKey().indexOf("-") > 0) {
+				System.out.println(11);
+			}
+			// TODO
+			// TODO 待优化
+			// TODO
+			// 更新汇总结果
 			accountSettleInfoService.saveOrUpdate(saveDto);
 
 		}
@@ -371,9 +469,10 @@ public class AccountSettleInfoController extends AccountBaseController {
 		/*
 		 * 2.切换记账月份
 		 */
-		// getCurrentSystemInfo().set
 		// 如果是最新月份
 		if (getCurrentSystemInfo().getAccountMonth().equals(getCurrentSystemInfo().getLatestMonth())) {
+
+			// 更新系统最新记账月份到下月
 			SystemInfoDto systemInfoDto = systemInfoService.selectById(getCurrentSystemInfo().getSystemId());
 
 			String latestMonth = DateUtils.addMonth(systemInfoDto.getServerMonth(), 1);
@@ -382,61 +481,131 @@ public class AccountSettleInfoController extends AccountBaseController {
 			systemInfoDto.setServerMonth(latestMonth);
 			systemInfoService.saveOrUpdate(systemInfoDto);
 
-//			getCurrentSystemInfo().setAccountMonth(latestMonth);
-//			getCurrentSystemInfo().setLatestMonth(latestMonth);
+			// 更新最新记账月份缓存
+			getCurrentSystemInfo().setLatestMonth(latestMonth);
+
 			/*
-			 * 3.创建初始分录
+			 * 3.初始化下月账单
 			 */
 			accountSettleInfoService.initSubjectOpening(systemCode, latestMonth);
-			List<AccountSettleWithSubjectInfoDto> initAccountSettleList = accountSettleInfoService.findListByMonth(systemCode, latestMonth);
-			for (AccountSettleWithSubjectInfoDto accountSettleWithSubjectInfoDto : initAccountSettleList) {
+			List<AccountSettleWithSubjectInfoDto> latestAccountSettleList = accountSettleInfoService.findListByMonth(systemCode,
+					latestMonth);
+			for (AccountSettleWithSubjectInfoDto latestAccountSettleWithSubjectDto : latestAccountSettleList) {
 				// 查询上一个月结账记录
-				AccountSettleInfoDto preAccountSettle = accountSettleInfoService.findInitBySubjectAndMonth(
-						accountSettleWithSubjectInfoDto.getSubjectId(), prevMonth);
-				if (preAccountSettle!=null) {
-					accountSettleWithSubjectInfoDto.setOpeningBalance(preAccountSettle.getClosingBalance());
-					accountSettleWithSubjectInfoDto.setYearOpeningBalance(preAccountSettle.getYearOpeningBalance());
-					accountSettleWithSubjectInfoDto.setYearCreditAmount(preAccountSettle.getYearCreditAmount().add(
+				// if
+				// (accountSettleWithSubjectInfoDto.getSubjectId().equals(4798L))
+				// {
+				// System.out.println();
+				// }
+				AccountSettleInfoDto preAccountSettle = accountSettleInfoService.findBySubjectIdAndMonth(
+						latestAccountSettleWithSubjectDto.getSubjectId(), prevMonth);
+				if (preAccountSettle != null) {
+					latestAccountSettleWithSubjectDto.setOpeningBalance(preAccountSettle.getClosingBalance());
+					latestAccountSettleWithSubjectDto.setYearOpeningBalance(preAccountSettle.getYearOpeningBalance());
+					latestAccountSettleWithSubjectDto.setYearCreditAmount(preAccountSettle.getYearCreditAmount().add(
 							preAccountSettle.getCreditAmount()));
-					accountSettleWithSubjectInfoDto.setYearDebitAmount(preAccountSettle.getYearDebitAmount().add(
+					latestAccountSettleWithSubjectDto.setYearDebitAmount(preAccountSettle.getYearDebitAmount().add(
 							preAccountSettle.getDebitAmount()));
+					if (StringUtils.isNotBlank(latestAccountSettleWithSubjectDto.getAssistAccount())) {
+						// 查询辅助核算列表
+						List<AccountSettleWithSubjectInfoDto> list = accountSettleInfoService.findListByParentId(preAccountSettle.getId());
+						for (AccountSettleWithSubjectInfoDto accountSettleInfoDto : list) {
+							AccountSettleWithSubjectInfoDto accountSettleInfoDto1 = new AccountSettleWithSubjectInfoDto();
+
+							BeanUtils.copyProperties(accountSettleInfoDto, accountSettleInfoDto1);
+							accountSettleInfoDto1.setId(null);
+							accountSettleInfoDto1.setParentId(latestAccountSettleWithSubjectDto.getId());
+							accountSettleInfoDto1.setAccountMonth(latestMonth);
+							accountSettleInfoDto1.setDebitAmount(new Amount());
+							accountSettleInfoDto1.setCreditAmount(new Amount());
+							accountSettleInfoDto1.setClosingBalance(new Amount());
+							accountSettleInfoDto1.setSumAmount(new Amount());
+							accountSettleInfoDto1.setOpeningBalance(accountSettleInfoDto.getClosingBalance());
+							accountSettleInfoDto1.setYearOpeningBalance(accountSettleInfoDto.getYearOpeningBalance());
+							accountSettleInfoDto1.setYearCreditAmount(accountSettleInfoDto.getYearCreditAmount().add(
+									accountSettleInfoDto.getCreditAmount()));
+							accountSettleInfoDto1.setYearDebitAmount(accountSettleInfoDto.getYearDebitAmount().add(
+									accountSettleInfoDto.getDebitAmount()));
+							accountSettleInfoDto1.setStatus(DataStatusEnum.NORMAL.getCode());
+							accountSettleInfoDto1.setCreateTime(new Date());
+							accountSettleInfoDto1.setLastUpdateTime(new Date());
+							accountSettleInfoService.saveOrUpdate(accountSettleInfoDto1);
+						}
+					}
+					accountSettleInfoService.saveOrUpdate(latestAccountSettleWithSubjectDto);
 				}
 			}
+
+			/*
+			 * 3.1 生成折旧明细
+			 */
+			FindPreDeprecitionInfoReqDto reqDto = new FindPreDeprecitionInfoReqDto();
+			reqDto.setDeprecitionMonth(getCurrentSystemInfo().getAccountMonth());
+			reqDto.setSystemCode(getCurrentSystemInfo().getSystemCode());
+			assetDeprecitionInfoService.doDeprecition(reqDto);
 
 		} else { // 如果非最新月份
 
 			String currMonth = getCurrentSystemInfo().getAccountMonth();
+			String nextMonth = DateUtils.addMonth(currMonth, 1);
 			// 查询当月到最新记账月期间所有结账记录，并更新
-			while (!getCurrentSystemInfo().getLatestMonth().equals(currMonth)) {
-				String nextMonth = DateUtils.addMonth(currMonth, 1);
-				List<AccountSettleWithSubjectInfoDto> settleList = accountSettleInfoService.findListByMonth(systemCode, nextMonth);
-				for (AccountSettleWithSubjectInfoDto settleDto : settleList) {
+			while (!getCurrentSystemInfo().getLatestMonth().equals(nextMonth)) {
+				List<AccountSettleWithSubjectInfoDto> nextSettleList = accountSettleInfoService.findListByMonth(systemCode, nextMonth);
+				for (AccountSettleWithSubjectInfoDto nextSettleDto : nextSettleList) {
 					// 查询月结账记录
-					AccountSettleInfoDto accountSettle = accountSettleInfoService.findInitBySubjectAndMonth(settleDto.getSubjectId(),
+					AccountSettleInfoDto currAccountSettle = accountSettleInfoService.findBySubjectIdAndMonth(nextSettleDto.getSubjectId(),
 							currMonth);
 					// 判断当前月的期末是否等于下月期初
-					if (!settleDto.getOpeningBalance().equals(accountSettle.getClosingBalance())
-							|| !settleDto.getDebitAmount().equals(accountSettle.getYearDebitAmount().add(accountSettle.getDebitAmount()))) {
-						settleDto.setOpeningBalance(accountSettle.getClosingBalance());
-						settleDto.setYearCreditAmount(accountSettle.getYearCreditAmount().add(accountSettle.getCreditAmount()));
-						settleDto.setYearDebitAmount(accountSettle.getYearDebitAmount().add(accountSettle.getDebitAmount()));
+					if (!nextSettleDto.getOpeningBalance().equals(currAccountSettle.getClosingBalance())
+							|| !nextSettleDto.getYearDebitAmount().equals(
+									currAccountSettle.getYearDebitAmount().add(currAccountSettle.getDebitAmount()))
+							|| !nextSettleDto.getYearCreditAmount().equals(
+									currAccountSettle.getYearCreditAmount().add(currAccountSettle.getCreditAmount()))) {
+						nextSettleDto.setOpeningBalance(currAccountSettle.getClosingBalance());
+						nextSettleDto.setYearCreditAmount(currAccountSettle.getYearCreditAmount().add(currAccountSettle.getCreditAmount()));
+						nextSettleDto.setYearDebitAmount(currAccountSettle.getYearDebitAmount().add(currAccountSettle.getDebitAmount()));
 						// 如果已结账，设置期末余额
-						if (AccountSettleStatusEnum.SETTLE.getCode().equals(settleDto.getStatus())) {
-							settleDto.setClosingBalance(settleDto.getOpeningBalance().add(settleDto.getSumAmount()));
+						if (AccountSettleStatusEnum.SETTLE.getCode().equals(nextSettleDto.getStatus())) {
+							nextSettleDto.setClosingBalance(nextSettleDto.getOpeningBalance().add(nextSettleDto.getSumAmount()));
 						}
-						accountSettleInfoService.saveOrUpdate(settleDto);
+						accountSettleInfoService.saveOrUpdate(nextSettleDto);
 					}
-					
+
+					if (StringUtils.isNotBlank(nextSettleDto.getAssistCode())) {
+						// 先删除
+//						accountSettleInfoService.deleteChildren(nextSettleDto.getId());
+						// 查询辅助核算列表
+						List<AccountSettleWithSubjectInfoDto> currList = accountSettleInfoService.findListByParentId(currAccountSettle.getId());
+						for (AccountSettleWithSubjectInfoDto currAccountSettleInfoDto : currList) {
+							
+							AccountSettleInfoDto nextDto = accountSettleInfoService.findAssistRecord(currAccountSettleInfoDto.getSubjectId(), currAccountSettleInfoDto.getAssistCode(), nextMonth);
+							
+							nextDto.setOpeningBalance(currAccountSettleInfoDto.getClosingBalance());
+							nextDto.setYearCreditAmount(currAccountSettleInfoDto.getYearCreditAmount().add(currAccountSettleInfoDto.getCreditAmount()));
+							nextDto.setYearDebitAmount(currAccountSettleInfoDto.getYearDebitAmount().add(currAccountSettleInfoDto.getDebitAmount()));
+							// 如果已结账，设置期末余额
+							if (AccountSettleStatusEnum.SETTLE.getCode().equals(nextDto.getStatus())) {
+								nextDto.setClosingBalance(nextDto.getOpeningBalance().add(nextDto.getSumAmount()));
+							}
+							nextDto.setLastUpdateTime(new Date());
+							accountSettleInfoService.saveOrUpdate(nextDto);
+						}
+					}
+
 				}
 				currMonth = nextMonth;
+				
+				
+				Boolean isSettle = accountSettleInfoService.isSettle(getCurrentSystemInfo().getSystemCode(), nextMonth);
+				// 如果期间存在未结账，在当前月份停止更新
+				if (!isSettle) {
+					break;
+				}
 			}
 
 		}
 
-		// 生成折旧明细
-		assetDeprecitionInfoService.doDeprecition(getCurrentSystemInfo().getSystemCode(), getCurrentSystemInfo().getAccountMonth());
-		
-		// 切换到最新月份
+		// 更新缓存到最新月份
 		getCurrentSystemInfo().setAccountMonth(getCurrentSystemInfo().getLatestMonth());
 
 		return baseRespDto;
@@ -458,9 +627,9 @@ public class AccountSettleInfoController extends AccountBaseController {
 		Amount sumYearCreditAmount = new Amount();
 
 		for (AccountSettleWithSubjectInfoDto accountSettleDto : dtoList) {
-			if (SystemInfoEnum.DEBIT.getCode().equals(accountSettleDto.getBalanceDirect())) {
+			if (SystemEnum.DEBIT.getCode().equals(accountSettleDto.getBalanceDirect())) {
 				sumDebitOpeningAmount = sumDebitOpeningAmount.add(accountSettleDto.getOpeningBalance());
-			}else {
+			} else {
 				if (!accountSettleDto.getOpeningBalance().isZero()) {
 					System.out.println(accountSettleDto.getOpeningBalance());
 				}

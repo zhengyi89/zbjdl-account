@@ -17,10 +17,12 @@
 	  <result column="INITIAL_WORTH" jdbcType="DECIMAL" property="initialWorth" />
 	  <result column="ASSET_WORTH" jdbcType="DECIMAL" property="assetWorth" />
 	  <result column="USE_AGE" jdbcType="INTEGER" property="useAge" />
+	  <result column="HAS_USE_AGE" jdbcType="INTEGER" property="hasUseAge" />
 	  <result column="DEPRECITION_TYPE" jdbcType="VARCHAR" property="deprecitionType" />
 	  <result column="NET_SALVAGE" jdbcType="DECIMAL" property="netSalvage" />
 	  <result column="MONTH_LOSS_AMOUNT" jdbcType="DECIMAL" property="monthLossAmount" />
 	  <result column="BEGIN_DATE" jdbcType="DATE" property="beginDate" />
+	  <result column="begin_use_date" jdbcType="DATE" property="beginUseDate" />
 	  <result column="COST_TYPE" jdbcType="VARCHAR" property="costType" />
 	  <result column="STATUS" jdbcType="VARCHAR" property="status" />
 	  <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
@@ -72,6 +74,9 @@
       	<if test="useAge != null" >
 	      and USE_AGE = #{useAge,jdbcType=INTEGER}
 	    </if>
+      	<if test="hasUseAge != null" >
+	      and HAS_USE_AGE = #{hasUseAge,jdbcType=INTEGER}
+	    </if>
       	<if test="deprecitionType != null" >
 	      and DEPRECITION_TYPE = #{deprecitionType,jdbcType=VARCHAR}
 	    </if>
@@ -83,6 +88,9 @@
 	    </if>
       	<if test="beginDate != null" >
 	      and BEGIN_DATE = #{beginDate,jdbcType=DATE}
+	    </if>
+      	<if test="beginUseDate != null" >
+	      and begin_use_date = #{beginUseDate,jdbcType=DATE}
 	    </if>
       	<if test="costType != null" >
 	      and COST_TYPE = #{costType,jdbcType=VARCHAR}
@@ -109,10 +117,12 @@
     INITIAL_WORTH,
     ASSET_WORTH,
     USE_AGE,
+    HAS_USE_AGE,
     DEPRECITION_TYPE,
     NET_SALVAGE,
     MONTH_LOSS_AMOUNT,
     BEGIN_DATE,
+    begin_use_date,
     COST_TYPE,
     STATUS,
     CREATE_TIME,
@@ -135,10 +145,12 @@
         INITIAL_WORTH = #{initialWorth,jdbcType=DECIMAL},
         ASSET_WORTH = #{assetWorth,jdbcType=DECIMAL},
         USE_AGE = #{useAge,jdbcType=INTEGER},
+        HAS_USE_AGE = #{hasUseAge,jdbcType=INTEGER},
         DEPRECITION_TYPE = #{deprecitionType,jdbcType=VARCHAR},
         NET_SALVAGE = #{netSalvage,jdbcType=DECIMAL},
         MONTH_LOSS_AMOUNT = #{monthLossAmount,jdbcType=DECIMAL},
         BEGIN_DATE = #{beginDate,jdbcType=DATE},
+        begin_use_date = #{beginUseDate,jdbcType=DATE},
         COST_TYPE = #{costType,jdbcType=VARCHAR},
         STATUS = #{status,jdbcType=VARCHAR},
   		LAST_UPDATE_TIME = sysdate(),
@@ -188,6 +200,9 @@
     <if test="useAge != null">
       USE_AGE,
     </if>
+    <if test="hasUseAge != null">
+      HAS_USE_AGE,
+    </if>
     <if test="deprecitionType != null">
       DEPRECITION_TYPE,
     </if>
@@ -199,6 +214,9 @@
     </if>
     <if test="beginDate != null">
       BEGIN_DATE,
+    </if>
+    <if test="beginUseDate != null">
+      begin_use_date,
     </if>
     <if test="costType != null">
       COST_TYPE,
@@ -252,6 +270,9 @@
     <if test="useAge != null">
       #{useAge,jdbcType=INTEGER},
     </if>
+    <if test="hasUseAge != null">
+      #{hasUseAge,jdbcType=INTEGER},
+    </if>
     <if test="deprecitionType != null">
       #{deprecitionType,jdbcType=VARCHAR},
     </if>
@@ -263,6 +284,9 @@
     </if>
     <if test="beginDate != null">
       #{beginDate,jdbcType=DATE},
+    </if>
+    <if test="beginUseDate != null">
+      #{beginUseDate,jdbcType=DATE},
     </if>
     <if test="costType != null">
       #{costType,jdbcType=VARCHAR},
@@ -294,7 +318,7 @@
     delete from asset_info
     where ID = #{id,jdbcType=DECIMAL}
   </delete>
-  <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id"  parameterType="AssetInfo">
+  <insert id="save" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="AssetInfo">
     insert into asset_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <include refid="Selective_Column_List"/>

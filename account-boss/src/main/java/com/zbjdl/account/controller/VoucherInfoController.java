@@ -18,19 +18,24 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
 import com.zbjdl.account.controller.frame.AccountBaseController;
+import com.zbjdl.account.dto.AssetDeprecitionInfoDto;
 import com.zbjdl.account.dto.AssistAccountInfoDto;
 import com.zbjdl.account.dto.SubjectInfoDto;
 import com.zbjdl.account.dto.VoucherInfoDto;
 import com.zbjdl.account.dto.VoucherSubInfoDto;
+import com.zbjdl.account.dto.request.FindPreDeprecitionInfoReqDto;
 import com.zbjdl.account.dto.request.VoucherInfoSaveReqDto;
 import com.zbjdl.account.dto.request.VoucherSaveDto;
 import com.zbjdl.account.dto.request.VoucherSubInfoSaveReqDto;
 import com.zbjdl.account.dto.request.VoucherTemplateSaveDto;
 import com.zbjdl.account.dto.response.BaseRespDto;
+import com.zbjdl.account.enumtype.AssetEnum;
 import com.zbjdl.account.enumtype.DataStatusEnum;
 import com.zbjdl.account.enumtype.MethodEnum;
 import com.zbjdl.account.enumtype.ReturnEnum;
-import com.zbjdl.account.enumtype.SystemInfoEnum;
+import com.zbjdl.account.enumtype.SystemEnum;
+import com.zbjdl.account.enumtype.VoucherTypeEnum;
+import com.zbjdl.account.service.AssetDeprecitionInfoService;
 import com.zbjdl.account.service.AssistAccountInfoService;
 import com.zbjdl.account.service.SubjectInfoService;
 import com.zbjdl.account.service.VoucherInfoService;
@@ -62,7 +67,10 @@ public class VoucherInfoController extends AccountBaseController {
 
 	@Autowired
 	private SubjectInfoService subjectInfoService;
-
+	
+	@Autowired
+	private AssetDeprecitionInfoService assetDeprecitionInfoService;
+	
 	/*
 	 * 列表页面
 	 */
@@ -99,8 +107,8 @@ public class VoucherInfoController extends AccountBaseController {
 			// 新增凭证，默认当前日期
 			dto.setAccountPeriod(new Date());
 			dto.setVoucherPapers(0);
-			String defSerialNum = voucherInfoService.selectDefaultSerialNum(getCurrentSystemInfo().getSystemCode(), getCurrentSystemInfo().getAccountMonth());
-			dto.setSerialNum(defSerialNum==null?"1":defSerialNum);
+			Integer defSerialNum = voucherInfoService.selectDefaultSerialNum(getCurrentSystemInfo().getSystemCode(), getCurrentSystemInfo().getAccountMonth());
+			dto.setSerialNum(defSerialNum==null?1:defSerialNum);
 		}
 		mav.addObject("dto", dto);
 		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
@@ -185,6 +193,7 @@ public class VoucherInfoController extends AccountBaseController {
 		voucherInfoDto.setSystemCode(getCurrentSystemInfo().getSystemCode());
 		voucherInfoDto.setCreatorId(getCurrentUser().getUserId());
 		voucherInfoDto.setCreatorName(getCurrentUser().getUserName());
+		voucherInfoDto.setVoucherType(VoucherTypeEnum.T.getCode());
 		Long voucherId = voucherInfoService.saveOrUpdate(voucherInfoDto);
 		for (VoucherSubInfoSaveReqDto voucherSubInfoSaveReqDto : dto.getVoucherSubInfoDtos()) {
 			if (!voucherSubInfoNullValid(voucherSubInfoSaveReqDto)) {
@@ -243,6 +252,9 @@ public class VoucherInfoController extends AccountBaseController {
 //		ModelAndView mav = new ModelAndView("voucher/voucherTemplateIndex");
 		return editIndex(id);
 	}
+	
+	
+	
 
 	
 	/*
@@ -273,6 +285,81 @@ public class VoucherInfoController extends AccountBaseController {
 	@RequestMapping(value = "/closingIndex", method = RequestMethod.GET)
 	public ModelAndView subjectOpeningInfoIndex() {
 		ModelAndView mav = new ModelAndView("voucher/voucherClosingIndex");
+		return mav;
+	}
+	
+	
+	
+	/*
+	 * 生成期末凭证
+	 */
+	@RequestMapping(value = "/genClosing", method = RequestMethod.GET)
+	public ModelAndView genClosing(Long id) {
+		ModelAndView mav = new ModelAndView("voucher/voucherEdit");
+		VoucherSaveDto dto = new VoucherSaveDto();
+		VoucherInfoDto voucherInfoDto=voucherInfoService.selectById(id);
+			List<VoucherSubInfoDto> voucherSubInfoDtos = voucherSubInfoService.selectByVoucherId(id);
+			BeanUtils.copyProperties(voucherInfoDto, dto);
+			List<VoucherSubInfoSaveReqDto> list = new ArrayList<VoucherSubInfoSaveReqDto>();
+			for (VoucherSubInfoDto voucherSubInfoDto : voucherSubInfoDtos) {
+				VoucherSubInfoSaveReqDto voucherSubInfoSaveReqDto = new VoucherSubInfoSaveReqDto();
+				BeanUtils.copyProperties(voucherSubInfoDto, voucherSubInfoSaveReqDto);
+				list.add(voucherSubInfoSaveReqDto);
+			}
+			dto.setVoucherSubInfoDtos(list);
+		
+		// 设置凭证默认
+		dto.setAccountPeriod(new Date());
+		dto.setVoucherPapers(0);
+		Integer defSerialNum = voucherInfoService.selectDefaultSerialNum(getCurrentSystemInfo().getSystemCode(), getCurrentSystemInfo().getAccountMonth());
+		dto.setSerialNum(defSerialNum==null?1:defSerialNum);
+		
+		
+		/*
+		 * 计算发生额
+		 */
+		//计提固定资产折旧
+		if (voucherInfoDto.getSerialNum()==1) {
+			Amount amount = new Amount();
+			// 查询当期折旧列表
+			FindPreDeprecitionInfoReqDto reqDto = new FindPreDeprecitionInfoReqDto();
+			reqDto.setDeprecitionMonth(getCurrentSystemInfo().getAccountMonth());
+			reqDto.setSystemCode(getCurrentSystemInfo().getSystemCode());
+			reqDto.setCostType(AssetEnum.COST_TYPE_DEPRECITION.getCode());
+			List<AssetDeprecitionInfoDto>  deprecitionList = assetDeprecitionInfoService.findPreDeprecition(reqDto);
+			for (AssetDeprecitionInfoDto assetDeprecitionInfoDto : deprecitionList) {
+				amount = amount.add(assetDeprecitionInfoDto.getDeprecitionAmount());
+			}
+			// 设置金额
+			for (VoucherSubInfoSaveReqDto saveDto : dto.getVoucherSubInfoDtos()) {
+				if ("560202".equals(saveDto.getSubjectCode())) {
+					saveDto.setDebitAmount(amount);
+				}else if("1602".equals(saveDto.getSubjectCode())){
+					saveDto.setCreditAmount(amount);
+				}
+			}
+			
+		}else if(voucherInfoDto.getSerialNum()==2){
+			Amount amount = new Amount();
+			// 查询当期摊销列表
+			FindPreDeprecitionInfoReqDto reqDto = new FindPreDeprecitionInfoReqDto();
+			reqDto.setDeprecitionMonth(getCurrentSystemInfo().getAccountMonth());
+			reqDto.setSystemCode(getCurrentSystemInfo().getSystemCode());
+			reqDto.setCostType(AssetEnum.COST_TYPE_EXPENSE.getCode());
+			List<AssetDeprecitionInfoDto>  deprecitionList = assetDeprecitionInfoService.findPreDeprecition(reqDto);
+			for (AssetDeprecitionInfoDto assetDeprecitionInfoDto : deprecitionList) {
+				amount = amount.add(assetDeprecitionInfoDto.getDeprecitionAmount());
+			}
+			// 设置金额
+			dto.getVoucherSubInfoDtos().get(0).setDebitAmount(amount);
+			dto.getVoucherSubInfoDtos().get(1).setCreditAmount(amount);
+			
+		}
+		
+		
+		mav.addObject("dto", dto);
+		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
+		mav.addObject("subjectList", subjectList);
 		return mav;
 	}
 }

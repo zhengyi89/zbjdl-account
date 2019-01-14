@@ -28,8 +28,8 @@ public class SessionInterceptor extends HandlerInterceptorAdapter {
 			CurrentSystemDto currentSystemDto = (CurrentSystemDto) request.getSession().getAttribute(DataConstants.SESSION_ACCOUNTINFO);
 
 			if (currentSystemDto == null || currentSystemDto.getSystemId() == null) {
-				logger.info("no session , redirect to company/index");
-				response.sendRedirect(request.getContextPath() + "/company/index?type=account&belongSystem=-9992003&_menuId=61&_firstMenuId=-2003");
+				logger.info("no session , redirect to company/serve/index");
+				response.sendRedirect(request.getContextPath() + "/company/serve/index?type=account&belongSystem=-9992003&_menuId=61&_firstMenuId=-2003");
 				return true;
 			}
 			return true;

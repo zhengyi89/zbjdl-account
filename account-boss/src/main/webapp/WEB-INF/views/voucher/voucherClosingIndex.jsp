@@ -26,11 +26,11 @@
 						<q:table queryService="queryService" queryKey="queryClosingVoucherList" formId="godownForma"
 							class="table table-striped table-bordered" pageSize="40" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel">
 							<q:nodata>无符合条件的记录</q:nodata>
-							<q:column title="序号" value="${_rowstatus.globalIndex}" with="10％" />
+							<q:column title="序号" value="${serial_num}" with="10％" />
 				            <q:column title="模版名称" value="${template_name}" width="20%" />
 				           
 				            <q:column title="操作" escapeHtml="false" width="20%">
-							    <a class="pink" onclick="window.location.href='${ctx}/voucher/useTemplate?id=${id}'">生成凭证</a>
+							    <a class="pink" onclick="window.location.href='${ctx}/voucher/genClosing?id=${id}'">生成凭证</a>
 							</q:column>
 						</q:table>
 					</div>

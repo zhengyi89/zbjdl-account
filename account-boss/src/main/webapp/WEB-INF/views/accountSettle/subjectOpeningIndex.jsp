@@ -36,6 +36,7 @@
 							class="table table-striped table-bordered" pageSize="40" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel">
 							<q:nodata>无符合条件的记录</q:nodata>
 							<q:param name="systemCode" value="${SESSION_ACCOUNTINFO.systemCode}" />
+							<q:param name="accountMonth" value="${SESSION_ACCOUNTINFO.startMonth}" />
 				            <q:column title="科目编码" value="${subject_code}" width="20%" dataIndex="subject_code"/>
 				            <q:column title="名称" value="${subject_name}" width="20%" dataIndex="subject_name"/>
 				            <q:column title="方向" value="${_textResource.getSysText('ACCOUNT_BALANCE_DIRECT', balance_direct)}" width="10%" dataIndex="balance_direct" showValueIndex="ACCOUNT_BALANCE_DIRECT"/>

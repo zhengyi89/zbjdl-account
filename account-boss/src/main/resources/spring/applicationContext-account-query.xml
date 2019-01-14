@@ -143,8 +143,9 @@
 										asi.sum_amount , asi.year_opening_balance , si.subject_code , si.SUBJECT_NAME , 
 										si.SUBJECT_LEVEL , si.LAST_LEVEL , si.BALANCE_DIRECT , si.ASSIST_ACCOUNT , si.BASIC_SUBJECT 
 									FROM subject_info si left join account_settle_info asi on si.id = asi.subject_id
-									where 1=1
+									where asi.parent_id is null
 									/~systemCode: and si.system_code = {systemCode,string} ~/
+									/~accountMonth: and asi.account_month = {accountMonth,string} ~/
 									order by subject_code asc
                                 ]]>
 							</value>
@@ -159,6 +160,7 @@
                                 <![CDATA[
 								 	select vi.*, vsi.*, si.* from voucher_info vi, voucher_sub_info vsi , subject_info si
 								 	where vi.ID = vsi.VOUCHER_ID and vsi.subject_code = si.subject_code and vi.system_code = si.system_code
+								     and template_flag = 0
 								      /~systemCode: and vi.system_code = {systemCode,string} ~/
   									  order by vi.id, vsi.id desc
                                 ]]>
@@ -173,7 +175,7 @@
 							<value>
                                 <![CDATA[
 								 	select vi.* from voucher_info vi
-								 	where template_flag = 1
+								 	where template_flag = 1 and voucher_type = 'T'
 								      /~systemCode: and vi.system_code = {systemCode,string} ~/
   									  order by vi.id desc
                                 ]]>
@@ -188,9 +190,9 @@
 							<value>
                                 <![CDATA[
 								 	select vi.* from voucher_info vi
-								 	where template_flag = 1
+								 	where template_flag = 1 and voucher_type = 'SETTLE'
 								      /~systemCode: and vi.system_code = {systemCode,string} ~/
-  									  order by vi.id desc
+  									  order by serial_num asc
                                 ]]>
 							</value>
 						</property>
@@ -209,7 +211,7 @@
 										year_debit_amount, (IFNULL(bb.sum_credit_amount,0)+aa.year_credit_amount) year_credit_amount
 									from (
 									 select asi.*,si.balance_direct, si.SUBJECT_CODE, si.SYSTEM_CODE 
-										from account_settle_info asi, subject_info si  where si.id = asi.subject_id 
+										from account_settle_info asi, subject_info si  where si.id = asi.subject_id  and asi.parent_id is null
 											/~systemCode: and system_code = {systemCode} ~/
 								 			/~subjectCode: and SUBJECT_CODE = {subjectCode} ~/
 									 		/~startdate: and account_month >= {startdate} ~/
@@ -233,12 +235,18 @@
 							<value>
                                 <![CDATA[
 								 	SELECT
-										date_format(account_period,'%Y-%m') account_period,SUMMARY, serial_num, CREDIT_AMOUNT, DEBIT_AMOUNT, BALANCE_DIRECT
+										date_format(account_period,'%Y-%m') account_period,SUMMARY, serial_num, vsi.CREDIT_AMOUNT, 
+										vsi.DEBIT_AMOUNT, vsi.BALANCE_DIRECT, vsi.amount,asi.opening_balance
 									FROM
-										voucher_info vi , voucher_sub_info vsi
+										voucher_info vi , voucher_sub_info vsi, subject_info si, account_settle_info asi
 									WHERE vi.id = vsi.VOUCHER_ID
-								 		/~systemCode: and system_code = {systemCode} ~/
-								 		/~subjectCode: and SUBJECT_CODE = {subjectCode} ~/
+										and vi.system_code = si.system_code
+										and vsi.SUBJECT_CODE = si.subject_code
+										and asi.subject_id = si.id
+										and asi.parent_id is null
+										and asi.account_month = date_format(vi.account_period , '%Y-%m')
+								 		/~systemCode: and vi.system_code = {systemCode} ~/
+								 		/~subjectCode: and vsi.SUBJECT_CODE = {subjectCode} ~/
 								 		/~startdate: and date_format(account_period,'%Y-%m') >= {startdate} ~/
 								 		/~enddate: and date_format(account_period,'%Y-%m') <= {enddate} ~/
 								 	GROUP BY vsi.id;
@@ -255,7 +263,7 @@
 						<property name="sql">
 							<value>
                                 <![CDATA[
-									SELECT si.subject_code , si.subject_name , sum(debit_amount) debit_amount , sum(credit_amount) credit_amount
+									SELECT vi.id,vi.voucher_papers,si.subject_code , si.subject_name , sum(debit_amount) debit_amount , sum(credit_amount) credit_amount
 									 FROM voucher_info vi , voucher_sub_info vsi , subject_info si 
 									WHERE vi.id = vsi.VOUCHER_ID and si.SYSTEM_CODE = vi.system_code and si.SUBJECT_CODE = vsi.SUBJECT_CODE 
 									/~systemCode: and vi.system_code = {systemCode} ~/
@@ -284,7 +292,7 @@
 										voucher_sub_info vsi on vi.ID = vsi.VOUCHER_ID join
 										subject_info si on vi.system_code = si.SYSTEM_CODE and vsi.SUBJECT_CODE = si.SUBJECT_CODE left join  
 										account_settle_info asi on  asi.subject_id = si.ID and asi.account_month = date_format(vi.account_period,'%Y-%m')
-									where 1=1
+									where  asi.parent_id is null
 									/~systemCode: and vi.system_code = {systemCode} ~/
 									/~startdate: and date_format(account_period,'%Y-%m') >= {startdate} ~/
 								 	/~enddate: and date_format(account_period,'%Y-%m') <= {enddate} ~/
@@ -302,18 +310,28 @@
 						<property name="sql">
 							<value>
                                 <![CDATA[
-									SELECT
-										SUBJECT_CODE, serial_num, summary, DATE_FORMAT(vi.account_period, '%Y-%m') account_period,
-										sum(CREDIT_AMOUNT) debit_amount, SUM(DEBIT_AMOUNT) credit_amount, balance_direct
+                                
+                                	SELECT
+										DATE_FORMAT(vi.account_period , '%Y-%m') account_period,
+										vi.serial_num ,
+										vsi.summary ,
+										vsi.DEBIT_AMOUNT ,
+										vsi.credit_amount ,
+										vsi.BALANCE_DIRECT ,
+										vsi.amount
 									FROM
-										voucher_info vi , voucher_sub_info vsi
-									WHERE vi.id = vsi.VOUCHER_ID
+										voucher_sub_info vsi ,
+										voucher_info vi
+									WHERE
+										vsi.voucher_id = vi.id  and vi.template_flag = 0
 										/~systemCode: and vi.system_code = {systemCode} ~/
 										/~subjectCode: and vsi.subject_code = {subjectCode} ~/
 										/~assistCode: and vsi.assist_code = {assistCode} ~/
 									 	/~startdate: and date_format(account_period,'%Y-%m') >= {startdate} ~/
 								 		/~enddate: and date_format(account_period,'%Y-%m') <= {enddate} ~/
-									group by vsi.SUBJECT_CODE
+									ORDER BY
+										DATE_FORMAT(vi.account_period , '%Y-%m') ASC ,
+										serial_num ASC
                                 ]]>
 							</value>
 						</property>
@@ -327,18 +345,29 @@
 							<value>
                                 <![CDATA[
 									SELECT
-										SUBJECT_CODE, DATE_FORMAT(vi.account_period, '%Y-%m') account_period,
-										sum(CREDIT_AMOUNT) CREDIT_AMOUNT, SUM(DEBIT_AMOUNT)
+										vsi.SUBJECT_CODE,vsi.assist_code, si.SUBJECT_NAME, sum(vsi.DEBIT_AMOUNT) DEBIT_AMOUNT,sum(vsi.CREDIT_AMOUNT) CREDIT_AMOUNT,  
+										IF(si.BALANCE_DIRECT = 'DEBIT', opening_balance, '') OPENING_DEBIT_AMOUNT,IF(si.BALANCE_DIRECT = 'CREDIT', opening_balance, '') OPENING_CREDIT_AMOUNT,
+										IF(si.BALANCE_DIRECT = 'DEBIT', (IFNULL(opening_balance,0)+ IFNULL(sum(vsi.DEBIT_AMOUNT),0)-IFNULL(sum(vsi.CREDIT_AMOUNT),0)), '') CLOSING_DEBIT_AMOUNT,
+										IF(si.BALANCE_DIRECT = 'CREDIT', (IFNULL(opening_balance,0)+IFNULL(sum(vsi.CREDIT_AMOUNT),0)-IFNULL(sum(vsi.DEBIT_AMOUNT),0)), '') CLOSING_CREDIT_AMOUNT
 									FROM
-										voucher_info vi , voucher_sub_info vsi
-									WHERE vi.id = vsi.VOUCHER_ID
+										voucher_info vi join 
+										voucher_sub_info vsi on vi.ID = vsi.VOUCHER_ID  and vi.template_flag = 0 join
+										subject_info si on vi.system_code = si.SYSTEM_CODE and vsi.SUBJECT_CODE = si.SUBJECT_CODE left join  
+										account_settle_info asi on  asi.subject_id = si.ID and asi.account_month = date_format(vi.account_period,'%Y-%m')
+									where  asi.parent_id is not null and asi.assist_code = vsi.ASSIST_CODE
 									/~systemCode: and vi.system_code = {systemCode} ~/
-									/~subjectCode: and vsi.subject_code = {subjectCode} ~/
-									/~assistCode: and vsi.assist_code = {assistCode} ~/
-								 	/~startdate: and date_format(account_period,'%Y-%m') >= {startdate} ~/
-								 	/~enddate: and date_format(account_period,'%Y-%m') <= {enddate} ~/
-									group by vsi.SUBJECT_CODE
+									/~subjectCode: and si.subject_code = {subjectCode} ~/
+									/~assistCode: and asi.assist_code = {assistCode} ~/
+									/~startdate: and asi.account_month >= {startdate} ~/
+								 	/~enddate: and asi.account_month <= {enddate} ~/
+									GROUP BY vsi.SUBJECT_CODE, vsi.assist_code
+									order by asi.assist_code asc
                                 ]]>
+							</value>
+						</property>
+                       	<property name="sumSelect">
+							<value>
+								select 1 as countnum,2 as sumamount
 							</value>
 						</property>
 					</bean>
@@ -355,7 +384,7 @@
 										sum(CREDIT_AMOUNT) CREDIT_AMOUNT, SUM(DEBIT_AMOUNT)
 									FROM
 										voucher_info vi , voucher_sub_info vsi
-									WHERE vi.id = vsi.VOUCHER_ID
+									WHERE vi.id = vsi.VOUCHER_ID  and vi.template_flag = 0
 									/~systemCode: and vi.system_code = {systemCode} ~/
 								 	/~accountDate: and DATE_FORMAT(vi.account_period, '%Y-%m') = {accountDate} ~/
 									group by vsi.SUBJECT_CODE

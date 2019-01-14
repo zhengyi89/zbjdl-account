@@ -20,6 +20,7 @@ import com.zbjdl.account.util.DateUtils;
 import com.zbjdl.account.model.AssetDeprecitionInfo;
 import com.zbjdl.account.dto.AssetDeprecitionInfoDto;
 import com.zbjdl.account.dto.AssetInfoDto;
+import com.zbjdl.account.dto.request.FindPreDeprecitionInfoReqDto;
 import com.zbjdl.account.enumtype.AssetEnum;
 import com.zbjdl.account.enumtype.DataStatusEnum;
 
@@ -67,11 +68,25 @@ public class AssetDeprecitionInfoServiceImpl implements AssetDeprecitionInfoServ
 
 	@Override
 	public void genDeprecitionRecord(AssetInfoDto assetInfoDto) {
-		// 折旧日期从开始时间的下一个月计算
-		String beginDate = DateUtils.addMonth(DateUtils.DATE_MONTH_FORMAT.format(assetInfoDto.getBeginDate()), 1);
-		Amount openingWorth = assetInfoDto.getInitialWorth();
+		String beginDate = null;
+		// 判断开始使用时间和创建时间
+		if (assetInfoDto.getBeginUseDate()!=null) {
+			int month = DateUtils.getMonthSpace(assetInfoDto.getBeginDate(), assetInfoDto.getBeginUseDate());
+			if (month>=1) {
+				// 折旧日期从开始月份计算
+				beginDate = DateUtils.DATE_MONTH_FORMAT.format(assetInfoDto.getBeginDate());
+				
+			}else {
+				// 折旧日期从开始时间的下一个月计算
+				beginDate = DateUtils.addMonth(DateUtils.DATE_MONTH_FORMAT.format(assetInfoDto.getBeginDate()), 1);
+			}
+		}
+		
+		
+		
+		Amount openingWorth = assetInfoDto.getAssetWorth();
 		// 循环折旧
-		for (int i = 0; i < assetInfoDto.getUseAge(); i++) {
+		for (int i = 0; i < assetInfoDto.getUseAge()-assetInfoDto.getHasUseAge(); i++) {
 			AssetDeprecitionInfo assetDeprecitionInfo = new AssetDeprecitionInfo();
 			assetDeprecitionInfo.setAssetId(assetInfoDto.getId());
 			assetDeprecitionInfo.setInitialWorth(assetInfoDto.getInitialWorth());
@@ -88,13 +103,25 @@ public class AssetDeprecitionInfoServiceImpl implements AssetDeprecitionInfoServ
 	}
 
 	@Override
-	public void doDeprecition(String systemCode, String accountMonth) {
+	public void doDeprecition(FindPreDeprecitionInfoReqDto reqDto) {
 		// 查询待折旧
-		List<AssetDeprecitionInfo> list = assetDeprecitionInfoManager.findPreDeprecition(systemCode, accountMonth);
+		List<AssetDeprecitionInfo> list = assetDeprecitionInfoManager.findPreDeprecition(reqDto);
 		for (AssetDeprecitionInfo assetDeprecitionInfo2 : list) {
 			assetDeprecitionInfo2.setStatus(DataStatusEnum.NORMAL.getCode());
 			assetDeprecitionInfoManager.update(assetDeprecitionInfo2);
 		}
+	}
+
+	@Override
+	public List<AssetDeprecitionInfoDto> findPreDeprecition(FindPreDeprecitionInfoReqDto reqDto) {
+		List<AssetDeprecitionInfo> assetDeprecitionInfoList = assetDeprecitionInfoManager.findPreDeprecition(reqDto);
+		List<AssetDeprecitionInfoDto> assetDeprecitionInfoDtoList = new ArrayList<AssetDeprecitionInfoDto>();
+		for(AssetDeprecitionInfo dto : assetDeprecitionInfoList){
+			AssetDeprecitionInfoDto respDto = new AssetDeprecitionInfoDto();
+			BeanUtils.copyProperties(dto, respDto);
+			assetDeprecitionInfoDtoList.add(respDto);
+		}
+		return assetDeprecitionInfoDtoList;
 	}
 	
 }

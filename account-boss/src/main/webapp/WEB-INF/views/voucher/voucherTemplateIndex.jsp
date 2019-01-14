@@ -23,7 +23,7 @@
 				<div class="panel-heading">查询结果</div>
 				<div class="panel-body">
 					<div class="panel-table">
-						<a href="${pageContext.request.contextPath}/voucher/editTemplateIndex">
+						<a href="${pageContext.request.contextPath}/voucher/templateIndex">
 							<button class="btn btn-primary submit" type="button">新 增<span class="content_blank_10"></span><span class="glyphicon glyphicon-plus"></span>
 							</button>
 						</a>

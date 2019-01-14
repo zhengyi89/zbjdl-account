@@ -153,9 +153,12 @@
     where ID = #{id,jdbcType=DECIMAL}
   </update>
   
-  <select id="findPreDeprecition" parameterType="java.lang.String" resultMap="BaseResultMap">
+  <select id="findPreDeprecition" parameterType="com.zbjdl.account.dto.request.FindPreDeprecitionInfoReqDto" resultMap="BaseResultMap">
     SELECT adi.* FROM asset_deprecition_info adi , asset_info ai 
     		WHERE ai.id = adi.asset_id and adi. status = 'INIT'
-    	and ai.SYSTEM_CODE = #{0} and adi.deprecition_month = #{1}
+    	and ai.SYSTEM_CODE = #{systemCode,jdbcType=VARCHAR} and adi.deprecition_month = #{deprecitionMonth,jdbcType=VARCHAR}
+    	<if test="costType != null" >
+	      and cost_type = #{costType,jdbcType=VARCHAR}
+	    </if>
   </select>
 </mapper>

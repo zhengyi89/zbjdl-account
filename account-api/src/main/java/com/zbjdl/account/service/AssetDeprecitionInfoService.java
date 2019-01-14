@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.zbjdl.account.dto.AssetDeprecitionInfoDto;
 import com.zbjdl.account.dto.AssetInfoDto;
+import com.zbjdl.account.dto.request.FindPreDeprecitionInfoReqDto;
 
 public interface AssetDeprecitionInfoService {
 	Integer saveOrUpdate(AssetDeprecitionInfoDto assetDeprecitionInfoSaveReqDto);
@@ -20,6 +21,8 @@ public interface AssetDeprecitionInfoService {
 
 	void genDeprecitionRecord(AssetInfoDto assetInfoDto);
 
-	void doDeprecition(String systemCode, String accountMonth);
+	void doDeprecition(FindPreDeprecitionInfoReqDto reqDto);
+
+	List<AssetDeprecitionInfoDto> findPreDeprecition(FindPreDeprecitionInfoReqDto reqDto);
 	
 }

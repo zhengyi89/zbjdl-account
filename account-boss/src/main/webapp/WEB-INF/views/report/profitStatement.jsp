@@ -5,7 +5,7 @@
 <%@ include file="/common/taglibs.jsp"%>
 <html>
 <head>
-<title>总账</title>
+<title>利润表</title>
 <script language="javascript" type="text/javascript" src="${ctx}/static/js/common.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/static/bootstrap-datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
@@ -30,7 +30,7 @@
 	            </thead>
 	            <tbody>
 	              <tr>
-	                <td>一、营业收入</td><td>1</td><td id="11">${dto["5001"].sumYearAmount.add(dto["5051"].sumYearAmount)  }</td><td id="12">${dto["5001"].sumAmount.add(dto["5051"].sumAmount)  }</td>
+	                <td>一、营业收入</td><td>1</td><td id="11">${dto["5001"].yearCreditAmount.add(dto["5051"].yearCreditAmount) }</td><td id="12">${dto["5001"].creditAmount.add(dto["5051"].creditAmount)  }</td>
 	              </tr>
 	              <tr>
 	                <td>减：营业成本</td><td>2</td><td id="21">${dto["5401"].sumYearAmount.add(dto["5402"].sumYearAmount)  }</td><td id="22">${dto["5401"].sumAmount.add(dto["5402"].sumAmount)  }</td>
@@ -91,7 +91,7 @@
 	                <td>加：投资收益（损失以“-”号填列）</td><td>20</td><td id="201">${dto["5111"].sumYearAmount }</td><td id="202">${dto["5111"].sumAmount }</td>
 	              </tr>
 	              <tr>
-	                <td>二、营业利润（亏损以“-”号填列）</td><td>21</td><td id="211">${dto["5301"].sumYearAmount }</td><td id="212">${dto["5301"].sumAmount }</td>
+	                <td>二、营业利润（亏损以“-”号填列）</td><td>21</td><td id="211"></td><td id="212"></td>
 	              </tr>
 	              <tr>
 	                <td>加：营业外收入</td><td>22</td><td id="221">${dto["5301"].sumYearAmount }</td><td id="222">${dto["5301"].sumAmount }</td>
@@ -112,13 +112,13 @@
 	                <td><span style="padding-left: 20%">无法收回的长期股权投资损失</span></td><td>27</td><td>${dto["571105"].sumYearAmount }</td><td>${dto["571105"].sumAmount }</td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 20%">自然灾害等不可抗力因素造成的损失</span></td><td>28</td><td>${dto["5711"].sumYearAmount }</td><td>${dto["5711"].sumAmount }</td>
+	                <td><span style="padding-left: 20%">自然灾害等不可抗力因素造成的损失</span></td><td>28</td><td>${dto["571106"].sumYearAmount }</td><td>${dto["571106"].sumAmount }</td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 20%">税收滞纳金</span></td><td>29</td><td>${dto["571106"].sumYearAmount }</td><td>${dto["571106"].sumAmount }</td>
+	                <td><span style="padding-left: 20%">税收滞纳金</span></td><td>29</td><td>${dto["571107"].sumYearAmount }</td><td>${dto["571107"].sumAmount }</td>
 	              </tr>
 	              <tr>
-	                <td>三、利润总额（亏损总额以“-”号填列）</td><td>30</td><td id="301">${dto["571107"].sumYearAmount }</td><td id="302">${dto["571107"].sumAmount }</td>
+	                <td>三、利润总额（亏损总额以“-”号填列）</td><td>30</td><td id="301"></td><td id="302"></td>
 	              </tr>
 	              <tr>
 	                <td>减：所得税费用</td><td>31</td><td id="311">${dto["5801"].sumYearAmount }</td><td id="312">${dto["5801"].sumAmount }</td>

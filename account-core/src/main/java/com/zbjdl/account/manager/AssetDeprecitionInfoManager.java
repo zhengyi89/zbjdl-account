@@ -8,6 +8,7 @@ package com.zbjdl.account.manager;
 
 import java.util.List;
 
+import com.zbjdl.account.dto.request.FindPreDeprecitionInfoReqDto;
 import com.zbjdl.account.model.AssetDeprecitionInfo;
 
 public interface AssetDeprecitionInfoManager {
@@ -21,6 +22,6 @@ public interface AssetDeprecitionInfoManager {
 	List<AssetDeprecitionInfo> findList(AssetDeprecitionInfo assetDeprecitionInfo);
 
 
-	List<AssetDeprecitionInfo> findPreDeprecition(String systemCode, String accountMonth);
+	List<AssetDeprecitionInfo> findPreDeprecition(FindPreDeprecitionInfoReqDto reqDto);
 	
 }
