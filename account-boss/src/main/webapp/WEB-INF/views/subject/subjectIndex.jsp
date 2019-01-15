@@ -14,8 +14,8 @@
 				<div class="panel-heading">内容筛选</div>
 				<div class="panel-body">
 					<form class="cmxform form-horizontal" action="${pageContext.request.contextPath}/subject/index" 
-						method="get" id="godownForma" name="godownForma">
-						<div class="form-group">
+					method="get" id="godownForma" name="godownForma">
+					<div class="form-group">
 							<label class="col-lg-2 control-label">科目类别</label>
 							<div class="col-lg-3">
 								<select class="form-control" id="basicSubject" name="basicSubject">
@@ -32,7 +32,7 @@
 								<button class="btn btn-primary submit ml_20" type="button" onclick="BusinessCode.clearAllInput('godownForma');">清空</button>
 							</div>
 						</div>
-					</form>
+				</form>
 				</div>
 			</div>
 			<div class="panel panel-default">
@@ -43,7 +43,7 @@
 							class="table table-striped table-bordered" pageSize="100" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel"> --%>
 							
 						<q:table queryService="queryService" queryKey="querySubjectList" formId="godownForma"
-							class="table table-striped table-bordered" pageSize="40" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel">
+							class="table table-striped table-bordered" pageSize="100" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel">
 							<q:nodata>无符合条件的记录</q:nodata>
 							<q:param name="systemCode" value="${SESSION_ACCOUNTINFO.systemCode}" />
 				            <q:column title="编码" value="${subject_code}" width="20%" dataIndex="subject_code"/>

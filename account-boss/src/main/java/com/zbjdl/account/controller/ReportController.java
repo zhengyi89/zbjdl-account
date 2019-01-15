@@ -97,27 +97,6 @@ public class ReportController extends AccountBaseController {
 		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
 		mav.addObject("subjectList", subjectList);
 
-		// // 查询科目期间账单
-		// List<AccountSettleWithSubjectInfoDto> accountSettleList =
-		// accountSettleInfoService.findBySubjectCode(getCurrentSystemInfo()
-		// .getSystemCode(), subjectCode);
-		// Map<String, AccountSettleInfoDto> map = new HashMap<String,
-		// AccountSettleInfoDto>();
-		// Integer start = Integer.parseInt(startdate.replaceAll("-", ""));
-		// Integer end = Integer.parseInt(enddate.replaceAll("-", ""));
-		// for (AccountSettleInfoDto accountSettleInfoDto : accountSettleList) {
-		// if (start <=
-		// Integer.parseInt(accountSettleInfoDto.getAccountMonth().replaceAll("-",
-		// ""))
-		// &&
-		// Integer.parseInt(accountSettleInfoDto.getAccountMonth().replaceAll("-",
-		// "")) <= end) {
-		// map.put(accountSettleInfoDto.getAccountMonth(),
-		// accountSettleInfoDto);
-		// }
-		// }
-		// mav.addObject("map", map);
-
 		Map<String, String> dateMap = DateUtils.genDateSelector(getCurrentSystemInfo().getStartMonth(), getCurrentSystemInfo()
 				.getLatestMonth());
 		mav.addObject("dateMap", dateMap);

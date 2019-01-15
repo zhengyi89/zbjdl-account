@@ -67,7 +67,7 @@
 							<div class="col-lg-3">
 								<select class="form-control" id="industryType" name="industryType">
 									<script type="text/javascript">
-										BusinessCode.getSysConfigCode("	ACCOUNT_INDUSTRY_TYPE", "industryType", "");
+										BusinessCode.getSysConfigCode("ACCOUNT_INDUSTRY_TYPE", "industryType", "");
 									</script>
 								</select>
 						   </div>

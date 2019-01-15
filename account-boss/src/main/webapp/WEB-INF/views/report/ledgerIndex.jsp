@@ -7,9 +7,9 @@
 <head>
 <title>总账</title>
 <script language="javascript" type="text/javascript" src="${ctx}/static/js/common.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/static/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/static/bootstrap-datetimepicker/js/bootstrap-datetimepicker.zh-CN.js"></script>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/static/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css"/>
+<script src="${ctx}/static/js/jquery.js" ></script>
+<script src="${ctx}/static/js/jquery.editable-select.js" ></script>
+<link  rel="stylesheet"  type="text/css"  href="${ctx}/static/cs/jquery.editable-select.css"/>
 </head>
 <body>
 	<div id="content_2" class="content_wrapper">
@@ -23,14 +23,12 @@
 						<div class="form-group">
 							<label class="control-label col-lg-2">会计科目</label>
 							<div class="col-lg-3">
-								<select class="form-control" id="subjectCode" name="subjectCode">
+								<select   class = "form-control Winstar-input120"  id="subjectCode" name="subjectCode">
 									<c:forEach items="${subjectList}" var="subject">
-										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == subjectCode }">selected</c:if>>
-											${subject.subjectCode } ${subject.subjectName }
-										</option>
+										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option>
 									</c:forEach>
 								</select>
-							</div>
+							</div> 
 						</div>
 						<div class="form-group">
 							<label class="control-label col-lg-2">会计期间（起始）</label>
@@ -92,15 +90,28 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-	$('.form_datetime').datetimepicker({
-        format: 'yyyy-mm',
-        autoclose: true,
-        todayBtn: true,
-        startView: 'year',
-        minView:'year',
-        maxView:'decade',
-        language:  'zh-CN',
-    });
+		$('#subjectCode').editableSelect(
+		     {
+		    	 
+		       bg_iframe: true,
+		       onSelect: function(list_item) {
+		         // 'this' is a reference to the instance of EditableSelect
+		         // object, so you have full access to everything there
+		        // $('#ddd2').val(this.text.val());
+		       },
+		       case_sensitive: false, // If set to true, the user has to type in an exact
+		                              // match for the item to get highlighted
+		       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+		       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
+		     }
+		 );
+		
+		
+		function onclick(){
+			 $('#subjectCode_sele').select();
+		}
+		
+	
   	</script>
 </body>
 </html>

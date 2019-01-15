@@ -33,6 +33,8 @@
 <script language="javascript" type="text/javascript" src="${resourcePath}/jqueryValidation/messages_zh.js"></script>
 <script language="javascript" type="text/javascript" src="${resourcePath}/jqueryValidation/additional-methods.js"></script>
 <script type="text/javascript" src="${resourcePath}/DatePicker/WdatePicker.js"></script>
+<script src="${ctx}/static/js/voucher/voucher.js" ></script>
+<link  rel="stylesheet"  type="text/css"  href="${ctx}/static/cs/jquery.editable-select.css"/>
 </head>
 <body>
 	<div id="content_2" class="content_wrapper">
@@ -117,12 +119,10 @@
 					        <tr>
 					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[0].summary}" id="summary0" name="voucherSubInfoDtos[0].summary" /></td>
 					          <td>
-								<select class="form-control" id="subjectCode0" name="voucherSubInfoDtos[0].subjectCode" onchange="selectSubject(0);">
+								<select class="form-control Winstar-input120" id="subjectCode0" name="voucherSubInfoDtos[0].subjectCode">
 									<option></option>
 									<c:forEach items="${subjectList}" var="subject">
-										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[0].subjectCode }">selected</c:if>>
-											${subject.subjectCode } ${subject.subjectName }
-										</option>
+										<option value="${subject.subjectCode}" title="0"  id="0" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[0].subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option>
 									</c:forEach>
 								</select>
 					          </td>
@@ -130,7 +130,7 @@
 					          	<div class="form-group">
 									<label class="col-lg-4 control-label" id="assistName0"></label>
 									<div class="col-lg-8">
-										<select class="form-control" id="assistCode0" name="voucherSubInfoDtos[0].assistCode" readonly>
+										<select class="form-control"id="assistCode0" name="voucherSubInfoDtos[0].assistCode" readonly>
 										</select>
 									</div>
 									
@@ -142,12 +142,10 @@
 					        <tr>
 					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[1].summary}" id="summary1" name="voucherSubInfoDtos[1].summary" /></td>
 					          <td>
-								<select class="form-control" id="subjectCode1" name="voucherSubInfoDtos[1].subjectCode" onchange="selectSubject(1);">
+								<select class="form-control" id="subjectCode1" name="voucherSubInfoDtos[1].subjectCode">
 									<option></option>
 									<c:forEach items="${subjectList}" var="subject">
-										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[1].subjectCode }">selected</c:if>>
-											${subject.subjectCode } ${subject.subjectName }
-										</option>
+										<option value="${subject.subjectCode}" title="1" id="1"  <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[1].subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option>
 									</c:forEach>
 								</select>
 					          </td>
@@ -167,12 +165,10 @@
 					        <tr>
 					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[2].summary}" id="summary2" name="voucherSubInfoDtos[2].summary" /></td>
 					           <td>
-								<select class="form-control" id="subjectCode2" name="voucherSubInfoDtos[2].subjectCode" onchange="selectSubject(2);">
+								<select class="form-control" id="subjectCode2" name="voucherSubInfoDtos[2].subjectCode">
 									<option></option>
 									<c:forEach items="${subjectList}" var="subject">
-										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[2].subjectCode }">selected</c:if>>
-											${subject.subjectCode } ${subject.subjectName }
-										</option>
+										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[2].subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option>
 									</c:forEach>
 								</select>
 					          </td>
@@ -192,12 +188,10 @@
 					        <tr>
 					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[3].summary}" id="summary3" name="voucherSubInfoDtos[3].summary" /></td>
 					           <td>
-								<select class="form-control" id="subjectCode3" name="voucherSubInfoDtos[3].subjectCode" onchange="selectSubject(3);">
+								<select class="form-control" id="subjectCode3" name="voucherSubInfoDtos[3].subjectCode">
 									<option></option>
 									<c:forEach items="${subjectList}" var="subject">
-										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[3].subjectCode }">selected</c:if>>
-											${subject.subjectCode } ${subject.subjectName }
-										</option>
+										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[3].subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option>
 									</c:forEach>
 								</select>
 					          </td>
@@ -217,18 +211,16 @@
 					        <tr>
 					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[4].summary}" id="summary4" name="voucherSubInfoDtos[4].summary" /></td>
 					           <td>
-								<select class="form-control" id="subjectCode4" name="voucherSubInfoDtos[4].subjectCode" onchange="selectSubject(4);">
+								<select class="form-control" id="subjectCode4" name="voucherSubInfoDtos[4].subjectCode">
 									<option></option>
 									<c:forEach items="${subjectList}" var="subject">
-										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[4].subjectCode }">selected</c:if>>
-											${subject.subjectCode } ${subject.subjectName }
-										</option>
+										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[4].subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option>
 									</c:forEach>
 								</select>
 					          </td>
 					          <td>
 					          	<div class="form-group">
-									<label class="col-lg-4 control-label" id="assistName5"></label>
+									<label class="col-lg-4 control-label" id="assistName4"></label>
 									<div class="col-lg-8">
 										<select class="form-control" id="assistCode4" name="voucherSubInfoDtos[4].assistCode" readonly>
 										</select>
@@ -242,12 +234,10 @@
 					        <tr>
 					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[5].summary}" id="summary5" name="voucherSubInfoDtos[5].summary" /></td>
 					           <td>
-								<select class="form-control" id="subjectCode5" name="voucherSubInfoDtos[5].subjectCode" onchange="selectSubject(5);">
+								<select class="form-control" id="subjectCode5" name="voucherSubInfoDtos[5].subjectCode">
 									<option></option>
 									<c:forEach items="${subjectList}" var="subject">
-										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[5].subjectCode }">selected</c:if>>
-											${subject.subjectCode } ${subject.subjectName }
-										</option>
+										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[5].subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option>
 									</c:forEach>
 								</select>
 					          </td>
@@ -360,11 +350,12 @@
 	    }
 		
 		function selectSubject(index){
+			$("#assistCode"+index).empty();
 			$("#assistCode"+index).attr("readonly", true);
 			$("#balanceDirect"+index).val(null);
 			$("#assistName"+index).html("");
-			var subjectCode=$("#subjectCode"+index+" option:selected").val();
-			console.log('---'+subjectCode);
+			var subjectCode=$("#subjectCode"+index).val();
+			console.log('subjectCode---'+subjectCode);
 			if(subjectCode == ''){
 				return;
 			}
@@ -402,6 +393,67 @@
 				}
 			});
 		}
+		
+		$('#subjectCode0').editableSelect(
+		     {
+		       bg_iframe: true,
+		       onSelect: function(list_item) {},
+		       case_sensitive: false, // If set to true, the user has to type in an exact
+		       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+		       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
+		     }
+		 );
+			
+		$('#subjectCode1').editableSelect(
+		     {
+		       bg_iframe: true,
+		       onSelect: function(list_item) {},
+		       case_sensitive: false, // If set to true, the user has to type in an exact
+		       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+		       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
+		     }
+		 );
+			
+		$('#subjectCode2').editableSelect(
+		     {
+		       bg_iframe: true,
+		       onSelect: function(list_item) {},
+		       case_sensitive: false, // If set to true, the user has to type in an exact
+		       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+		       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
+		     }
+		 );
+			
+		$('#subjectCode3').editableSelect(
+		     {
+		       bg_iframe: true,
+		       onSelect: function(list_item) {},
+		       case_sensitive: false, // If set to true, the user has to type in an exact
+		       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+		       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
+		     }
+		 );
+			
+		$('#subjectCode4').editableSelect(
+		     {
+		       bg_iframe: true,
+		       onSelect: function(list_item) {},
+		       case_sensitive: false, // If set to true, the user has to type in an exact
+		       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+		       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
+		     }
+		 );
+			
+		$('#subjectCode5').editableSelect(
+		     {
+		       bg_iframe: true,
+		       onSelect: function(list_item) {},
+		       case_sensitive: false, // If set to true, the user has to type in an exact
+		       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+		       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
+		     }
+		 );
+			
 	</script>
 </body>
 </html>

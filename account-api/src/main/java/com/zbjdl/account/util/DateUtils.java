@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import com.zbjdl.common.utils.StringUtils;
+
 public class DateUtils {
 	public static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -80,7 +82,7 @@ public class DateUtils {
 		return result == 0 ? 1 : Math.abs(result);
 
 	}
-	
+
 	public static TreeSet<String> genDateSet(String startDate, String endDate) {
 		TreeSet<String> set = new TreeSet<String>();
 		List<String> list = getBetweenMonth(startDate, endDate);
@@ -106,5 +108,25 @@ public class DateUtils {
 		}
 
 	}
+
+	public static Date getMonthLastDay(String accountMonth) {
+		if (StringUtils.isBlank(accountMonth)) {
+			return null;
+		}
+		String[] str = accountMonth.split("-");
+		String year = str[0];
+		String month = str[1];
+		Calendar calendar = Calendar.getInstance();
+		// 设置时间,当前时间不用设置
+		calendar.set(Calendar.YEAR, Integer.parseInt(year));
+		calendar.set(Calendar.MONTH, Integer.parseInt(month)-1);
+
+		// System.out.println(calendar.getTime());
+
+		calendar.set(Calendar.DAY_OF_MONTH, 1);
+		calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+		return calendar.getTime();
+	}
+	
 
 }

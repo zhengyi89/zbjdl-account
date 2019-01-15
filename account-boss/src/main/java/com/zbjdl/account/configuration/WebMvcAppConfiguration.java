@@ -47,6 +47,8 @@ public class WebMvcAppConfiguration extends WebMvcConfigurerAdapter {
 //		
 		registry.addInterceptor(new SessionInterceptor()).
 		excludePathPatterns("/company/**").
-		excludePathPatterns("/system/console");
+		excludePathPatterns("/system/console").
+		excludePathPatterns("/system/createSetBook").
+		excludePathPatterns("/bussinessCode/**");
 	}
 }

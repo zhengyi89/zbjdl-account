@@ -10,6 +10,7 @@
  */
 (function($) {
   var instances = [];
+  var index;
   $.fn.editableSelect = function(options) {
     var defaults = { bg_iframe: false,
                      onSelect: false,
@@ -233,11 +234,14 @@
           e.stopPropagation();
           context.showList();
           context.highlightSelected();
-          $('#subjectCode_sele').select();
+          this.select();
+          index = parseInt($(this).attr("id").replace(/subjectCode/g,''));
+          console.log('-------'+index)
         }
       ).keydown(
         // Capture key events so the user can navigate through the list
         function(e) {
+        	console.log("1---"+e.keyCode);
           switch(e.keyCode) {
             // Down
             case 40:
@@ -268,6 +272,7 @@
             case 13:
               e.preventDefault();
               context.pickListItem(context.selectedListItem());
+              selectSubject(index);
               return false;
           };
         }
@@ -296,6 +301,7 @@
         }
       ).keypress(
         function(e) {
+        	console.log("key press "+e.keyCode);
           if(e.keyCode == 13) {
             // Enter, prevent form submission
             e.preventDefault();
@@ -315,8 +321,10 @@
         // Needs to be mousedown and not click, since the inputs blur events
         // fires before the list items click event
         function(e) {
-          e.stopPropagation();
-          context.pickListItem(context.selectedListItem());
+        	console.log('---22----'+index);
+        	e.stopPropagation();
+        	context.pickListItem(context.selectedListItem());
+        	selectSubject(index);
         }
       );
     },
@@ -530,19 +538,19 @@
       // The text input has a right margin because of the background arrow image
       // so we need to remove that from the width
       this.select.show();
-      var width = this.select.width() + 2 + 20;
+      var width = 250;
       this.select.hide();
       var padding_right = parseInt(this.text.css('padding-right').replace(/px/, ''), 10);
-      this.text.width(width - padding_right + 18);
-      this.wrapper.width(width + 2 + 20);
+      this.text.width(250);
+      this.wrapper.width(250);
       if(this.bg_iframe) {
-        this.bg_iframe.width(width + 4 + 20);
+        this.bg_iframe.width(250);
       };
     },
     createBackgroundIframe: function() {
       var bg_iframe = $('<iframe frameborder="0" class="editable-select-iframe1" src="about:blank;"></iframe>');
       $(document.body).append(bg_iframe);
-      bg_iframe.width(this.select.width() + 2);
+      bg_iframe.width(250);
       bg_iframe.height(this.wrapper.height());
       bg_iframe.css({top: this.wrapper.css('top'), left: this.wrapper.css('left')});
       this.bg_iframe = bg_iframe;

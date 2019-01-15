@@ -1,5 +1,6 @@
 package com.zbjdl.account.controller;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,6 +42,7 @@ import com.zbjdl.account.service.SubjectInfoService;
 import com.zbjdl.account.service.VoucherInfoService;
 import com.zbjdl.account.service.VoucherSubInfoService;
 import com.zbjdl.account.util.AccountUtils;
+import com.zbjdl.account.util.DateUtils;
 import com.zbjdl.common.amount.Amount;
 import com.zbjdl.common.utils.BeanUtils;
 import com.zbjdl.common.utils.StringUtils;
@@ -67,10 +69,10 @@ public class VoucherInfoController extends AccountBaseController {
 
 	@Autowired
 	private SubjectInfoService subjectInfoService;
-	
+
 	@Autowired
 	private AssetDeprecitionInfoService assetDeprecitionInfoService;
-	
+
 	/*
 	 * 列表页面
 	 */
@@ -88,7 +90,7 @@ public class VoucherInfoController extends AccountBaseController {
 	public ModelAndView editIndex(Long id) {
 		ModelAndView mav = new ModelAndView("voucher/voucherEdit");
 		VoucherSaveDto dto = new VoucherSaveDto();
-		VoucherInfoDto voucherInfoDto=null;
+		VoucherInfoDto voucherInfoDto = null;
 		if (id != null) {
 			voucherInfoDto = voucherInfoService.selectById(id);
 			List<VoucherSubInfoDto> voucherSubInfoDtos = voucherSubInfoService.selectByVoucherId(id);
@@ -97,24 +99,26 @@ public class VoucherInfoController extends AccountBaseController {
 			for (VoucherSubInfoDto voucherSubInfoDto : voucherSubInfoDtos) {
 				VoucherSubInfoSaveReqDto voucherSubInfoSaveReqDto = new VoucherSubInfoSaveReqDto();
 				BeanUtils.copyProperties(voucherSubInfoDto, voucherSubInfoSaveReqDto);
-//				voucherSubInfoSaveReqDto.setCreditAmount(voucherSubInfoDto.getAmount());
+				// voucherSubInfoSaveReqDto.setCreditAmount(voucherSubInfoDto.getAmount());
 				list.add(voucherSubInfoSaveReqDto);
 			}
 			dto.setVoucherSubInfoDtos(list);
-		}  
-		
-		if (id == null || (voucherInfoDto!=null&&voucherInfoDto.getTemplateFlag())) {
+		}
+
+		if (id == null || (voucherInfoDto != null && voucherInfoDto.getTemplateFlag())) {
 			// 新增凭证，默认当前日期
-			dto.setAccountPeriod(new Date());
+			dto.setAccountPeriod(DateUtils.getMonthLastDay(getCurrentSystemInfo().getAccountMonth()));
 			dto.setVoucherPapers(0);
-			Integer defSerialNum = voucherInfoService.selectDefaultSerialNum(getCurrentSystemInfo().getSystemCode(), getCurrentSystemInfo().getAccountMonth());
-			dto.setSerialNum(defSerialNum==null?1:defSerialNum);
+			Integer defSerialNum = voucherInfoService.selectDefaultSerialNum(getCurrentSystemInfo().getSystemCode(), getCurrentSystemInfo()
+					.getAccountMonth());
+			dto.setSerialNum(defSerialNum == null ? 1 : defSerialNum);
 		}
 		mav.addObject("dto", dto);
 		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
 		mav.addObject("subjectList", subjectList);
 		return mav;
 	}
+
 	/*
 	 * 进入新增页面
 	 */
@@ -122,7 +126,7 @@ public class VoucherInfoController extends AccountBaseController {
 	public ModelAndView editTemplateIndex(Long id) {
 		ModelAndView mav = new ModelAndView("voucher/voucherTemplateEdit");
 		VoucherSaveDto dto = new VoucherSaveDto();
-		VoucherInfoDto voucherInfoDto=null;
+		VoucherInfoDto voucherInfoDto = null;
 		if (id != null) {
 			voucherInfoDto = voucherInfoService.selectById(id);
 			List<VoucherSubInfoDto> voucherSubInfoDtos = voucherSubInfoService.selectByVoucherId(id);
@@ -131,12 +135,12 @@ public class VoucherInfoController extends AccountBaseController {
 			for (VoucherSubInfoDto voucherSubInfoDto : voucherSubInfoDtos) {
 				VoucherSubInfoSaveReqDto voucherSubInfoSaveReqDto = new VoucherSubInfoSaveReqDto();
 				BeanUtils.copyProperties(voucherSubInfoDto, voucherSubInfoSaveReqDto);
-//				voucherSubInfoSaveReqDto.setCreditAmount(voucherSubInfoDto.getAmount());
+				// voucherSubInfoSaveReqDto.setCreditAmount(voucherSubInfoDto.getAmount());
 				list.add(voucherSubInfoSaveReqDto);
 			}
 			dto.setVoucherSubInfoDtos(list);
-		}  
-		
+		}
+
 		mav.addObject("dto", dto);
 		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
 		mav.addObject("subjectList", subjectList);
@@ -154,12 +158,12 @@ public class VoucherInfoController extends AccountBaseController {
 		VoucherInfoDto voucherInfoDto = new VoucherInfoDto();
 		BeanUtils.copyProperties(dto, voucherInfoDto);
 		voucherInfoDto.setSystemCode(getCurrentSystemInfo().getSystemCode());
-		if (dto.getId()==null) {
+		if (dto.getId() == null) {
 			voucherInfoDto.setTemplateFlag(false);
 			voucherInfoDto.setCreatorId(getCurrentUser().getUserId());
 			voucherInfoDto.setCreatorName(getCurrentUser().getUserName());
 		}
-		
+
 		Long voucherId = voucherInfoService.saveOrUpdate(voucherInfoDto);
 		for (VoucherSubInfoSaveReqDto voucherSubInfoSaveReqDto : dto.getVoucherSubInfoDtos()) {
 			if (!voucherSubInfoNullValid(voucherSubInfoSaveReqDto)) {
@@ -176,8 +180,7 @@ public class VoucherInfoController extends AccountBaseController {
 
 		return mav;
 	}
-	
-	
+
 	/*
 	 * 模版保存
 	 */
@@ -199,7 +202,7 @@ public class VoucherInfoController extends AccountBaseController {
 			if (!voucherSubInfoNullValid(voucherSubInfoSaveReqDto)) {
 				voucherSubInfoSaveReqDto.setVoucherId(voucherId);
 				// 如果不需要设置金额，清空金额
-				if (dto.getSaveAmount()==null || !dto.getSaveAmount()) {
+				if (dto.getSaveAmount() == null || !dto.getSaveAmount()) {
 					voucherSubInfoSaveReqDto.setCreditAmount(null);
 					voucherSubInfoSaveReqDto.setDebitAmount(null);
 				}
@@ -232,8 +235,7 @@ public class VoucherInfoController extends AccountBaseController {
 		mav.addObject("dto", voucherInfoDto);
 		return mav;
 	}
-	
-	
+
 	/*
 	 * 模版列表页面
 	 */
@@ -243,20 +245,16 @@ public class VoucherInfoController extends AccountBaseController {
 
 		return mav;
 	}
-	
+
 	/*
 	 * 使用模版
 	 */
 	@RequestMapping(value = "/useTemplate", method = RequestMethod.GET)
 	public ModelAndView useTemplate(Long id) {
-//		ModelAndView mav = new ModelAndView("voucher/voucherTemplateIndex");
+		// ModelAndView mav = new ModelAndView("voucher/voucherTemplateIndex");
 		return editIndex(id);
 	}
-	
-	
-	
 
-	
 	/*
 	 * 模版列表页面
 	 */
@@ -268,17 +266,16 @@ public class VoucherInfoController extends AccountBaseController {
 			voucherInfoDto.setAuditorId(getCurrentUser().getUserId());
 			voucherInfoDto.setAuditorName(getCurrentUser().getUserName());
 			voucherInfoDto.setStatus(DataStatusEnum.AUDITED.getCode());
-		}else if (MethodEnum.UNAUDIT.getCode().equals(operate)) {
+		} else if (MethodEnum.UNAUDIT.getCode().equals(operate)) {
 			voucherInfoDto.setAuditorId(null);
 			voucherInfoDto.setAuditorName(null);
 			voucherInfoDto.setStatus(DataStatusEnum.NORMAL.getCode());
 		}
 		voucherInfoService.saveOrUpdate(voucherInfoDto);
 		return mav;
-		
+
 	}
-	
-	
+
 	/*
 	 * 期末凭证
 	 */
@@ -287,9 +284,7 @@ public class VoucherInfoController extends AccountBaseController {
 		ModelAndView mav = new ModelAndView("voucher/voucherClosingIndex");
 		return mav;
 	}
-	
-	
-	
+
 	/*
 	 * 生成期末凭证
 	 */
@@ -297,36 +292,36 @@ public class VoucherInfoController extends AccountBaseController {
 	public ModelAndView genClosing(Long id) {
 		ModelAndView mav = new ModelAndView("voucher/voucherEdit");
 		VoucherSaveDto dto = new VoucherSaveDto();
-		VoucherInfoDto voucherInfoDto=voucherInfoService.selectById(id);
-			List<VoucherSubInfoDto> voucherSubInfoDtos = voucherSubInfoService.selectByVoucherId(id);
-			BeanUtils.copyProperties(voucherInfoDto, dto);
-			List<VoucherSubInfoSaveReqDto> list = new ArrayList<VoucherSubInfoSaveReqDto>();
-			for (VoucherSubInfoDto voucherSubInfoDto : voucherSubInfoDtos) {
-				VoucherSubInfoSaveReqDto voucherSubInfoSaveReqDto = new VoucherSubInfoSaveReqDto();
-				BeanUtils.copyProperties(voucherSubInfoDto, voucherSubInfoSaveReqDto);
-				list.add(voucherSubInfoSaveReqDto);
-			}
-			dto.setVoucherSubInfoDtos(list);
-		
+		VoucherInfoDto voucherInfoDto = voucherInfoService.selectById(id);
+		List<VoucherSubInfoDto> voucherSubInfoDtos = voucherSubInfoService.selectByVoucherId(id);
+		BeanUtils.copyProperties(voucherInfoDto, dto);
+		List<VoucherSubInfoSaveReqDto> list = new ArrayList<VoucherSubInfoSaveReqDto>();
+		for (VoucherSubInfoDto voucherSubInfoDto : voucherSubInfoDtos) {
+			VoucherSubInfoSaveReqDto voucherSubInfoSaveReqDto = new VoucherSubInfoSaveReqDto();
+			BeanUtils.copyProperties(voucherSubInfoDto, voucherSubInfoSaveReqDto);
+			list.add(voucherSubInfoSaveReqDto);
+		}
+		dto.setVoucherSubInfoDtos(list);
+
 		// 设置凭证默认
-		dto.setAccountPeriod(new Date());
+		dto.setAccountPeriod(DateUtils.getMonthLastDay(getCurrentSystemInfo().getAccountMonth()));
 		dto.setVoucherPapers(0);
-		Integer defSerialNum = voucherInfoService.selectDefaultSerialNum(getCurrentSystemInfo().getSystemCode(), getCurrentSystemInfo().getAccountMonth());
-		dto.setSerialNum(defSerialNum==null?1:defSerialNum);
-		
-		
+		Integer defSerialNum = voucherInfoService.selectDefaultSerialNum(getCurrentSystemInfo().getSystemCode(), getCurrentSystemInfo()
+				.getAccountMonth());
+		dto.setSerialNum(defSerialNum == null ? 1 : defSerialNum);
+
 		/*
 		 * 计算发生额
 		 */
-		//计提固定资产折旧
-		if (voucherInfoDto.getSerialNum()==1) {
+		// 计提固定资产折旧
+		if (voucherInfoDto.getSerialNum() == 1) {
 			Amount amount = new Amount();
 			// 查询当期折旧列表
 			FindPreDeprecitionInfoReqDto reqDto = new FindPreDeprecitionInfoReqDto();
 			reqDto.setDeprecitionMonth(getCurrentSystemInfo().getAccountMonth());
 			reqDto.setSystemCode(getCurrentSystemInfo().getSystemCode());
 			reqDto.setCostType(AssetEnum.COST_TYPE_DEPRECITION.getCode());
-			List<AssetDeprecitionInfoDto>  deprecitionList = assetDeprecitionInfoService.findPreDeprecition(reqDto);
+			List<AssetDeprecitionInfoDto> deprecitionList = assetDeprecitionInfoService.findPreDeprecition(reqDto);
 			for (AssetDeprecitionInfoDto assetDeprecitionInfoDto : deprecitionList) {
 				amount = amount.add(assetDeprecitionInfoDto.getDeprecitionAmount());
 			}
@@ -334,29 +329,28 @@ public class VoucherInfoController extends AccountBaseController {
 			for (VoucherSubInfoSaveReqDto saveDto : dto.getVoucherSubInfoDtos()) {
 				if ("560202".equals(saveDto.getSubjectCode())) {
 					saveDto.setDebitAmount(amount);
-				}else if("1602".equals(saveDto.getSubjectCode())){
+				} else if ("1602".equals(saveDto.getSubjectCode())) {
 					saveDto.setCreditAmount(amount);
 				}
 			}
-			
-		}else if(voucherInfoDto.getSerialNum()==2){
+
+		} else if (voucherInfoDto.getSerialNum() == 2) {
 			Amount amount = new Amount();
 			// 查询当期摊销列表
 			FindPreDeprecitionInfoReqDto reqDto = new FindPreDeprecitionInfoReqDto();
 			reqDto.setDeprecitionMonth(getCurrentSystemInfo().getAccountMonth());
 			reqDto.setSystemCode(getCurrentSystemInfo().getSystemCode());
 			reqDto.setCostType(AssetEnum.COST_TYPE_EXPENSE.getCode());
-			List<AssetDeprecitionInfoDto>  deprecitionList = assetDeprecitionInfoService.findPreDeprecition(reqDto);
+			List<AssetDeprecitionInfoDto> deprecitionList = assetDeprecitionInfoService.findPreDeprecition(reqDto);
 			for (AssetDeprecitionInfoDto assetDeprecitionInfoDto : deprecitionList) {
 				amount = amount.add(assetDeprecitionInfoDto.getDeprecitionAmount());
 			}
 			// 设置金额
 			dto.getVoucherSubInfoDtos().get(0).setDebitAmount(amount);
 			dto.getVoucherSubInfoDtos().get(1).setCreditAmount(amount);
-			
+
 		}
-		
-		
+
 		mav.addObject("dto", dto);
 		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
 		mav.addObject("subjectList", subjectList);

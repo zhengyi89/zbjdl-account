@@ -43,7 +43,6 @@
 						<q:table queryService="queryService" queryKey="queryVoucherList" formId="godownForma"
 							class="table table-striped table-bordered" pageSize="40" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel">
 							<q:nodata>无符合条件的记录</q:nodata>
-							<q:column title="序号" value="${_rowstatus.globalIndex}" with="10％" />
 				            <q:column title="日期" value="${account_period}" width="20%" dataIndex="voucher_code"/>
 				            <q:column title="凭证字号" value="${serial_num}" width="20%" dataIndex="voucher_name"/>
 				            <q:column title="摘要" value="${summary}" width="20%" dataIndex="balance_direct" />

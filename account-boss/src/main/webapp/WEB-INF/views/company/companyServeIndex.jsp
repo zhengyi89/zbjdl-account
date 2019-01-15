@@ -25,7 +25,7 @@
 						<div class="form-group">
 							<label class="control-label col-lg-2">客户名称</label>
 							<div class="col-lg-3">
-								<input class="form-control" id="companyName" name="companyName" ></input>
+								<input class="form-control" id="companyName" name="companyName" onclick="aa()"></input>
 							</div>
 							
 							<label for="status" class="control-label col-lg-2">客户状态</label>
@@ -99,6 +99,11 @@
     $(function(){
       
     });
+    
+    function aa(){
+		 $('#companyName').select();
+	}
+	
   </script>
 </body>
 </html>

@@ -15,10 +15,30 @@
 <body>
 	<div id="content_2" class="content_wrapper">
 		<div class="content_main">
-			<div class="panel-body">
+			<div class="panel panel-default">
+				<div class="panel-heading">内容筛选</div>
+				<div class="panel-body">
 				<form class="cmxform form-horizontal" action="${pageContext.request.contextPath}/accountSettle/openingIndex" 
 					method="get" id="godownForma" name="godownForma">
+					<div class="form-group">
+							<label class="col-lg-2 control-label">科目类别</label>
+							<div class="col-lg-3">
+								<select class="form-control" id="basicSubject" name="basicSubject">
+									<script type="text/javascript">
+										BusinessCode.getSysConfigCode("ACCOUNT_SUBJECT_TYPE ", "basicSubject", "$!{query.basicSubject}");
+									</script>
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-lg-12 align_center">
+								<button class="btn btn-primary submit ml_20" type="submit">查 询</button>
+								<button class="btn btn-primary submit ml_20" type="button" onclick="BusinessCode.clearAllInput('godownForma');">清空</button>
+							</div>
+						</div>
 				</form>
+				</div>
 			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">查询结果</div>

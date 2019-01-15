@@ -146,6 +146,7 @@
 									where asi.parent_id is null
 									/~systemCode: and si.system_code = {systemCode,string} ~/
 									/~accountMonth: and asi.account_month = {accountMonth,string} ~/
+									/~basicSubject: and si.basic_subject = {basicSubject,string} ~/
 									order by subject_code asc
                                 ]]>
 							</value>
