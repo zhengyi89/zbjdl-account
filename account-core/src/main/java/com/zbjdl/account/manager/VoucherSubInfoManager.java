@@ -25,5 +25,7 @@ public interface VoucherSubInfoManager {
 	List<VoucherSubInfo> findListByMonth(String systemCode, String accountMonth);
 
 	List<VoucherSubDetailDto> findListByParamOrder(DetailAccountReportReqDto reqDto);
+
+	void delete(Long id);
 	
 }

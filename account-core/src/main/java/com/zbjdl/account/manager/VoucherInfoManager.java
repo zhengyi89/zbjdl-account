@@ -26,4 +26,8 @@ public interface VoucherInfoManager {
 	Integer selectDefaultSerialNum(String systemCode, String accountMonth);
 
 	List<VoucherInfo> findListMonthBetween(String systemCode, String startDate, String endDate);
+
+	VoucherInfo selectBySubId(Long id);
+
+	void batchAudit(List<VoucherInfoDto> param);
 }

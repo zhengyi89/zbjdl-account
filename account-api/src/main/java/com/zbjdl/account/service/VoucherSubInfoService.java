@@ -25,5 +25,5 @@ public interface VoucherSubInfoService {
 
 	List<VoucherSubDetailDto> findListByParamOrder(DetailAccountReportReqDto reqDto);
 
-	
+	void delete(Long id);
 }

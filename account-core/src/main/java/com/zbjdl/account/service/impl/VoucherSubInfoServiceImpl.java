@@ -86,4 +86,9 @@ public class VoucherSubInfoServiceImpl implements VoucherSubInfoService {
 		return voucherSubInfoManager.findListByParamOrder(reqDto);
 	}
 
+	@Override
+	public void delete(Long id) {
+		voucherSubInfoManager.delete(id);
+	}
+
 }

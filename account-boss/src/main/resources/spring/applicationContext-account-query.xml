@@ -159,11 +159,20 @@
 						<property name="sql">
 							<value>
                                 <![CDATA[
-								 	select vi.*, vsi.*, si.* from voucher_info vi, voucher_sub_info vsi , subject_info si
-								 	where vi.ID = vsi.VOUCHER_ID and vsi.subject_code = si.subject_code and vi.system_code = si.system_code
-								     and template_flag = 0
-								      /~systemCode: and vi.system_code = {systemCode,string} ~/
-  									  order by vi.id, vsi.id desc
+								 	SELECT
+										vi.*, vsi.summary, concat(si.subject_code, ' ', si.subject_name) subject_name
+									FROM
+										voucher_info vi ,
+										voucher_sub_info vsi,
+										subject_info si
+									WHERE
+										vi.ID = vsi.VOUCHER_ID and vi.system_code = si.system_code and vsi.subject_code = si.subject_code
+									AND template_flag = 0
+									/~systemCode: and vi.system_code = {systemCode,string} ~/
+									/~accountMonth: and date_format(account_period,'%Y-%m') = {accountMonth,string} ~/
+									/~status: and vi.status = {status,string} ~/
+									GROUP BY vsi.VOUCHER_ID
+	 								order by vi.id asc
                                 ]]>
 							</value>
 						</property>

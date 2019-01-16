@@ -8,6 +8,7 @@ package com.zbjdl.account.repository;
 
 import java.util.List;
 
+import com.zbjdl.account.dto.VoucherInfoDto;
 import com.zbjdl.account.model.VoucherInfo;
 import com.zbjdl.common.respository.mybatis.GenericRepository;
 
@@ -26,5 +27,9 @@ public interface VoucherInfoRepository extends GenericRepository {
 	Integer selectDefaultSerialNum(String systemCode, String accountMonth);
 
 	List<VoucherInfo> findListMonthBetween(String systemCode, String startDate, String endDate);
+
+	VoucherInfo selectBySubId(Long id);
+
+	void batchAudit(List<VoucherInfoDto> param);
 	
 }

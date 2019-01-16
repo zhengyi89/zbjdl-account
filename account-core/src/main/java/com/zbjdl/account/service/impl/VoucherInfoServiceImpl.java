@@ -103,6 +103,19 @@ public class VoucherInfoServiceImpl implements VoucherInfoService {
 		}
 		return voucherInfoDtoList;
 	}
+
+	@Override
+	public VoucherInfoDto selectBySubId(Long id) {
+		VoucherInfo voucherInfo = voucherInfoManager.selectBySubId(id);
+		VoucherInfoDto voucherInfoDto = new VoucherInfoDto();
+		BeanUtils.copyProperties(voucherInfo, voucherInfoDto);
+		return voucherInfoDto;
+	}
+
+	@Override
+	public void batchAudit(List<VoucherInfoDto> param) {
+		voucherInfoManager.batchAudit(param);
+	}
 	
 }
 

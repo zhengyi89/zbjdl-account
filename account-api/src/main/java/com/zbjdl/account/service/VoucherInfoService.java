@@ -23,4 +23,8 @@ public interface VoucherInfoService {
 
 	List<VoucherInfoDto> findListMonthBetween(String systemCode, String startdate, String enddate);
 
+	VoucherInfoDto selectBySubId(Long id);
+
+	void batchAudit(List<VoucherInfoDto> param);
+
 }

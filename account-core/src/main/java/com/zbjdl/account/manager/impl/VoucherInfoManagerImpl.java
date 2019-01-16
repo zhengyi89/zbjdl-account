@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.zbjdl.account.repository.VoucherInfoRepository;
+import com.zbjdl.account.dto.VoucherInfoDto;
 import com.zbjdl.account.manager.VoucherInfoManager;
 import com.zbjdl.account.model.VoucherInfo;
 
@@ -55,6 +56,16 @@ public class VoucherInfoManagerImpl implements VoucherInfoManager {
 	@Override
 	public List<VoucherInfo> findListMonthBetween(String systemCode, String startDate, String endDate) {
 		return voucherInfoRepository.findListMonthBetween(systemCode, startDate, endDate);
+	}
+
+	@Override
+	public VoucherInfo selectBySubId(Long id) {
+		return voucherInfoRepository.selectBySubId(id);
+	}
+
+	@Override
+	public void batchAudit(List<VoucherInfoDto> param) {
+		voucherInfoRepository.batchAudit(param);
 	}
 
 }

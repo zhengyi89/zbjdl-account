@@ -265,4 +265,24 @@
     where system_code = #{0} and date_format(account_period,'%Y-%m') &gt;= #{1}
      and date_format(account_period,'%Y-%m') &lt;= #{2}
   </select>
+  
+  
+  <select id="selectBySubId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    	vi.*
+    from voucher_info vi, voucher_sub_info vsi
+    where vi.id = vsi.voucher_id and vsi.ID = #{id,jdbcType=DECIMAL}
+  </select>
+  
+  
+  <update id="batchAudit"  parameterType="java.util.List">  
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+        update voucher
+        <set>
+            auditor_id=${item.auditorId}, auditor_name=${item.auditorName}, status=${item.status}, last_update_time = sysdate()
+        </set>
+        where id = ${item.id}
+    </foreach>      
+</update>
+  
 </mapper>

@@ -87,25 +87,30 @@ public class VoucherInfoController extends AccountBaseController {
 	 * 进入新增页面
 	 */
 	@RequestMapping(value = "/edit/index", method = RequestMethod.GET)
-	public ModelAndView editIndex(Long id) {
+	public ModelAndView editIndex(Long id, Boolean templateFlag) {
 		ModelAndView mav = new ModelAndView("voucher/voucherEdit");
+		
+		templateFlag = templateFlag==null?false:templateFlag;
+		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
+		mav.addObject("subjectList", subjectList);
+		
+		Boolean auditFlag = false;
 		VoucherSaveDto dto = new VoucherSaveDto();
 		VoucherInfoDto voucherInfoDto = null;
 		if (id != null) {
 			voucherInfoDto = voucherInfoService.selectById(id);
-			List<VoucherSubInfoDto> voucherSubInfoDtos = voucherSubInfoService.selectByVoucherId(id);
 			BeanUtils.copyProperties(voucherInfoDto, dto);
-			List<VoucherSubInfoSaveReqDto> list = new ArrayList<VoucherSubInfoSaveReqDto>();
-			for (VoucherSubInfoDto voucherSubInfoDto : voucherSubInfoDtos) {
-				VoucherSubInfoSaveReqDto voucherSubInfoSaveReqDto = new VoucherSubInfoSaveReqDto();
-				BeanUtils.copyProperties(voucherSubInfoDto, voucherSubInfoSaveReqDto);
-				// voucherSubInfoSaveReqDto.setCreditAmount(voucherSubInfoDto.getAmount());
-				list.add(voucherSubInfoSaveReqDto);
-			}
-			dto.setVoucherSubInfoDtos(list);
+			auditFlag = DataStatusEnum.AUDITED.getCode().equals(voucherInfoDto.getStatus())?true:false;
+			mav.addObject("creator", voucherInfoDto.getCreatorName());
+			mav.addObject("auditor", voucherInfoDto.getAuditorName());
 		}
-
-		if (id == null || (voucherInfoDto != null && voucherInfoDto.getTemplateFlag())) {
+		
+		// 使用凭证模版
+		if (id != null && voucherInfoDto.getTemplateFlag() && !templateFlag) {
+			
+		}
+		
+		if (id == null || templateFlag) {
 			// 新增凭证，默认当前日期
 			dto.setAccountPeriod(DateUtils.getMonthLastDay(getCurrentSystemInfo().getAccountMonth()));
 			dto.setVoucherPapers(0);
@@ -113,38 +118,29 @@ public class VoucherInfoController extends AccountBaseController {
 					.getAccountMonth());
 			dto.setSerialNum(defSerialNum == null ? 1 : defSerialNum);
 		}
-		mav.addObject("dto1", dto);
-		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
-		mav.addObject("subjectList", subjectList);
+		mav.addObject("id", id);
+		mav.addObject("dto", dto);
+		mav.addObject("templateFlag", templateFlag);
+		mav.addObject("auditFlag", auditFlag);
 		return mav;
 	}
-
 	/*
 	 * 进入新增页面
 	 */
-	@RequestMapping(value = "/editTemplateIndex", method = RequestMethod.GET)
-	public ModelAndView editTemplateIndex(Long id) {
-		ModelAndView mav = new ModelAndView("voucher/voucherTemplateEdit");
-		VoucherSaveDto dto = new VoucherSaveDto();
-		VoucherInfoDto voucherInfoDto = null;
+	@RequestMapping(value = "/query", method = RequestMethod.POST)
+	@ResponseBody
+	public Object query(Long id) {
+		List<VoucherSubInfoSaveReqDto> list = new ArrayList<VoucherSubInfoSaveReqDto>();
 		if (id != null) {
-			voucherInfoDto = voucherInfoService.selectById(id);
 			List<VoucherSubInfoDto> voucherSubInfoDtos = voucherSubInfoService.selectByVoucherId(id);
-			BeanUtils.copyProperties(voucherInfoDto, dto);
-			List<VoucherSubInfoSaveReqDto> list = new ArrayList<VoucherSubInfoSaveReqDto>();
 			for (VoucherSubInfoDto voucherSubInfoDto : voucherSubInfoDtos) {
 				VoucherSubInfoSaveReqDto voucherSubInfoSaveReqDto = new VoucherSubInfoSaveReqDto();
 				BeanUtils.copyProperties(voucherSubInfoDto, voucherSubInfoSaveReqDto);
-				// voucherSubInfoSaveReqDto.setCreditAmount(voucherSubInfoDto.getAmount());
 				list.add(voucherSubInfoSaveReqDto);
 			}
-			dto.setVoucherSubInfoDtos(list);
 		}
-
-		mav.addObject("dto", dto);
-		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
-		mav.addObject("subjectList", subjectList);
-		return mav;
+		return list;
+		
 	}
 
 	/*
@@ -153,8 +149,28 @@ public class VoucherInfoController extends AccountBaseController {
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	public ModelAndView save(VoucherSaveDto dto, BindingResult bindingResult) {
 		logger.info("save VoucherInfo, param is : {}", JSON.toJSONString(dto));
-		ModelAndView mav = new ModelAndView("redirect:/voucher/index");
-
+		
+		ModelAndView mav;
+		if (dto.getAddFlag()) {
+			mav = new ModelAndView("redirect:/voucher/edit/index");
+		}else{
+			mav = new ModelAndView("redirect:/voucher/index");
+		}
+		
+		
+		//先去查询凭证信息，判断是否是模版
+		Boolean templateFlag = false;
+		if (dto.getId() != null) {
+			VoucherInfoDto voucher = voucherInfoService.selectById(dto.getId());
+			// 如果是模版
+			if (voucher.getTemplateFlag()) {
+				templateFlag = true;
+				// 设置id为空
+				dto.setId(null);
+			}
+		}
+		
+		
 		VoucherInfoDto voucherInfoDto = new VoucherInfoDto();
 		BeanUtils.copyProperties(dto, voucherInfoDto);
 		voucherInfoDto.setSystemCode(getCurrentSystemInfo().getSystemCode());
@@ -168,6 +184,9 @@ public class VoucherInfoController extends AccountBaseController {
 		for (VoucherSubInfoSaveReqDto voucherSubInfoSaveReqDto : dto.getVoucherSubInfoDtos()) {
 			if (!voucherSubInfoNullValid(voucherSubInfoSaveReqDto)) {
 				voucherSubInfoSaveReqDto.setVoucherId(voucherId);
+				if (templateFlag) {
+					voucherSubInfoSaveReqDto.setId(null);
+				}
 				// 根据余额方向，设置凭证金额
 				Amount amount = AccountUtils.getRealAmount(voucherSubInfoSaveReqDto.getBalanceDirect(),
 						voucherSubInfoSaveReqDto.getDebitAmount(), voucherSubInfoSaveReqDto.getCreditAmount());
@@ -252,7 +271,7 @@ public class VoucherInfoController extends AccountBaseController {
 	@RequestMapping(value = "/useTemplate", method = RequestMethod.GET)
 	public ModelAndView useTemplate(Long id) {
 		// ModelAndView mav = new ModelAndView("voucher/voucherTemplateIndex");
-		return editIndex(id);
+		return editIndex(id, false);
 	}
 
 	/*
@@ -275,6 +294,8 @@ public class VoucherInfoController extends AccountBaseController {
 		return mav;
 
 	}
+	
+	
 
 	/*
 	 * 期末凭证
@@ -355,5 +376,53 @@ public class VoucherInfoController extends AccountBaseController {
 		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
 		mav.addObject("subjectList", subjectList);
 		return mav;
+	}
+	
+	
+	/*
+	 * 删除subinfo
+	 */
+	@RequestMapping(value = "/sub/delete", method = RequestMethod.DELETE)
+	@ResponseBody
+	public Object deleteSubById(Long id, Boolean templateFlag) {
+		logger.info("delete voucher sub id : {}, templateFlag : {}", id, templateFlag);
+		BaseRespDto dto = new BaseRespDto(ReturnEnum.SUCCESS);
+		
+		// 如果非模版凭证，根据id判断是否是使用了模版的
+		if (!templateFlag) {
+			VoucherInfoDto voucher = voucherInfoService.selectBySubId(id);
+			// 如果是模版，不删除
+			if (voucher.getTemplateFlag()) {
+				return dto;
+			}
+		}
+		voucherSubInfoService.delete(id);
+		return dto;
+	}
+	
+	
+	
+	/*
+	 * 删除subinfo
+	 */
+	@RequestMapping(value = "/sub/delete", method = RequestMethod.DELETE)
+	@ResponseBody
+	public Object batchAudit(String ids) {
+		logger.info("batchAudit ids : {}", ids);
+		ids = ids.substring(0, ids.length()-1);
+		BaseRespDto dto = new BaseRespDto(ReturnEnum.SUCCESS);
+		String[] idArray = ids.split(",");
+		
+		List<VoucherInfoDto> param = new ArrayList<VoucherInfoDto>();
+		for (String id : idArray) {
+			VoucherInfoDto voucher = new VoucherInfoDto();
+			voucher.setAuditorId(getCurrentUser().getUserId());
+			voucher.setAuditorName(getCurrentUser().getUserName());
+			voucher.setStatus(DataStatusEnum.AUDITED.getCode());
+			voucher.setId(Long.parseLong(id));
+			param.add(voucher);
+		}
+		voucherInfoService.batchAudit(param);
+		return dto;
 	}
 }
