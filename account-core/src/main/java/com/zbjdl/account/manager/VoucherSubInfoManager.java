@@ -8,6 +8,8 @@ package com.zbjdl.account.manager;
 
 import java.util.List;
 
+import com.zbjdl.account.dto.VoucherSubDetailDto;
+import com.zbjdl.account.dto.request.DetailAccountReportReqDto;
 import com.zbjdl.account.model.VoucherSubInfo;
 
 public interface VoucherSubInfoManager {
@@ -21,5 +23,7 @@ public interface VoucherSubInfoManager {
 	List<VoucherSubInfo> findList(VoucherSubInfo voucherSubInfo);
 
 	List<VoucherSubInfo> findListByMonth(String systemCode, String accountMonth);
+
+	List<VoucherSubDetailDto> findListByParamOrder(DetailAccountReportReqDto reqDto);
 	
 }

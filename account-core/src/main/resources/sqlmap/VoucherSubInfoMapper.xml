@@ -15,6 +15,24 @@
 	  <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
 	  <result column="LAST_UPDATE_TIME" jdbcType="TIMESTAMP" property="lastUpdateTime" />
   </resultMap>
+	<resultMap id="DetailResultMap" type="com.zbjdl.account.dto.VoucherSubDetailDto">
+	  <id column="ID" jdbcType="DECIMAL" property="id" />
+	  <result column="VOUCHER_ID" jdbcType="BIGINT" property="voucherId" />
+	  <result column="SUMMARY" jdbcType="VARCHAR" property="summary" />
+	  <result column="SUBJECT_CODE" jdbcType="VARCHAR" property="subjectCode" />
+	  <result column="BALANCE_DIRECT" jdbcType="VARCHAR" property="balanceDirect" />
+	  <result column="ASSIST_CODE" jdbcType="VARCHAR" property="assistCode" />
+	  <result column="AMOUNT" jdbcType="DECIMAL" property="amount" />
+	  <result column="DEBIT_AMOUNT" jdbcType="DECIMAL" property="debitAmount" />
+	  <result column="CREDIT_AMOUNT" jdbcType="DECIMAL" property="creditAmount" />
+	  <result column="DEL_FLAG" jdbcType="BIT" property="delFlag" />
+	  <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
+	  <result column="LAST_UPDATE_TIME" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+	  
+	  <result column="system_code" jdbcType="VARCHAR" property="systemCode" />
+	  <result column="account_period" jdbcType="DATE" property="accountPeriod" />
+	  <result column="serial_num" jdbcType="INTEGER" property="serialNum" />
+  </resultMap>
 
   <sql id="Example_Where_Clause">
     <where>
@@ -173,6 +191,41 @@
     from voucher_sub_info vsi, voucher_info vi
     where vsi.voucher_id = vi.id and
     system_code = #{0} and account_period like CONCAT(#{1},'%')
+  </select>
+  
+  
+  <select id="findListByParamOrder" parameterType="com.zbjdl.account.dto.request.DetailAccountReportReqDto" resultMap="DetailResultMap">
+     	SELECT
+			vsi.id , vsi.VOUCHER_ID , vsi.SUMMARY , vsi.SUBJECT_CODE , vsi.BALANCE_DIRECT , vsi.ASSIST_CODE ,
+			sum(vsi.AMOUNT) amount , sum(vsi.DEBIT_AMOUNT) DEBIT_AMOUNT , sum(vsi.CREDIT_AMOUNT) CREDIT_AMOUNT ,
+			vi.account_period , vi.serial_num , vi.system_code
+		FROM
+			voucher_sub_info vsi ,
+			voucher_info vi
+	    where vsi.voucher_id = vi.id 
+	    <if test="subjectCode != null and subjectCode !=''" >
+	      and SUBJECT_CODE like CONCAT(#{subjectCode,jdbcType=VARCHAR},'%')
+	    </if>
+      	<if test="systemCode != null and systemCode !=''" >
+	      and system_code = #{systemCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="assistCode != null and assistCode !=''" >
+	      and ASSIST_CODE = #{assistCode,jdbcType=VARCHAR}
+	    </if>
+      	<if test="accountMonth != null and accountMonth !=''" >
+	      and date_format(account_period,'%Y-%m') = #{accountMonth,jdbcType=VARCHAR}
+	    </if>
+	    <!-- 如果accountMonth为空，使用记账区间 -->
+	    <if test="accountMonth == null" >
+	    	<if test="startdate != null and startdate !=''" >
+		      and date_format(account_period,'%Y-%m') >=  #{startdate,jdbcType=VARCHAR}
+		    </if>
+	      	<if test="enddate != null and enddate !=''" >
+		      and date_format(account_period,'%Y-%m') &lt;= #{enddate,jdbcType=VARCHAR}
+		    </if>
+	    </if>
+	    GROUP BY VOUCHER_ID
+    	order by date_format(account_period,'%Y-%m') asc, serial_num asc
   </select>
   
 </mapper>

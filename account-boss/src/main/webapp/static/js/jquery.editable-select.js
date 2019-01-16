@@ -394,7 +394,7 @@
     },
     showList: function() {
       this.positionElements();
-      this.setWidths();
+      //this.setWidths();
       this.wrapper.show();
       this.hideOtherLists();
       this.list_is_visible = true;
@@ -530,19 +530,19 @@
       // The text input has a right margin because of the background arrow image
       // so we need to remove that from the width
       this.select.show();
-      var width = this.select.width() + 2 + 20;
+      var width = 237;
       this.select.hide();
       var padding_right = parseInt(this.text.css('padding-right').replace(/px/, ''), 10);
-      this.text.width(width - padding_right + 18);
-      this.wrapper.width(width + 2 + 20);
+      this.text.width(237);
+      this.wrapper.width(237);
       if(this.bg_iframe) {
-        this.bg_iframe.width(width + 4 + 20);
+        this.bg_iframe.width(237);
       };
     },
     createBackgroundIframe: function() {
       var bg_iframe = $('<iframe frameborder="0" class="editable-select-iframe1" src="about:blank;"></iframe>');
       $(document.body).append(bg_iframe);
-      bg_iframe.width(this.select.width() + 2);
+      bg_iframe.width(237);
       bg_iframe.height(this.wrapper.height());
       bg_iframe.css({top: this.wrapper.css('top'), left: this.wrapper.css('left')});
       this.bg_iframe = bg_iframe;

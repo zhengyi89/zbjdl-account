@@ -32,9 +32,6 @@ font-family:Arial;
 				<div class="panel-body">
 					<form method="post" id="godownForma" name="godownForma"
 						action="${pageContext.request.contextPath}/accountSettle/save" class="cmxform form-horizontal">
-						<%-- <input type="hidden" value="${dto.id}" id="id" name="id"> 
-						<input type="hidden" value="${dto.subjectId}" id="subjectId" name="subjectId">  --%>
-						<!-- <input type="hidden" value="DEPRECITION" id="costType" name="costType">  -->
 						<table class="table" border="1" id="tableid">
 						    <thead>
 							    <tr>

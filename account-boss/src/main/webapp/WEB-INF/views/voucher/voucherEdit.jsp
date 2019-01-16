@@ -91,23 +91,11 @@
 							</div> 
 							<label class="col-lg-1 control-label" style="text-align:left">张</label>
 						</div>
-						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[0].id}" id="id0" name="voucherSubInfoDtos[0].id" />
-						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[1].id}" id="id1" name="voucherSubInfoDtos[1].id" />
-						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[2].id}" id="id2" name="voucherSubInfoDtos[2].id" />
-						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[3].id}" id="id3" name="voucherSubInfoDtos[3].id" />
-						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[4].id}" id="id4" name="voucherSubInfoDtos[4].id" />
-						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[5].id}" id="id5" name="voucherSubInfoDtos[5].id" />
 						
-						
-						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[0].balanceDirect}" id="balanceDirect0" name="voucherSubInfoDtos[0].balanceDirect" />
-						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[1].balanceDirect}" id="balanceDirect1" name="voucherSubInfoDtos[1].balanceDirect" />
-						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[2].balanceDirect}" id="balanceDirect2" name="voucherSubInfoDtos[2].balanceDirect" />
-						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[3].balanceDirect}" id="balanceDirect3" name="voucherSubInfoDtos[3].balanceDirect" />
-						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[4].balanceDirect}" id="balanceDirect4" name="voucherSubInfoDtos[4].balanceDirect" />
-						<input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos[5].balanceDirect}" id="balanceDirect5" name="voucherSubInfoDtos[5].balanceDirect" />
-						<table class="table table-bordered">
+						<table class="table table-bordered" id="tab">
 					      <thead>
 					        <tr>
+					          <th width="5%"></th>
 					          <th width="15%">摘要</th>
 					          <th width="20%">会计科目</th>
 					          <th width="35%">辅助核算</th>
@@ -117,145 +105,8 @@
 					      </thead>
 					      <tbody>
 					        <tr>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[0].summary}" id="summary0" name="voucherSubInfoDtos[0].summary" /></td>
-					          <td>
-								<select class="form-control Winstar-input120" id="subjectCode0" name="voucherSubInfoDtos[0].subjectCode">
-									<option></option>
-									<c:forEach items="${subjectList}" var="subject">
-										<option value="${subject.subjectCode}" title="0"  id="0" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[0].subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option>
-									</c:forEach>
-								</select>
-					          </td>
-					          <td>
-					          	<div class="form-group">
-									<label class="col-lg-4 control-label" id="assistName0"></label>
-									<div class="col-lg-8">
-										<select class="form-control"id="assistCode0" name="voucherSubInfoDtos[0].assistCode" readonly>
-										</select>
-									</div>
-									
-								</div>
-					          </td>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[0].debitAmount}" id="debitAmount0" name="voucherSubInfoDtos[0].debitAmount" /></td>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[0].creditAmount}" id="creditAmount0" name="voucherSubInfoDtos[0].creditAmount" /></td>
-					        </tr>
-					        <tr>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[1].summary}" id="summary1" name="voucherSubInfoDtos[1].summary" /></td>
-					          <td>
-								<select class="form-control" id="subjectCode1" name="voucherSubInfoDtos[1].subjectCode">
-									<option></option>
-									<c:forEach items="${subjectList}" var="subject">
-										<option value="${subject.subjectCode}" title="1" id="1"  <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[1].subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option>
-									</c:forEach>
-								</select>
-					          </td>
-					          <td>
-					          	<div class="form-group">
-									<label class="col-lg-4 control-label" id="assistName1"></label>
-									<div class="col-lg-8">
-										<select class="form-control" id="assistCode1" name="voucherSubInfoDtos[1].assistCode" readonly>
-										</select>
-									</div>
-									
-								</div>
-					          </td>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[1].debitAmount}" id="debitAmount1" name="voucherSubInfoDtos[1].debitAmount" /></td>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[1].creditAmount}" id="creditAmount1" name="voucherSubInfoDtos[1].creditAmount" /></td>
-					        </tr>
-					        <tr>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[2].summary}" id="summary2" name="voucherSubInfoDtos[2].summary" /></td>
-					           <td>
-								<select class="form-control" id="subjectCode2" name="voucherSubInfoDtos[2].subjectCode">
-									<option></option>
-									<c:forEach items="${subjectList}" var="subject">
-										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[2].subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option>
-									</c:forEach>
-								</select>
-					          </td>
-					          <td>
-					          	<div class="form-group">
-									<label class="col-lg-4 control-label" id="assistName2"></label>
-									<div class="col-lg-8">
-										<select class="form-control" id="assistCode2" name="voucherSubInfoDtos[2].assistCode" readonly>
-										</select>
-									</div>
-									
-								</div>
-					          </td>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[2].debitAmount}" id="debitAmount2" name="voucherSubInfoDtos[2].debitAmount" /></td>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[2].creditAmount}" id="creditAmount2" name="voucherSubInfoDtos[2].creditAmount" /></td>
-					        </tr>
-					        <tr>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[3].summary}" id="summary3" name="voucherSubInfoDtos[3].summary" /></td>
-					           <td>
-								<select class="form-control" id="subjectCode3" name="voucherSubInfoDtos[3].subjectCode">
-									<option></option>
-									<c:forEach items="${subjectList}" var="subject">
-										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[3].subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option>
-									</c:forEach>
-								</select>
-					          </td>
-					          <td>
-					          	<div class="form-group">
-									<label class="col-lg-4 control-label" id="assistName3"></label>
-									<div class="col-lg-8">
-										<select class="form-control" id="assistCode3" name="voucherSubInfoDtos[3].assistCode" readonly>
-										</select>
-									</div>
-									
-								</div>
-					          </td>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[3].debitAmount}" id="debitAmount3" name="voucherSubInfoDtos[3].debitAmount" /></td>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[3].creditAmount}" id="creditAmount3" name="voucherSubInfoDtos[3].creditAmount" /></td>
-					        </tr>
-					        <tr>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[4].summary}" id="summary4" name="voucherSubInfoDtos[4].summary" /></td>
-					           <td>
-								<select class="form-control" id="subjectCode4" name="voucherSubInfoDtos[4].subjectCode">
-									<option></option>
-									<c:forEach items="${subjectList}" var="subject">
-										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[4].subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option>
-									</c:forEach>
-								</select>
-					          </td>
-					          <td>
-					          	<div class="form-group">
-									<label class="col-lg-4 control-label" id="assistName4"></label>
-									<div class="col-lg-8">
-										<select class="form-control" id="assistCode4" name="voucherSubInfoDtos[4].assistCode" readonly>
-										</select>
-									</div>
-									
-								</div>
-					          </td>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[4].debitAmount}" id="debitAmount4" name="voucherSubInfoDtos[4].debitAmount" /></td>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[4].creditAmount}" id="creditAmount4" name="voucherSubInfoDtos[4].creditAmount" /></td>
-					        </tr>
-					        <tr>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[5].summary}" id="summary5" name="voucherSubInfoDtos[5].summary" /></td>
-					           <td>
-								<select class="form-control" id="subjectCode5" name="voucherSubInfoDtos[5].subjectCode">
-									<option></option>
-									<c:forEach items="${subjectList}" var="subject">
-										<option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> <c:if test="${subject.subjectCode == dto.voucherSubInfoDtos[5].subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option>
-									</c:forEach>
-								</select>
-					          </td>
-					          <td>
-					          	<div class="form-group">
-									<label class="col-lg-4 control-label" id="assistName5"></label>
-									<div class="col-lg-8">
-										<select class="form-control" id="assistCode5" name="voucherSubInfoDtos[5].assistCode" readonly>
-										</select>
-									</div>
-									
-								</div>
-					          </td>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[5].debitAmount}" id="debitAmount5" name="voucherSubInfoDtos[5].debitAmount" /></td>
-					          <td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos[5].creditAmount}" id="creditAmount5" name="voucherSubInfoDtos[5].creditAmount" /></td>
-					        </tr>
-					        <tr>
 					          <th scope="row">合计:</th>
+					          <td></td>
 					          <td></td>
 					          <td></td>
 					          <td></td>
@@ -279,33 +130,77 @@
 		</div>
 	</div>
 	<script type="text/javascript">
+		var index = 0;
 		$(function(){
-			if(${not empty dto.voucherSubInfoDtos[0].assistCode }){
+			// 如果是新增页面
+			if(${empty id }){
+				addRow(index++);
+				addRow(index++);
+				addRow(index++);
+				addRow(index++);
+			}
+			
+			if(${not empty dto1.voucherSubInfoDtos }){
+				console.log(${dto1.voucherSubInfoDtos.size()});
+			}
+			
+			for(var i = 0; i < ${dto1.voucherSubInfoDtos.size()}; i++){
+				console.log('---'+i);
+			}
+			if(${not empty dto1.voucherSubInfoDtos[0].assistCode }){
 				selectSubject(0);
 				$("#assistCode0").val('${dto.voucherSubInfoDtos[0].assistCode }');
 			}
-			if(${not empty dto.voucherSubInfoDtos[1].assistCode }){
-				selectSubject(1);
-				$("#assistCode1").val('${dto.voucherSubInfoDtos[1].assistCode }');
-			}
-			if(${not empty dto.voucherSubInfoDtos[2].assistCode }){
-				selectSubject(2);
-				$("#assistCode2").val('${dto.voucherSubInfoDtos[2].assistCode }');
-			}
-			if(${not empty dto.voucherSubInfoDtos[3].assistCode }){
-				selectSubject(3);
-				$("#assistCode3").val('${dto.voucherSubInfoDtos[3].assistCode }');
-			}
-			if(${not empty dto.voucherSubInfoDtos[4].assistCode }){
-				selectSubject(4);
-				$("#assistCode4").val('${dto.voucherSubInfoDtos[4].assistCode }');
-			}
-			if(${not empty dto.voucherSubInfoDtos[5].assistCode }){
-				selectSubject(5);
-				$("#assistCode5").val('${dto.voucherSubInfoDtos[5].assistCode }');
-			}
 			
 		})
+		
+		//删除行;(obj代表连接对象)
+	    function del(obj){
+	  		obj.parentNode.parentNode.remove();
+	  		/* save(); */
+	    }
+		
+	    function add(obj){
+	    	index++;
+	    	var rows = obj.parentNode.parentNode.rowIndex;
+	  		console.log('----'+rows+'----index:'+index);
+	  		addRow(rows);
+	    }
+		
+	    
+	    function addRow(rows){
+	        var html = '<tr><td><a class="" onclick="del(this)">－</a><a class="" onclick="add(this)">＋</a><input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos['+index+'].id}" id="id'+index+
+	        '" name="voucherSubInfoDtos['+index+'].id" /><input type="hidden" class="form-control" value="${dto.voucherSubInfoDtos['+index+'].balanceDirect}" id="balanceDirect'+index+'" name="voucherSubInfoDtos['+index+'].balanceDirect" /></td>'+
+	        '<td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos['+index+'].summary}" id="summary'+index+'" name="voucherSubInfoDtos['+index+'].summary" /></td>'+
+	        '<td><select class="form-control Winstar-input120" id="subjectCode'+index+'" name="voucherSubInfoDtos['+index+'].subjectCode"><option></option>'+
+	        '<c:forEach items="${subjectList}" var="subject"><option value="${subject.subjectCode}" <c:if test="${!subject.lastLevel }">disabled</c:if> '+
+	        '<c:if test="${subject.subjectCode == dto.voucherSubInfoDtos['+index+'].subjectCode }">selected</c:if>>${subject.subjectCode } ${subject.subjectName }</option></c:forEach>'+
+	        '</select></td><td><div class="form-group"><label class="col-lg-4 control-label" id="assistName'+index+'"></label><div class="col-lg-8"><select class="form-control"id="assistCode'+index+'" name="voucherSubInfoDtos['+index+'].assistCode" readonly>'+
+	        '</select></div></div></td><td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos['+index+'].debitAmount}" id="debitAmount'+index+
+	        '" name="voucherSubInfoDtos['+index+'].debitAmount" /></td><td><input type="text" class="form-control" value="${dto.voucherSubInfoDtos['+index+'].creditAmount}" id="creditAmount'+index+'" name="voucherSubInfoDtos['+index+'].creditAmount" /></td></tr>';
+	    	addTr(rows, html);
+	    	setEditable(index);
+	    }
+	    
+	    /**
+	     * 为table指定行添加一行
+	     *
+	     * tab 表id
+	     * row 行数，如：0->第一行 1->第二行 -2->倒数第二行 -1->最后一行
+	     * trHtml 添加行的html代码
+	     *
+	     */
+	    function addTr(row, trHtml){
+	       //获取table最后一行 $("#tab tr:last")
+	       //获取table第一行 $("#tab tr").eq(0)
+	       //获取table倒数第二行 $("#tab tr").eq(-2)
+	       var $tr=$("#tab tr").eq(row);
+	       if($tr.size()==0){
+	          alert("指定的table id或行数不存在！");
+	          return;
+	       }
+	       $tr.after(trHtml);
+	    }
 		
 		function cancel(){
 			$("#loading").hide();
@@ -403,56 +298,18 @@
 		       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
 		     }
 		 );
-			
-		$('#subjectCode1').editableSelect(
-		     {
-		       bg_iframe: true,
-		       onSelect: function(list_item) {},
-		       case_sensitive: false, // If set to true, the user has to type in an exact
-		       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
-		       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
-		     }
-		 );
-			
-		$('#subjectCode2').editableSelect(
-		     {
-		       bg_iframe: true,
-		       onSelect: function(list_item) {},
-		       case_sensitive: false, // If set to true, the user has to type in an exact
-		       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
-		       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
-		     }
-		 );
-			
-		$('#subjectCode3').editableSelect(
-		     {
-		       bg_iframe: true,
-		       onSelect: function(list_item) {},
-		       case_sensitive: false, // If set to true, the user has to type in an exact
-		       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
-		       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
-		     }
-		 );
-			
-		$('#subjectCode4').editableSelect(
-		     {
-		       bg_iframe: true,
-		       onSelect: function(list_item) {},
-		       case_sensitive: false, // If set to true, the user has to type in an exact
-		       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
-		       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
-		     }
-		 );
-			
-		$('#subjectCode5').editableSelect(
-		     {
-		       bg_iframe: true,
-		       onSelect: function(list_item) {},
-		       case_sensitive: false, // If set to true, the user has to type in an exact
-		       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
-		       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
-		     }
-		 );
+		
+		function setEditable(index){
+			$('#subjectCode'+index).editableSelect(
+			     {
+			       bg_iframe: true,
+			       onSelect: function(list_item) {},
+			       case_sensitive: false, // If set to true, the user has to type in an exact
+			       items_then_scroll: 10 ,// If there are more than 10 items, display a scrollbar
+			       isFilter:true //If set to true, the item will be filtered according to the matching criteria.
+			     }
+			 );
+		}
 			
 	</script>
 </body>

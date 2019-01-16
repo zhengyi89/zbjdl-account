@@ -16,7 +16,9 @@ import com.zbjdl.common.utils.BeanUtils;
 import com.zbjdl.account.manager.VoucherSubInfoManager;
 import com.zbjdl.account.service.VoucherSubInfoService;
 import com.zbjdl.account.model.VoucherSubInfo;
+import com.zbjdl.account.dto.VoucherSubDetailDto;
 import com.zbjdl.account.dto.VoucherSubInfoDto;
+import com.zbjdl.account.dto.request.DetailAccountReportReqDto;
 
 @Service("voucherSubInfoService")
 public class VoucherSubInfoServiceImpl implements VoucherSubInfoService {
@@ -77,6 +79,11 @@ public class VoucherSubInfoServiceImpl implements VoucherSubInfoService {
 			voucherSubInfoDtoList.add(respDto);
 		}
 		return voucherSubInfoDtoList;
+	}
+
+	@Override
+	public List<VoucherSubDetailDto> findListByParamOrder(DetailAccountReportReqDto reqDto) {
+		return voucherSubInfoManager.findListByParamOrder(reqDto);
 	}
 
 }

@@ -113,7 +113,7 @@ public class VoucherInfoController extends AccountBaseController {
 					.getAccountMonth());
 			dto.setSerialNum(defSerialNum == null ? 1 : defSerialNum);
 		}
-		mav.addObject("dto", dto);
+		mav.addObject("dto1", dto);
 		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
 		mav.addObject("subjectList", subjectList);
 		return mav;

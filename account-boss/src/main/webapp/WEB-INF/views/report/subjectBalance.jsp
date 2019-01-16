@@ -24,9 +24,9 @@
 							<label class="control-label col-lg-2">会计期间（起始）</label>
 							<div class="col-lg-3">
 								<select class="form-control" id="startdate" name="startdate">
-									<c:forEach items="${dateMap}" var="date">
-										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
-											${date.value } 
+									<c:forEach items="${SESSION_ACCOUNTINFO.dateSet}" var="date">
+										<option value="${date}" <c:if test="${date == startdate}">selected</c:if>>
+											${date } 
 										</option>
 									</c:forEach>
 								</select>
@@ -35,9 +35,9 @@
 							<label class="col-lg-2 control-label">会计期间（结束）</label>
 							<div class="col-lg-3">
 								<select class="form-control" id="enddate" name="enddate">
-									<c:forEach items="${dateMap}" var="date">
-										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
-											${date.value } 
+									<c:forEach items="${SESSION_ACCOUNTINFO.dateSet}" var="date">
+										<option value="${date}" <c:if test="${date == enddate }">selected</c:if>>
+											${date } 
 										</option>
 									</c:forEach>
 								</select>

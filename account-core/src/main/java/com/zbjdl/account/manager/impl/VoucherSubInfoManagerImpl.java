@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.zbjdl.account.repository.VoucherSubInfoRepository;
+import com.zbjdl.account.dto.VoucherSubDetailDto;
 import com.zbjdl.account.dto.VoucherSubInfoDto;
+import com.zbjdl.account.dto.request.DetailAccountReportReqDto;
 import com.zbjdl.account.manager.VoucherSubInfoManager;
 import com.zbjdl.account.model.VoucherSubInfo;
 
@@ -45,6 +47,11 @@ public class VoucherSubInfoManagerImpl implements VoucherSubInfoManager {
 	@Override
 	public List<VoucherSubInfo> findListByMonth(String systemCode, String accountMonth) {
 		return voucherSubInfoRepository.findListByMonth(systemCode,accountMonth);
+	}
+
+	@Override
+	public List<VoucherSubDetailDto> findListByParamOrder(DetailAccountReportReqDto reqDto) {
+		return voucherSubInfoRepository.findListByParamOrder(reqDto);
 	}
 
 }

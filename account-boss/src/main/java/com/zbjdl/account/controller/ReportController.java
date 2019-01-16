@@ -1,5 +1,6 @@
 package com.zbjdl.account.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -22,8 +23,11 @@ import com.zbjdl.account.dto.AccountSettleWithSubjectInfoDto;
 import com.zbjdl.account.dto.AssistAccountInfoDto;
 import com.zbjdl.account.dto.SubjectInfoDto;
 import com.zbjdl.account.dto.VoucherInfoDto;
+import com.zbjdl.account.dto.VoucherSubDetailDto;
 import com.zbjdl.account.dto.VoucherSubInfoDto;
+import com.zbjdl.account.dto.request.DetailAccountReportReqDto;
 import com.zbjdl.account.dto.response.CashFlowStatementRespDto;
+import com.zbjdl.account.dto.response.ReportDetailAccountRespDto;
 import com.zbjdl.account.enumtype.SystemEnum;
 import com.zbjdl.account.service.AccountSettleInfoService;
 import com.zbjdl.account.service.AssistAccountInfoService;
@@ -31,8 +35,10 @@ import com.zbjdl.account.service.CurrencyInfoService;
 import com.zbjdl.account.service.SubjectInfoService;
 import com.zbjdl.account.service.VoucherInfoService;
 import com.zbjdl.account.service.VoucherSubInfoService;
+import com.zbjdl.account.util.AccountUtils;
 import com.zbjdl.account.util.DateUtils;
 import com.zbjdl.common.amount.Amount;
+import com.zbjdl.common.utils.BeanUtils;
 import com.zbjdl.common.utils.StringUtils;
 
 /**
@@ -64,18 +70,26 @@ public class ReportController extends AccountBaseController {
 	@Autowired
 	private AssistAccountInfoService assistAccountInfoService;
 
+	private static final String SUMMARY_1 = "上期结转";
+	private static final String SUMMARY_MONTH = "本月合计";
+	private static final String SUMMARY_YEAR = "本年累计";
+	private static final String DEFAULT_SUBJECT = "1001";
+
 	/*
 	 * 总账
 	 */
 	@RequestMapping(value = "/ledger", method = RequestMethod.GET)
-	public ModelAndView ledgerIndex() {
+	public ModelAndView ledgerIndex(DetailAccountReportReqDto reqDto) {
 		ModelAndView mav = new ModelAndView("report/ledgerIndex");
 		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
 		mav.addObject("subjectList", subjectList);
-
-		Map<String, String> dateMap = DateUtils.genDateSelector(getCurrentSystemInfo().getStartMonth(), getCurrentSystemInfo()
-				.getLatestMonth());
-		mav.addObject("dateMap", dateMap);
+		
+		if (reqDto.getStartdate()==null) {
+			mav.addObject("startdate", getCurrentSystemInfo().getAccountMonth());
+			mav.addObject("enddate", getCurrentSystemInfo().getAccountMonth());
+			mav.addObject("subjectCode", DEFAULT_SUBJECT);
+		}
+		
 
 		return mav;
 	}
@@ -84,22 +98,95 @@ public class ReportController extends AccountBaseController {
 	 * 明细账
 	 */
 	@RequestMapping(value = "/detailAccount", method = RequestMethod.GET)
-	public ModelAndView detailAccount(String subjectCode, String startdate, String enddate) {
+	public ModelAndView detailAccount(DetailAccountReportReqDto reqDto) {
 		ModelAndView mav = new ModelAndView("report/detailAccount");
-
-		if (StringUtils.isBlank(startdate)) {
-			startdate = getCurrentSystemInfo().getAccountMonth();
-		}
-		if (StringUtils.isBlank(enddate)) {
-			enddate = getCurrentSystemInfo().getAccountMonth();
-		}
-
+		
+		reqDto.setSystemCode(getCurrentSystemInfo().getSystemCode());
+		SubjectInfoDto subjectDto = subjectInfoService.selectByCode(reqDto.getSubjectCode(), reqDto.getSystemCode());
 		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
 		mav.addObject("subjectList", subjectList);
+		mav.addObject("subject", subjectDto);
+		
+		if (reqDto.getStartdate()==null) {
+			reqDto.setStartdate(getCurrentSystemInfo().getAccountMonth());
+			reqDto.setEnddate(getCurrentSystemInfo().getAccountMonth());
+			reqDto.setSubjectCode(DEFAULT_SUBJECT);
+		}
+		
+		
+		// 根据起始日期查询期初
+		AccountSettleInfoDto accountSettleDto = accountSettleInfoService.findAssistRecord(subjectDto.getId(), reqDto.getAssistCode(),
+				reqDto.getStartdate());
+		List<ReportDetailAccountRespDto> resultList = new ArrayList<ReportDetailAccountRespDto>();
+		Amount remainAmount = new Amount();
+		if (accountSettleDto != null) {
+			ReportDetailAccountRespDto dto = new ReportDetailAccountRespDto();
+			dto.setAccountMonth(reqDto.getStartdate());
+			dto.setSummary(SUMMARY_1);
+			dto.setRemainAmount(accountSettleDto.getOpeningBalance());
+			resultList.add(dto);
 
-		Map<String, String> dateMap = DateUtils.genDateSelector(getCurrentSystemInfo().getStartMonth(), getCurrentSystemInfo()
-				.getLatestMonth());
-		mav.addObject("dateMap", dateMap);
+			remainAmount = accountSettleDto.getOpeningBalance();
+		}
+
+		Amount yearDebit = new Amount();
+		Amount yearCredit = new Amount();
+
+		// 获取记账区间月份
+		List<String> dateList = DateUtils.getBetweenMonth(reqDto.getStartdate(), reqDto.getEnddate());
+		// 遍历，按月查询
+		for (String date : dateList) {
+			reqDto.setAccountMonth(date);
+			List<VoucherSubDetailDto> detailList = voucherSubInfoService.findListByParamOrder(reqDto);
+			// 本月合计
+			ReportDetailAccountRespDto monthDto = new ReportDetailAccountRespDto();
+			monthDto.setAccountMonth(date);
+			monthDto.setSummary(SUMMARY_MONTH);
+			Amount sumDebit = new Amount();
+			Amount sumCredit = new Amount();
+
+			// 遍历凭证
+			for (VoucherSubDetailDto voucherSubDetailDto : detailList) {
+				sumDebit = sumDebit.add(voucherSubDetailDto.getDebitAmount());
+				sumCredit = sumCredit.add(voucherSubDetailDto.getCreditAmount());
+				ReportDetailAccountRespDto voucherDto = new ReportDetailAccountRespDto();
+				BeanUtils.copyProperties(voucherSubDetailDto, voucherDto);
+				voucherDto.setAccountMonth(DateUtils.DATE_MONTH_FORMAT.format(voucherSubDetailDto.getAccountPeriod()));
+				remainAmount = remainAmount.subtract(voucherSubDetailDto.getAmount());
+				voucherDto.setRemainAmount(remainAmount);
+				resultList.add(voucherDto);
+			}
+
+			// 计算当月真实发生金额
+			monthDto.setRemainAmount(remainAmount);
+			monthDto.setCreditAmount(sumCredit);
+			monthDto.setDebitAmount(sumDebit);
+			resultList.add(monthDto);
+
+			// 计算年累计真实发生金额
+			yearDebit = yearDebit.add(sumDebit);
+			yearCredit = yearCredit.add(sumCredit);
+			ReportDetailAccountRespDto yearDto = new ReportDetailAccountRespDto();
+			yearDto.setAccountMonth(date);
+			yearDto.setSummary(SUMMARY_YEAR);
+			yearDto.setDebitAmount(yearDebit);
+			yearDto.setCreditAmount(yearCredit);
+			yearDto.setRemainAmount(remainAmount);
+			resultList.add(yearDto);
+
+		}
+
+		for (ReportDetailAccountRespDto result : resultList) {
+			System.out.println(result.getAccountMonth() + "--" + result.getSerialNum() + "--" + result.getSummary() + "--"
+					+ result.getCreditAmount() + "--" + result.getDebitAmount() + "--" + result.getRemainAmount());
+		}
+
+		mav.addObject("resultList", resultList);
+		
+		mav.addObject("startdate", reqDto.getStartdate());
+		mav.addObject("enddate", reqDto.getEnddate());
+		mav.addObject("subjectCode", reqDto.getSubjectCode());
+		mav.addObject("assistCode", reqDto.getAssistCode());
 
 		return mav;
 	}
@@ -110,10 +197,6 @@ public class ReportController extends AccountBaseController {
 	@RequestMapping(value = "/subjectBalance", method = RequestMethod.GET)
 	public ModelAndView subjectBalance() {
 		ModelAndView mav = new ModelAndView("report/subjectBalance");
-
-		Map<String, String> dateMap = DateUtils.genDateSelector(getCurrentSystemInfo().getStartMonth(), getCurrentSystemInfo()
-				.getLatestMonth());
-		mav.addObject("dateMap", dateMap);
 
 		return mav;
 	}
@@ -162,14 +245,14 @@ public class ReportController extends AccountBaseController {
 
 		// 查询科目
 		SubjectInfoDto subject = subjectInfoService.selectByCode(subjectCode, getCurrentSystemInfo().getSystemCode());
-		
+
 		// 查询期初
 		AccountSettleInfoDto dto = accountSettleInfoService.findAssistRecord(subject.getId(), assistCode, startdate);
-		
+
 		Map<String, String> dateMap = DateUtils.genDateSelector(getCurrentSystemInfo().getStartMonth(), getCurrentSystemInfo()
 				.getLatestMonth());
 		mav.addObject("dateMap", dateMap);
-		mav.addObject("openingBalance", dto==null?new Amount():dto.getOpeningBalance());
+		mav.addObject("openingBalance", dto == null ? new Amount() : dto.getOpeningBalance());
 
 		return mav;
 	}
@@ -338,11 +421,11 @@ public class ReportController extends AccountBaseController {
 				.getSystemCode(), getCurrentSystemInfo().getAccountMonth());
 		for (AccountSettleWithSubjectInfoDto accountSettleWithSubjectInfoDto : accountSettleList) {
 			accountSettleWithSubjectInfoDto.setClosingBalance(accountSettleWithSubjectInfoDto.getOpeningBalance());
-			
+
 			accountSettleWithSubjectInfoDto.setCreditAmount(new Amount());
 			accountSettleWithSubjectInfoDto.setSumAmount(new Amount());
 			accountSettleWithSubjectInfoDto.setDebitAmount(new Amount());
-			
+
 			map.put(accountSettleWithSubjectInfoDto.getSubjectCode(), accountSettleWithSubjectInfoDto);
 		}
 
@@ -445,13 +528,9 @@ public class ReportController extends AccountBaseController {
 		Amount a560306d = map.get("560306").getDebitAmount();
 		Amount a2231d = map.get("2231").getDebitAmount();
 		Amount a2232d = map.get("2232").getDebitAmount();
-		
-		
-		
-		
+
 		/*
 		 * 以下是本年累计
-		 * 
 		 */
 		Amount y5001c = map.get("5001").getYearCreditAmount();
 		Amount y1122c = map.get("1122").getYearCreditAmount();
@@ -503,14 +582,7 @@ public class ReportController extends AccountBaseController {
 		Amount y560306d = map.get("560306").getYearDebitAmount();
 		Amount y2231d = map.get("2231").getYearDebitAmount();
 		Amount y2232d = map.get("2232").getYearDebitAmount();
-		
-		
-		
-		
-		
-		
-		
-		
+
 		CashFlowStatementRespDto dto1 = new CashFlowStatementRespDto();
 		dto1.setSumAmount(a5001c.add(a1121c).add(a1122c).add(a2203c).add(a222101c));
 		dto1.setSumYearAmount(y5001c.add(y1121c).add(y1122c).add(y2203c).add(y222101c));
@@ -536,8 +608,8 @@ public class ReportController extends AccountBaseController {
 		dto6.setSumYearAmount(y5711d.add(y5602d).subtract(y560206d).subtract(y560208d).subtract(y560212d));
 
 		CashFlowStatementRespDto dto7 = new CashFlowStatementRespDto();
-		dto7.setSumAmount(dto1.getSumAmount().add(dto2.getSumAmount()).subtract(dto3.getSumAmount())
-				.subtract(dto4.getSumAmount()).subtract(dto5.getSumAmount()).subtract(dto6.getSumAmount()));
+		dto7.setSumAmount(dto1.getSumAmount().add(dto2.getSumAmount()).subtract(dto3.getSumAmount()).subtract(dto4.getSumAmount())
+				.subtract(dto5.getSumAmount()).subtract(dto6.getSumAmount()));
 		dto7.setSumYearAmount(dto1.getSumYearAmount().add(dto2.getSumYearAmount()).subtract(dto3.getSumYearAmount())
 				.subtract(dto4.getSumYearAmount()).subtract(dto5.getSumYearAmount()).subtract(dto6.getSumYearAmount()));
 
@@ -562,8 +634,8 @@ public class ReportController extends AccountBaseController {
 		dto12.setSumYearAmount(y1601d.add(y1701d).add(y1604d).add(y1621d));
 
 		CashFlowStatementRespDto dto13 = new CashFlowStatementRespDto();
-		dto13.setSumAmount(dto8.getSumAmount().add(dto9.getSumAmount()).add(dto10.getSumAmount())
-				.subtract(dto11.getSumAmount()).subtract(dto12.getSumAmount()));
+		dto13.setSumAmount(dto8.getSumAmount().add(dto9.getSumAmount()).add(dto10.getSumAmount()).subtract(dto11.getSumAmount())
+				.subtract(dto12.getSumAmount()));
 		dto13.setSumYearAmount(dto8.getSumYearAmount().add(dto9.getSumYearAmount()).add(dto10.getSumYearAmount())
 				.subtract(dto11.getSumYearAmount()).subtract(dto12.getSumYearAmount()));
 
@@ -588,25 +660,25 @@ public class ReportController extends AccountBaseController {
 		dto18.setSumYearAmount(y2232d);
 
 		CashFlowStatementRespDto dto19 = new CashFlowStatementRespDto();
-		dto19.setSumAmount(dto14.getSumAmount().add(dto15.getSumAmount()).subtract(dto16.getSumAmount())
-				.subtract(dto17.getSumAmount()).subtract(dto18.getSumAmount()));
+		dto19.setSumAmount(dto14.getSumAmount().add(dto15.getSumAmount()).subtract(dto16.getSumAmount()).subtract(dto17.getSumAmount())
+				.subtract(dto18.getSumAmount()));
 		dto19.setSumYearAmount(dto14.getSumYearAmount().add(dto15.getSumYearAmount()).subtract(dto16.getSumYearAmount())
 				.subtract(dto17.getSumYearAmount()).subtract(dto18.getSumYearAmount()));
-		
+
 		CashFlowStatementRespDto dto20 = new CashFlowStatementRespDto();
 		dto20.setSumAmount(dto7.getSumAmount().add(dto13.getSumAmount()).add(dto19.getSumAmount()));
 		dto20.setSumYearAmount(dto7.getSumYearAmount().add(dto13.getSumYearAmount()).add(dto19.getSumYearAmount()));
-		
+
 		CashFlowStatementRespDto dto21 = new CashFlowStatementRespDto();
-		dto21.setSumAmount(map.get("1001").getOpeningBalance().add(map.get("1002").getOpeningBalance()).add(map.get("1012").getOpeningBalance()));
-		dto21.setSumYearAmount(map.get("1001").getYearOpeningBalance().add(map.get("1002").getYearOpeningBalance()).add(map.get("1012").getYearOpeningBalance()));
-		
+		dto21.setSumAmount(map.get("1001").getOpeningBalance().add(map.get("1002").getOpeningBalance())
+				.add(map.get("1012").getOpeningBalance()));
+		dto21.setSumYearAmount(map.get("1001").getYearOpeningBalance().add(map.get("1002").getYearOpeningBalance())
+				.add(map.get("1012").getYearOpeningBalance()));
+
 		CashFlowStatementRespDto dto22 = new CashFlowStatementRespDto();
 		dto22.setSumAmount(dto20.getSumAmount().add(dto21.getSumAmount()));
 		dto22.setSumYearAmount(dto20.getSumYearAmount().add(dto21.getSumYearAmount()));
-		
 
-		
 		ModelAndView mav = new ModelAndView("report/cashFlowStatement");
 		mav.addObject("dto1", dto1);
 		mav.addObject("dto2", dto2);
@@ -631,7 +703,7 @@ public class ReportController extends AccountBaseController {
 		mav.addObject("dto21", dto21);
 		mav.addObject("dto22", dto22);
 		// System.out.println(JSON.toJSONString(map));
-//		mav.addObject("dto", map);
+		// mav.addObject("dto", map);
 		return mav;
 	}
 

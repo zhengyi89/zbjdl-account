@@ -16,7 +16,7 @@ import com.zbjdl.common.amount.Amount;
  * @author code-generator
  *
  */
-public class VoucherSubInfoDto implements Serializable {
+public class VoucherSubDetailDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private java.lang.Long id;
@@ -31,6 +31,10 @@ public class VoucherSubInfoDto implements Serializable {
 	private java.lang.Boolean delFlag;
 	private java.util.Date createTime;
 	private java.util.Date lastUpdateTime;
+
+	private java.util.Date accountPeriod;
+	private java.lang.Integer serialNum;
+	private String systemCode;
 
 	/**
 	 * @param id
@@ -220,6 +224,30 @@ public class VoucherSubInfoDto implements Serializable {
 
 	public void setCreditAmount(com.zbjdl.common.amount.Amount creditAmount) {
 		this.creditAmount = creditAmount;
+	}
+
+	public java.util.Date getAccountPeriod() {
+		return accountPeriod;
+	}
+
+	public void setAccountPeriod(java.util.Date accountPeriod) {
+		this.accountPeriod = accountPeriod;
+	}
+
+	public java.lang.Integer getSerialNum() {
+		return serialNum;
+	}
+
+	public void setSerialNum(java.lang.Integer serialNum) {
+		this.serialNum = serialNum;
+	}
+
+	public String getSystemCode() {
+		return systemCode;
+	}
+
+	public void setSystemCode(String systemCode) {
+		this.systemCode = systemCode;
 	}
 
 }
