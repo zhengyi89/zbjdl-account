@@ -54,9 +54,9 @@
 	
 		$(function(){
 			if(${SESSION_ACCOUNTINFO.accountStatus}){
-				/* $("#checkButton").attr("style","display:none");
+				$("#checkButton").attr("style","display:none");
 				$("#settleButton").attr("style","display:none");
-				$("#succ").removeAttr("hidden"); */
+				$("#succ").removeAttr("hidden");
 			}
 		})
 	

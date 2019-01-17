@@ -335,7 +335,7 @@ public class ReportController extends AccountBaseController {
 		ModelAndView mav;
 		// 小企业和企业报表不同
 		if (SystemEnum.ACCOUNT_TYPE_GENERAL.getCode().equals(getCurrentSystemInfo().getAccountType())) {
-			mav = new ModelAndView("report/balanceSheet");
+			mav = new ModelAndView("report/balanceSheetGeneral");
 		} else {
 			mav = new ModelAndView("report/balanceSheetSmall");
 		}
@@ -404,7 +404,13 @@ public class ReportController extends AccountBaseController {
 		for (Map.Entry<String, AccountSettleWithSubjectInfoDto> entry : map.entrySet()) {
 			System.out.println(entry.getKey() + "----" + entry.getValue().getSumAmount() + "---" + entry.getValue().getSumYearAmount());
 		}
-		ModelAndView mav = new ModelAndView("report/profitStatement");
+		ModelAndView mav;
+		// 小企业和企业报表不同
+		if (SystemEnum.ACCOUNT_TYPE_GENERAL.getCode().equals(getCurrentSystemInfo().getAccountType())) {
+			mav = new ModelAndView("report/profitStatementGeneral");
+		} else {
+			mav = new ModelAndView("report/profitStatementSmall");
+		}
 		mav.addObject("dto", map);
 		return mav;
 	}

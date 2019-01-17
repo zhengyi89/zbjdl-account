@@ -25,7 +25,8 @@ public enum SystemEnum {
 	/*
 	 * 科目预设类型
 	 */
-	SUBJECT_DEFAULT("DEFAULT", "系统默认"), SUBJECT_COST_DEFAULT("DEFAULT_COST", "期间费用预设科目"),
+	SUBJECT_DEF_SMALL("DEF_SMALL", "小规模默认科目"), SUBJECT_DEF_SMALL_COST("DEF_SMALL_COST", "期间费用预设科目-小规模"),
+	SUBJECT_DEF_GENERAL("DEF_GENERAL", "一般纳税人默认科目"), SUBJECT_DEF_GENERAL_COST("DEF_GENERAL_COST", "期间费用预设科目-一般纳税人")
 	
 	
 	;

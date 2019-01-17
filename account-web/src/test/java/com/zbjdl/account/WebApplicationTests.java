@@ -1,5 +1,6 @@
 package com.zbjdl.account;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -13,11 +14,13 @@ import com.alibaba.fastjson.JSON;
 import com.zbjdl.account.dto.AssetDeprecitionInfoDto;
 import com.zbjdl.account.dto.AssetInfoDto;
 import com.zbjdl.account.dto.TaxInfoDto;
+import com.zbjdl.account.dto.VoucherInfoDto;
 import com.zbjdl.account.dto.VoucherSubDetailDto;
 import com.zbjdl.account.dto.request.DetailAccountReportReqDto;
 import com.zbjdl.account.dto.request.FindPreDeprecitionInfoReqDto;
 import com.zbjdl.account.dto.request.VoucherInfoSaveReqDto;
 import com.zbjdl.account.enumtype.AssetEnum;
+import com.zbjdl.account.model.VoucherInfo;
 import com.zbjdl.account.service.AssetClassInfoService;
 import com.zbjdl.account.service.AssetDeprecitionInfoService;
 import com.zbjdl.account.service.AssetInfoService;
@@ -106,6 +109,24 @@ public class WebApplicationTests {
 		for (VoucherSubDetailDto voucherSubDetailDto : list) {
 			System.out.println("-----"+JSON.toJSONString(voucherSubDetailDto));
 		}
+	}
+	
+	@Test
+	public void batchAudit(){
+		List<VoucherInfoDto> param = new ArrayList<VoucherInfoDto>();
+			VoucherInfoDto voucher = new VoucherInfoDto();
+			voucher.setId(49L);
+			voucher.setStatus("AUDITED");
+			voucher.setAuditorId(172L);
+			voucher.setAuditorName("zhengyi");
+			VoucherInfoDto voucher1 = new VoucherInfoDto();
+			voucher1.setId(50L);
+			voucher1.setStatus("AUDITED");
+			voucher1.setAuditorId(172L);
+			voucher1.setAuditorName("zhengyi");
+			param.add(voucher);
+			param.add(voucher1);
+		voucherInfoService.batchAudit(param);
 	}
 	
 }

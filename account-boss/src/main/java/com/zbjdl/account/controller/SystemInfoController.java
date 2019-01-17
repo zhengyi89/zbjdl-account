@@ -1,8 +1,5 @@
 package com.zbjdl.account.controller;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,14 +15,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSON;
-import com.zbjdl.account.constant.Constants;
-import com.zbjdl.account.constant.DataConstants;
 import com.zbjdl.account.controller.frame.AccountBaseController;
-import com.zbjdl.account.dto.AssetClassInfoDto;
 import com.zbjdl.account.dto.CompanyInfoDto;
 import com.zbjdl.account.dto.CurrentSystemDto;
 import com.zbjdl.account.dto.SystemInfoDto;
-import com.zbjdl.account.dto.request.CompanyInfoSaveReqDto;
 import com.zbjdl.account.dto.request.SystemInfoSaveReqDto;
 import com.zbjdl.account.dto.response.BaseRespDto;
 import com.zbjdl.account.enumtype.CompanyStatusEnum;
@@ -77,7 +70,7 @@ public class SystemInfoController extends AccountBaseController {
 		CurrentSystemDto currentSystemDto = new CurrentSystemDto();
 		if (companyId == null) {
 			currentSystemDto = getCurrentSystemInfo();
-			if (currentSystemDto==null) {
+			if (currentSystemDto == null) {
 				return new ModelAndView("redirect:/company/serve/index?type=account&belongSystem=-9992003&_menuId=61&_firstMenuId=-2003");
 			}
 		} else {
@@ -87,6 +80,7 @@ public class SystemInfoController extends AccountBaseController {
 			currentSystemDto.setStartMonth(DateUtils.DATE_MONTH_FORMAT.format(systemInfoDto.getServerStartDate()));
 			currentSystemDto.setAccountMonth(systemInfoDto.getServerMonth());
 			currentSystemDto.setLatestMonth(systemInfoDto.getServerMonth());
+			currentSystemDto.setAccountType(systemInfoDto.getTaxpayerType());
 			TreeSet<String> dateSet = DateUtils.genDateSet(currentSystemDto.getStartMonth(), currentSystemDto.getLatestMonth());
 			currentSystemDto.setDateSet(dateSet);
 
@@ -149,11 +143,23 @@ public class SystemInfoController extends AccountBaseController {
 		systemInfoService.saveOrUpdate(dto);
 
 		// 根据纳税人类型，预设科目
-		subjectInfoService.initSubjectForSystem(systemInfoSaveReqDto.getSystemCode(), SystemEnum.SUBJECT_DEFAULT.getCode());
 
-		// 是否 预置期间费用明细科目
-		if (systemInfoSaveReqDto.getCommonSubjectInit()) {
-			subjectInfoService.initSubjectForSystem(systemInfoSaveReqDto.getSystemCode(), SystemEnum.SUBJECT_COST_DEFAULT.getCode());
+		if (SystemEnum.TAXPAYER_TYPE_GENERAL.getCode().equals(systemInfoSaveReqDto.getTaxpayerType())) {
+			// 一般纳税人
+			subjectInfoService.initSubjectForSystem(systemInfoSaveReqDto.getSystemCode(), SystemEnum.SUBJECT_DEF_GENERAL.getCode());
+			// 预置期间费用明细科目
+			if (systemInfoSaveReqDto.getCommonSubjectInit()) {
+				subjectInfoService
+						.initSubjectForSystem(systemInfoSaveReqDto.getSystemCode(), SystemEnum.SUBJECT_DEF_GENERAL_COST.getCode());
+			}
+		} else {
+			// 小规模
+			subjectInfoService.initSubjectForSystem(systemInfoSaveReqDto.getSystemCode(), SystemEnum.SUBJECT_DEF_SMALL.getCode());
+			// 预置期间费用明细科目
+			if (systemInfoSaveReqDto.getCommonSubjectInit()) {
+				subjectInfoService.initSubjectForSystem(systemInfoSaveReqDto.getSystemCode(), SystemEnum.SUBJECT_DEF_SMALL_COST.getCode());
+			}
+
 		}
 
 		// 初始化科目期初

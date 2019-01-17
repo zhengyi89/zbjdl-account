@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -405,9 +406,9 @@ public class VoucherInfoController extends AccountBaseController {
 	/*
 	 * 删除subinfo
 	 */
-	@RequestMapping(value = "/sub/delete", method = RequestMethod.DELETE)
+	@RequestMapping(value = "/batchAudit", method = RequestMethod.POST)
 	@ResponseBody
-	public Object batchAudit(String ids) {
+	public Object batchAudit(String ids, @RequestParam(value="flag",defaultValue="0",required = false) Boolean flag) {
 		logger.info("batchAudit ids : {}", ids);
 		ids = ids.substring(0, ids.length()-1);
 		BaseRespDto dto = new BaseRespDto(ReturnEnum.SUCCESS);
@@ -416,9 +417,16 @@ public class VoucherInfoController extends AccountBaseController {
 		List<VoucherInfoDto> param = new ArrayList<VoucherInfoDto>();
 		for (String id : idArray) {
 			VoucherInfoDto voucher = new VoucherInfoDto();
-			voucher.setAuditorId(getCurrentUser().getUserId());
-			voucher.setAuditorName(getCurrentUser().getUserName());
-			voucher.setStatus(DataStatusEnum.AUDITED.getCode());
+			if (flag) {
+				voucher.setAuditorId(getCurrentUser().getUserId());
+				voucher.setAuditorName(getCurrentUser().getUserName());
+				voucher.setStatus(DataStatusEnum.AUDITED.getCode());
+			}else {
+				voucher.setAuditorId(null);
+				voucher.setAuditorName(null);
+				voucher.setStatus(DataStatusEnum.NORMAL.getCode());
+			}
+			
 			voucher.setId(Long.parseLong(id));
 			param.add(voucher);
 		}

@@ -40,8 +40,11 @@
 				<div class="panel-heading">查询结果</div>
 				<div class="panel-body">
 					<div class="panel-table">
-						<button class="btn btn-primary submit" type="button" onclick="audit()">
+						<button class="btn btn-primary submit" type="button" onclick="audit(1);">
 							审 核<span class="content_blank_10"></span><span class="glyphicon glyphicon-plus"></span>
+						</button>
+						<button class="btn btn-primary submit" type="button" onclick="audit(0);">
+							反审核<span class="content_blank_10"></span><span class="glyphicon glyphicon-plus"></span>
 						</button>
 						<q:table queryService="queryService" queryKey="queryVoucherList" formId="godownForma"
 							class="table table-striped table-bordered" pageSize="30" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel">
@@ -52,12 +55,12 @@
 								<q:title><a href="javaScript:;" onclick="checkAll(); id='check'">全选</a></q:title>
 								<input type="checkbox" name="checkbox" id="checkboxId" value="${id }">
 							</q:column>
-				            <q:column title="日期" value="${account_period}" width="20%" dataIndex="voucher_code"/>
-				            <q:column title="凭证字号" value="${serial_num}" width="20%" dataIndex="voucher_name"/>
-				            <q:column title="摘要" value="${summary}" width="20%" dataIndex="balance_direct" />
-				            <q:column title="科目" value="${subject_name}" width="20%" />
-				            <q:column title="制单人" value="${creator_name}" width="20%" />
-				            <q:column title="审核人" value="${auditor_name}" width="20%" />
+				            <q:column title="日期" value="${account_period}" width="20%" dataIndex="account_period"/>
+				            <q:column title="凭证字号" value="${serial_num}" width="20%" dataIndex="serial_num"/>
+				            <q:column title="摘要" value="${summary}" width="20%" dataIndex="summary" />
+				            <q:column title="科目" value="${subject_name}" width="20%" dataIndex="subject_name"/>
+				            <q:column title="制单人" value="${creator_name}" width="20%" dataIndex="creator_name"/>
+				            <q:column title="审核人" value="${auditor_name}" width="20%" dataIndex="auditor_name"/>
 				           
 				            <q:column title="操作" escapeHtml="false" width="20%">
 							   
@@ -100,25 +103,32 @@
 		}
 	}
 	
-	
-	function audit(){
+	// v_flag 1:审核 0:反审核
+	function audit(v_flag){
 		var boxes = document.getElementsByName("checkbox");
-		var checkIds;
+		var checkIds = '';
 		for (i = 0; i < boxes.length; i++) {
 			if(boxes[i].checked){
-				//console.log('---i--'+boxes[i].value);
-				checkIds = checkIds+',';
+				console.log('---i--'+boxes[i].value+',');
+				checkIds = checkIds+boxes[i].value+',';
 			}
 		}
 		console.log(checkIds);
 		
 		$.ajax({
-			type : 'DELETE',
-			url : '${pageContext.request.contextPath}/voucher/sub/delete?templateFlag=${templateFlag}&id='+id,
+			type : 'POST',
+			url : '${pageContext.request.contextPath}/voucher/batchAudit?ids='+checkIds+'&flag='+v_flag,
 			async: false,
 			success : function(data) {
+				if(v_flag){
+					alert('审核通过');
+				}else{
+					alert('反审核成功');
+				}
+				
+				window.location.reload();
 			}
-		});
+		}); 
 	}
 	
     $(function(){
