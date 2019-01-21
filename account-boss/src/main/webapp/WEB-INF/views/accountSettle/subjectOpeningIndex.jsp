@@ -42,14 +42,14 @@
 			</div>
 			<div class="panel panel-default">
 				<div class="panel-heading">查询结果</div>
-				<button class="btn btn-default ml_20" type="submit">
-					导入
-				</button>
-				<button class="btn btn-default ml_20" onclick="trialBalance();">
-					试算平衡
-				</button>
 				<div class="panel-body">
 					<div class="panel-table">
+						<button class="btn btn-primary ml_20" onclick="trialBalance();">
+							试算平衡
+						</button>
+						<button class="btn btn-default ml_20" type="submit">
+							导入
+						</button>
 						<%-- <q:table queryService="queryService" queryKey="querySubjectList" formId="godownForma"
 							class="table table-striped table-bordered" pageSize="100" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel"> --%>
 						<q:table queryService="queryService" queryKey="querySubjectOpeningIndex" formId="godownForma"

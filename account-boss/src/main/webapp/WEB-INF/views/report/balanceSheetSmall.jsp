@@ -70,7 +70,9 @@
 	                <td><span style="padding-left: 10%">应付利润</span></td><td>38</td><td id="381">${dto["2232"].closingBalance  }</td><td id="382">${dto["2232"].yearOpeningBalance  }</td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 10%">存货</span></td><td>9</td><td id="91">${dto["1401"].closingBalance  }</td><td id="92">${dto["1401"].yearOpeningBalance  }</td>
+	                <td><span style="padding-left: 10%">存货</span></td><td>9</td>
+	                <td id="91">${dto["1401"].closingBalance.add(dto["1402"].closingBalance).add(dto["1403"].closingBalance).add(dto["1404"].closingBalance).add(dto["1405"].closingBalance).subtract(dto["1407"].closingBalance).add(dto["1408"].closingBalance).add(dto["1411"].closingBalance).add(dto["1413"].yearOpeningBalance).add(dto["1421"].closingBalance).add(dto["4001"].closingBalance).add(dto["4401"].closingBalance).add(dto["4101"].closingBalance).add(dto["4403"].closingBalance) }<</td>
+	                <td id="92">${dto["1401"].yearOpeningBalance.add(dto["1402"].yearOpeningBalance).add(dto["1403"].yearOpeningBalance).add(dto["1404"].yearOpeningBalance).add(dto["1405"].yearOpeningBalance).subtract(dto["1407"].yearOpeningBalance).add(dto["1408"].yearOpeningBalance).add(dto["1411"].yearOpeningBalance).add(dto["1412"].yearOpeningBalance).add(dto["1413"].yearOpeningBalance).add(dto["1421"].yearOpeningBalance).add(dto["4001"].yearOpeningBalance).add(dto["4401"].yearOpeningBalance).add(dto["4101"].yearOpeningBalance).add(dto["4403"].yearOpeningBalance) }</td>
 	                <td><span style="padding-left: 10%">其他应付款</span></td><td>39</td><td id="391">${dto["2241"].closingBalance  }</td><td id="392">${dto["2241"].yearOpeningBalance  }</td>
 	              </tr>
 	              <tr>
@@ -82,7 +84,7 @@
 	                <td><span style="padding-left: 20%">流动负债合计</span></td><td>41</td><td id="411"></td><td id="412"></td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 20%">库存商品</span></td><td>12</td><td id="121">${dto["1405"].closingBalance.add(dto["1407"].closingBalance)  }</td><td id="122">${dto["1405"].yearOpeningBalance.add(dto["1407"].yearOpeningBalance)  }</td>
+	                <td><span style="padding-left: 20%">库存商品</span></td><td>12</td><td id="121">${dto["1405"].closingBalance.subtract(dto["1407"].closingBalance)  }</td><td id="122">${dto["1405"].yearOpeningBalance.subtract(dto["1407"].yearOpeningBalance)  }</td>
 	                <td>非流动负债：</td><td></td><td></td><td></td>
 	              </tr>
 	              <tr>
@@ -170,8 +172,7 @@
 	$(function(){
 		
 		var v_151 = Number($("#11").text())+Number($("#21").text())+Number($("#31").text())+Number($("#41").text())+Number($("#51").text())
-		+Number($("#61").text())+Number($("#71").text())+Number($("#81").text())+Number($("#91").text())+Number($("#111").text())
-		+Number($("#121").text())+Number($("#131").text())+Number($("#141").text());
+		+Number($("#61").text())+Number($("#71").text())+Number($("#81").text())+Number($("#91").text())+Number($("#141").text());
 		var v_201 = Number($("#161").text())+Number($("#171").text())+Number($("#181").text())-Number($("#191").text());
 		var v_291 = v_201+Number($("#211").text())+Number($("#221").text())+Number($("#231").text())+Number($("#241").text())+Number($("#251").text())
 		+Number($("#261").text())+Number($("#271").text())+Number($("#281").text());
@@ -194,8 +195,7 @@
 		
 		
 		var v_152 = Number($("#12").text())+Number($("#22").text())+Number($("#32").text())+Number($("#42").text())+Number($("#52").text())
-			+Number($("#62").text())+Number($("#72").text())+Number($("#82").text())+Number($("#92").text())+Number($("#112").text())
-			+Number($("#122").text())+Number($("#132").text())+Number($("#142").text());
+			+Number($("#62").text())+Number($("#72").text())+Number($("#82").text())+Number($("#92").text())+Number($("#142").text());
 		var v_202 = Number($("#162").text())+Number($("#171").text())+Number($("#182").text())-Number($("#192").text());
 		var v_292 = v_202+Number($("#212").text())+Number($("#222").text())+Number($("#232").text())+Number($("#242").text())+Number($("#252").text())
 			+Number($("#262").text())+Number($("#272").text())+Number($("#282").text());
@@ -216,15 +216,7 @@
 		$("#522").text(v_522.toFixed(2));
 		$("#532").text(v_532.toFixed(2));
 	})
-	$('.form_datetime').datetimepicker({
-        format: 'yyyy-mm',
-        autoclose: true,
-        todayBtn: true,
-        startView: 'year',
-        minView:'year',
-        maxView:'decade',
-        language:  'zh-CN',
-    });
+	
   	</script>
 </body>
 </html>

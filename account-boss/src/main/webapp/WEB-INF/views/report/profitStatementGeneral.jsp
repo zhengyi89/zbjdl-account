@@ -30,103 +30,72 @@
 	            </thead>
 	            <tbody>
 	              <tr>
-	                <td>一、营业收入</td><td>1</td><td id="11">${dto["5001"].yearCreditAmount.add(dto["5051"].yearCreditAmount) }</td><td id="12">${dto["5001"].creditAmount.add(dto["5051"].creditAmount)  }</td>
+	                <td>一、营业收入</td><td>1</td>
+	                <td id="11">${dto["6001"].yearCreditAmount.add(dto["6051"].yearCreditAmount).add(dto["6011"].yearCreditAmount).add(dto["6021"].yearCreditAmount).add(dto["6031"].yearCreditAmount).add(dto["6041"].yearCreditAmount) }</td>
+	                <td id="12">${dto["6001"].creditAmount.add(dto["6051"].creditAmount).add(dto["6011"].yearCreditAmount).add(dto["6021"].yearCreditAmount).add(dto["6031"].yearCreditAmount).add(dto["6041"].yearCreditAmount)  }</td>
 	              </tr>
 	              <tr>
-	                <td>减：营业成本</td><td>2</td><td id="21">${dto["5401"].sumYearAmount.add(dto["5402"].sumYearAmount)  }</td><td id="22">${dto["5401"].sumAmount.add(dto["5402"].sumAmount)  }</td>
+	                <td>减：营业成本</td><td>2</td>
+	                <td id="21">${dto["6401"].sumYearAmount.add(dto["6402"].sumYearAmount).add(dto["6411"].sumYearAmount).add(dto["6421"].sumYearAmount)  }</td>
+	                <td id="22">${dto["6401"].sumAmount.add(dto["6402"].sumAmount).add(dto["6411"].sumYearAmount).add(dto["6421"].sumYearAmount) }</td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 10%">营业税金及附加</span></td><td>3</td><td id="31">${dto["5403"].sumYearAmount }</td><td id="32">${dto["5403"].sumAmount }</td>
+	                <td><span style="padding-left: 10%">税金及附加</span></td><td>3</td><td id="31">${dto["6403"].sumYearAmount }</td><td id="32">${dto["6403"].sumAmount }</td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 10%">其中：消费税</span></td><td>4</td><td id="41">${dto["540301"].sumYearAmount }</td><td id="42">${dto["540301"].sumAmount }</td>
-	              </tr>
-	              <tr>
-	                <td><span style="padding-left: 20%">营业税</span></td><td>5</td><td>${dto["540302"].sumYearAmount }</td><td>${dto["540302"].sumAmount }</td>
-	              </tr>
-	              <tr>
-	                <td><span style="padding-left: 20%">城市维护建设税</span></td><td>6</td><td>${dto["540303"].sumYearAmount }</td><td>${dto["540303"].sumAmount }</td>
-	              </tr>
-	              <tr>
-	                <td><span style="padding-left: 20%">资源税</span></td><td>7</td><td>${dto["540304"].sumYearAmount }</td><td>${dto["540304"].sumAmount }</td>
-	              </tr>
-	              <tr>
-	                <td><span style="padding-left: 20%">土地增值税</span></td><td>8</td><td>${dto["540305"].sumYearAmount }</td><td>${dto["540305"].sumAmount }</td>
-	              </tr>
-	              <tr>
-	                <td><span style="padding-left: 20%">城镇土地使用税、房产税、车船税、印花税</span></td><td>9</td><td>${dto["540306"].sumYearAmount.add(dto["540307"].sumYearAmount).add(dto["540308"].sumYearAmount).add(dto["540309"].sumYearAmount) }</td><td>${dto["540306"].sumAmount.add(dto["540307"].sumAmount).add(dto["540308"].sumAmount).add(dto["540309"].sumAmount) }</td>
-	              </tr>
-	              <tr>
-	                <td><span style="padding-left: 20%">教育费附加、矿产资源、排污费</span></td><td>10</td><td>${dto["540310"].sumYearAmount.add(dto["540311"].sumYearAmount).add(dto["540312"].sumYearAmount) }</td><td>${dto["540310"].sumAmount.add(dto["540311"].sumAmount).add(dto["540312"].sumAmount) }</td>
-	              </tr>
-	              <tr>
-	                <td><span style="padding-left: 10%">销售费用</span></td><td>11</td><td id="111">${dto["5601"].sumYearAmount }</td><td id="112">${dto["5601"].sumAmount }</td>
+	                <td><span style="padding-left: 10%">销售费用</span></td><td>4</td><td id="41">${dto["6601"].sumYearAmount }</td><td id="42">${dto["6601"].sumAmount }</td>
 	              </tr>
 	              
 	              <tr>
-	                <td><span style="padding-left: 10%">其中：商品维修费</span></td><td>12</td><td>${dto["560102"].sumYearAmount }</td><td>${dto["560102"].sumAmount }</td>
+	                <td><span style="padding-left: 10%">管理费用</span></td><td>5</td><td  id="51">${dto["6602"].sumYearAmount.add(dto["6604"].sumYearAmount) }</td><td  id="52">${dto["6602"].sumAmount.add(dto["6604"].sumYearAmount) }</td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 20%">广告费和业务宣传费</span></td><td>13</td><td>${dto["560107"].sumYearAmount }</td><td>${dto["560107"].sumAmount }</td>
+	                <td><span style="padding-left: 10%">财务费用</span></td><td>6</td><td  id="61">${dto["6603"].sumYearAmount.add(dto["6061"].sumYearAmount) }</td><td  id="62">${dto["6603"].sumAmount.add(dto["6061"].sumYearAmount) }</td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 10%">管理费用</span></td><td>14</td><td  id="141">${dto["5602"].sumYearAmount }</td><td  id="142">${dto["5602"].sumAmount }</td>
+	                <td><span style="padding-left: 10%">资产减值损失</span></td><td>7</td><td  id="71">${dto["6701"].sumYearAmount }</td><td  id="72">${dto["6701"].sumAmount }</td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 10%">其中：开办费</span></td><td>15</td><td>${dto["560201"].sumYearAmount }</td><td>${dto["560201"].sumAmount }</td>
+	                <td>加：公允价值变动收益（损失以-填列）</td><td>8</td><td id="81">${dto["6101"].sumYearAmount }</td><td id="82">${dto["6101"].sumAmount }</td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 20%">业务招待费</span></td><td>16</td><td>${dto["560208"].sumYearAmount }</td><td>${dto["560208"].sumAmount }</td>
+	                <td>投资收益（损失以-填列）</td><td>9</td>
+	                <td id="91">${dto["6111"].sumYearAmount.add(dto["6201"].sumYearAmount).add(dto["6202"].sumYearAmount).add(dto["6203"].sumYearAmount).subtract(dto["6501"].sumYearAmount).subtract(dto["6502"].sumYearAmount).subtract(dto["6511"].sumYearAmount).subtract(dto["6521"].sumYearAmount).subtract(dto["6531"].sumYearAmount).subtract(dto["6541"].sumYearAmount).subtract(dto["6542"].sumYearAmount) }</td>
+	                <td id="92">${dto["6111"].sumYearAmount.add(dto["6201"].sumYearAmount).add(dto["6202"].sumYearAmount).add(dto["6203"].sumYearAmount).subtract(dto["6501"].sumYearAmount).subtract(dto["6502"].sumYearAmount).subtract(dto["6511"].sumYearAmount).subtract(dto["6521"].sumYearAmount).subtract(dto["6531"].sumYearAmount).subtract(dto["6541"].sumYearAmount).subtract(dto["6542"].sumYearAmount) }</td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 20%">研究费用</span></td><td>17</td><td>${dto["560209"].sumYearAmount }</td><td>${dto["560209"].sumAmount }</td>
+	                <td>其中：对联营企业和合营企业的投资收益</td><td>10</td><td id="101"></td><td id="102"></td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 10%">财务费用</span></td><td>18</td><td  id="181">${dto["5603"].sumYearAmount }</td><td  id="182">${dto["5603"].sumAmount }</td>
+	                <td>二、营业利润（亏损以“-”号填列）</td><td>11</td><td id="111"></td><td id="112"></td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 10%">其中：利息费用（收入以“-”号填列）</span></td><td>19</td><td>${dto["560301"].sumYearAmount.add(dto["560305"].sumYearAmount).add(dto["560306"].sumYearAmount) }</td><td>${dto["560301"].sumAmount.add(dto["560305"].sumAmount).add(dto["560306"].sumAmount) }</td>
+	                <td>加：营业外收入</td><td>12</td><td id="121">${dto["6301"].sumYearAmount }</td><td id="122">${dto["6301"].sumAmount }</td>
 	              </tr>
 	              <tr>
-	                <td>加：投资收益（损失以“-”号填列）</td><td>20</td><td id="201">${dto["5111"].sumYearAmount }</td><td id="202">${dto["5111"].sumAmount }</td>
+	                <td>减：营业外支出</td><td>13</td><td id="131">${dto["6711"].sumYearAmount }</td><td id="132">${dto["6711"].sumAmount }</td>
 	              </tr>
 	              <tr>
-	                <td>二、营业利润（亏损以“-”号填列）</td><td>21</td><td id="211"></td><td id="212"></td>
+	                <td><span style="padding-left: 20%">其中：非流动资产处置损失</span></td><td>14</td><td id="142"></td><td id="142"></td>
 	              </tr>
 	              <tr>
-	                <td>加：营业外收入</td><td>22</td><td id="221">${dto["5301"].sumYearAmount }</td><td id="222">${dto["5301"].sumAmount }</td>
+	                <td>三、利润总额（亏损总额以“-”号填列）</td><td>15</td><td id="151"></td><td id="152"></td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 10%">其中：政府补助</span></td><td>23</td><td>${dto["530102"].sumYearAmount }</td><td>${dto["530102"].sumAmount }</td>
+	                <td>减：所得税费用</td><td>16</td><td id="161">${dto["6801"].sumYearAmount }</td><td id="162">${dto["6801"].sumAmount }</td>
 	              </tr>
 	              <tr>
-	                <td>减：营业外支出</td><td>24</td><td id="241">${dto["5711"].sumYearAmount }</td><td id="242">${dto["5711"].sumAmount }</td>
+	                <td>四、净利润（净亏损以“-”号填列）</td><td>17</td><td id="171"></td><td id="172"></td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 20%">其中：坏账损失</span></td><td>25</td><td>${dto["571103"].sumYearAmount }</td><td>${dto["571103"].sumAmount }</td>
+	                <td>五、每股收益：</td><td>18</td><td id="181"></td><td id="182"></td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 20%">无法收回的长期债券投资损失</span></td><td>26</td><td>${dto["571104"].sumYearAmount }</td><td>${dto["571104"].sumAmount }</td>
+	                <td>（一）基本每股收益</td><td>19</td><td id="191"></td><td id="192"></td>
 	              </tr>
 	              <tr>
-	                <td><span style="padding-left: 20%">无法收回的长期股权投资损失</span></td><td>27</td><td>${dto["571105"].sumYearAmount }</td><td>${dto["571105"].sumAmount }</td>
+	                <td>（二）稀释每股收益</td><td>20</td><td id="201"></td><td id="202"></td>
 	              </tr>
-	              <tr>
-	                <td><span style="padding-left: 20%">自然灾害等不可抗力因素造成的损失</span></td><td>28</td><td>${dto["571106"].sumYearAmount }</td><td>${dto["571106"].sumAmount }</td>
-	              </tr>
-	              <tr>
-	                <td><span style="padding-left: 20%">税收滞纳金</span></td><td>29</td><td>${dto["571107"].sumYearAmount }</td><td>${dto["571107"].sumAmount }</td>
-	              </tr>
-	              <tr>
-	                <td>三、利润总额（亏损总额以“-”号填列）</td><td>30</td><td id="301"></td><td id="302"></td>
-	              </tr>
-	              <tr>
-	                <td>减：所得税费用</td><td>31</td><td id="311">${dto["5801"].sumYearAmount }</td><td id="312">${dto["5801"].sumAmount }</td>
-	              </tr>
-	              <tr>
-	                <td>四、净利润（净亏损以“-”号填列）</td><td>32</td><td id="321"></td><td id="322"></td>
-	              </tr>
-	              
 	            </tbody>
 	          </table>
         </div>
@@ -135,32 +104,24 @@
 	<script type="text/javascript">
 	$(function(){
 		
-		var v_211 = Number($("#11").text())-Number($("#21").text())-Number($("#31").text())-Number($("#111").text())-Number($("#141").text())-Number($("#181").text())+Number($("#201").text());
-		$("#211").text(v_211.toFixed(2));
-		var v_212 = Number($("#12").text())-Number($("#22").text())-Number($("#32").text())-Number($("#112").text())-Number($("#142").text())-Number($("#182").text())+Number($("#202").text());
-		$("#212").text(v_212.toFixed(2));
+		var v_111 = Number($("#11").text())-Number($("#21").text())-Number($("#31").text())-Number($("#41").text())-Number($("#51").text())-Number($("#61").text())-Number($("#71").text())+Number($("#81").text())+Number($("#91").text());
+		var v_151 = v_111.toFixed(2) + Number($("#121").text()) -Number($("#131").text());
+		var v_171 = v_151.toFixed(2) - Number($("#161").text());
+		$("#111").text(v_111.toFixed(2));
+		$("#151").text(v_151.toFixed(2));
+		$("#171").text(v_171.toFixed(2));
 		
-		var v_301 = Number($("#211").text())+Number($("#221").text())-Number($("#241").text());
-		var v_302 = Number($("#212").text())+Number($("#222").text())-Number($("#242").text());
-		$("#301").text(v_301.toFixed(2));
-		$("#302").text(v_302.toFixed(2));
 		
-		$("#321").text(Number($("#301").text())-Number($("#311").text()));
-		$("#322").text(Number($("#302").text())-Number($("#312").text()));
 		
+		var v_112 = Number($("#12").text())-Number($("#22").text())-Number($("#32").text())-Number($("#42").text())-Number($("#52").text())-Number($("#62").text())-Number($("#72").text())+Number($("#82").text())+Number($("#92").text());
+		var v_152 = v_112.toFixed(2) + Number($("#122").text()) -Number($("#132").text());
+		var v_172 = v_152.toFixed(2) - Number($("#162").text());
+		$("#112").text(v_112.toFixed(2));
+		$("#152").text(v_152.toFixed(2));
+		$("#172").text(v_172.toFixed(2));
 	})
 	
 	
-	
-	$('.form_datetime').datetimepicker({
-        format: 'yyyy-mm',
-        autoclose: true,
-        todayBtn: true,
-        startView: 'year',
-        minView:'year',
-        maxView:'decade',
-        language:  'zh-CN',
-    });
   	</script>
 </body>
 </html>

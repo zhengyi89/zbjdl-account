@@ -39,8 +39,8 @@
 	              </tr>
 	               <tr>
 	                <td><span style="padding-left: 10%">货币资金</span></td><td>1</td>
-	                <td id="11">${dto["1001"].closingBalance.add(dto["1002"].closingBalance).add(dto["1003"].closingBalance).add(dto["1011"].closingBalance).add(dto["1012"].closingBalance).add(dto["1021"].closingBalance).add(dto["1031"].closingBalance).add(dto["1032"].closingBalance).add(dto["1301"].closingBalance).add(dto["1302"].closingBalance)  }</td>
-	                <td id="12">${dto["1001"].yearOpeningBalance.add(dto["1002"].yearOpeningBalance).add(dto["1003"].yearOpeningBalance).add(dto["1011"].yearOpeningBalance).add(dto["1012"].yearOpeningBalance).add(dto["1021"].yearOpeningBalance).add(dto["1031"].yearOpeningBalance).add(dto["1032"].yearOpeningBalance).add(dto["1301"].yearOpeningBalance).add(dto["1302"].yearOpeningBalance)  }</td>
+	                <td id="11">${dto["1001"].closingBalance.add(dto["1002"].closingBalance).add(dto["1003"].closingBalance).add(dto["1011"].closingBalance).add(dto["1012"].closingBalance).add(dto["1021"].closingBalance).add(dto["1031"].closingBalance).add(dto["1301"].closingBalance).add(dto["1302"].closingBalance)  }</td>
+	                <td id="12">${dto["1001"].yearOpeningBalance.add(dto["1002"].yearOpeningBalance).add(dto["1003"].yearOpeningBalance).add(dto["1011"].yearOpeningBalance).add(dto["1012"].yearOpeningBalance).add(dto["1021"].yearOpeningBalance).add(dto["1031"].yearOpeningBalance).add(dto["1301"].yearOpeningBalance).add(dto["1302"].yearOpeningBalance)  }</td>
 	                <td><span style="padding-left: 10%">短期借款</span></td><td>32</td>
 	                <td id="311">${dto["2001"].closingBalance.add(dto["1303"].closingBalance).subtract(dto["1304"].closingBalance)  }</td>
 	                <td id="312">${dto["2001"].yearOpeningBalance.add(dto["1303"].yearOpeningBalance).subtract(dto["1304"].yearOpeningBalance)  }</td>
@@ -153,7 +153,7 @@
 	              
 	              <tr>
 	                <td><span style="padding-left: 10%">油气资产</span></td><td>23</td><td id="231">${dto["1631"].closingBalance.subtract(dto["1632"].closingBalance)  }</td><td id="232">${dto["1631"].yearOpeningBalance.subtract(dto["1632"].yearOpeningBalance)  }</td>
-	                <td>所有者权益（或股东权益）：</td><td></td><td></td><td></td>
+	                <td><span style="padding-left: 10%">所有者权益（或股东权益）：</span></td><td></td><td></td><td></td>
 	              </tr>
 	               <tr>
 	                <td><span style="padding-left: 10%">无形资产</span></td><td>24</td><td id="241">${dto["1701"].closingBalance.subtract(dto["1702"].closingBalance).subtract(dto["1703"].closingBalance)  }</td><td id="242">${dto["1701"].yearOpeningBalance.subtract(dto["1702"].yearOpeningBalance).subtract(dto["1703"].yearOpeningBalance)  }</td>
@@ -206,34 +206,42 @@
 		var v_301 = Number($("#131").text())+Number($("#141").text())+Number($("#151").text())+Number($("#161").text())+Number($("#171").text())
 			+Number($("#181").text())-Number($("#191").text())+Number($("#201").text())+Number($("#211").text())+Number($("#221").text())+Number($("#231").text())
 			+Number($("#241").text())+Number($("#251").text())+Number($("#261").text())+Number($("#271").text())+Number($("#281").text())+Number($("#291").text());
-		var v_311 = v_121+v_301;
+		var v_311 = v_121.toFixed(2)+v_301.toFixed(2);
 		var v_441 = Number($("#321").text())+Number($("#331").text())+Number($("#341").text())+Number($("#351").text())+Number($("#361").text())
 		+Number($("#371").text())+Number($("#381").text())+Number($("#391").text())+Number($("#401").text())+Number($("#411").text())+Number($("#421").text())+Number($("#431").text());
 		var v_521 = Number($("#451").text())+Number($("#461").text())+Number($("#471").text())+Number($("#481").text())+Number($("#491").text())+Number($("#501").text())+Number($("#511").text());
-		var v_531 = v_441+v_521;
+		var v_531 = v_441.toFixed(2)+v_521.toFixed(2);
+		var v_591 = Number($("#541").text())+Number($("#551").text())+Number($("#561").text())+Number($("#571").text())+Number($("#581").text());
+		var v_601 = v_531.toFixed(2) + v_591.toFixed(2);
 		$("#121").text(v_121.toFixed(2));
 		$("#301").text(v_301.toFixed(2));
 		$("#311").text(v_311.toFixed(2));
 		$("#411").text(v_411.toFixed(2));
 		$("#521").text(v_521.toFixed(2));
 		$("#531").text(v_531.toFixed(2));
+		$("#591").text(v_591.toFixed(2));
+		$("#601").text(v_601.toFixed(2));
 		
 		var v_122 = Number($("#12").text())+Number($("#22").text())+Number($("#32").text())+Number($("#42").text())+Number($("#52").text())
 			+Number($("#62").text())+Number($("#72").text())+Number($("#82").text())+Number($("#92").text())+Number($("#112").text());
 		var v_302 = Number($("#132").text())+Number($("#142").text())+Number($("#152").text())+Number($("#162").text())+Number($("#172").text())
 			+Number($("#182").text())-Number($("#192").text())+Number($("#202").text())+Number($("#212").text())+Number($("#222").text())+Number($("#232").text())
 			+Number($("#242").text())+Number($("#252").text())+Number($("#262").text())+Number($("#272").text())+Number($("#282").text())+Number($("#292").text());
-		var v_312 = v_122+v_302;
+		var v_312 = v_122.toFixed(2)+v_302.toFixed(2);
 		var v_442 = Number($("#322").text())+Number($("#332").text())+Number($("#342").text())+Number($("#352").text())+Number($("#362").text())
 		+Number($("#372").text())+Number($("#382").text())+Number($("#392").text())+Number($("#402").text())+Number($("#412").text())+Number($("#422").text())+Number($("#432").text());
 		var v_522 = Number($("#452").text())+Number($("#462").text())+Number($("#472").text())+Number($("#482").text())+Number($("#492").text())+Number($("#502").text())+Number($("#512").text());
-		var v_532 = v_442+v_522;
+		var v_532 = v_442.toFixed(2)+v_522.toFixed(2);
+		var v_592 = Number($("#542").text())+Number($("#552").text())+Number($("#562").text())+Number($("#572").text())+Number($("#582").text());
+		var v_602 = v_532.toFixed(2) + v_592.toFixed(2);
 		$("#122").text(v_122.toFixed(2));
 		$("#302").text(v_302.toFixed(2));
 		$("#312").text(v_312.toFixed(2));
 		$("#412").text(v_412.toFixed(2));
 		$("#522").text(v_522.toFixed(2));
 		$("#532").text(v_532.toFixed(2));
+		$("#592").text(v_592.toFixed(2));
+		$("#602").text(v_602.toFixed(2));
 	})
   	</script>
 </body>
