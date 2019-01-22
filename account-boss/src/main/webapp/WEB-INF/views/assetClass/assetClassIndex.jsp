@@ -35,7 +35,7 @@
 							<q:param name="systemCode" value="${SESSION_ACCOUNTINFO.systemCode}" />
 				            <q:column title="类别编号" value="${asset_class_code}" width="20%" />
 				            <q:column title="类别名称" value="${asset_class_name}" width="20%" />
-				            <q:column title="折旧方法" value="${deprecition_type}" width="20%" />
+				            <q:column title="折旧方法" value="${_textResource.getSysText('ACCOUNT_ASSET_TYPE', deprecition_type)}" width="20%" />
 				            <q:column title="预计使用期限" value="${use_age}" width="20%" />
 				            <q:column title="固定资产科目" value="${subject_code1}" width="20%" />
 				            <q:column title="累计折旧科目" value="${subject_code2}" width="20%" />

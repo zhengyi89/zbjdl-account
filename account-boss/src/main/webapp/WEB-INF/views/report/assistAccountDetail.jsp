@@ -48,9 +48,9 @@
 							<label class="control-label col-lg-2">会计期间（起始）</label>
 							<div class="col-lg-3">
 								<select class="form-control" id="startdate" name="startdate">
-									<c:forEach items="${dateMap}" var="date">
-										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
-											${date.value } 
+									<c:forEach items="${SESSION_ACCOUNTINFO.dateSet}" var="date">
+										<option value="${date}" <c:if test="${date == startdate}">selected</c:if>>
+											${date } 
 										</option>
 									</c:forEach>
 								</select>
@@ -59,9 +59,9 @@
 							<label class="col-lg-2 control-label">会计期间（结束）</label>
 							<div class="col-lg-3">
 								<select class="form-control" id="enddate" name="enddate">
-									<c:forEach items="${dateMap}" var="date">
-										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
-											${date.value } 
+									<c:forEach items="${SESSION_ACCOUNTINFO.dateSet}" var="date">
+										<option value="${date}" <c:if test="${date == enddate }">selected</c:if>>
+											${date } 
 										</option>
 									</c:forEach>
 								</select>
@@ -71,9 +71,6 @@
 							<div class="col-lg-11 align_center">
 								<a onclick="document.getElementById('companyForm').submit();">
 									<button class="btn btn-primary submit ml_20" type="submit">查 询</button>
-								</a>
-								<a onclick="clearAllInput('companyForm');">
-									<button class="btn btn-default button" type="button">清 除</button>
 								</a>
 							</div>
 						</div>
@@ -86,17 +83,17 @@
 				<div class="panel-body">
 					<div class="panel-table">
 						<q:table id="tab" queryService="queryService" queryKey="queryAssistAccountDetail" formId="godownForma"
-							class="table table-striped table-bordered" pageSize="20">
+							class="table table-striped table-bordered" pageSize="100" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel">
 							<q:nodata>无符合条件的记录</q:nodata>
 							<q:param name="systemCode" value="${SESSION_ACCOUNTINFO.systemCode}" />
-				            <q:column title="日期" value="${account_period}" width="20%" />
-				            <q:column title="凭证" value="记-${serial_num}" width="20%" />
-				            <q:column title="摘要" value="${summary}" width="20%" />
-				            <q:column title="借方" value="${debit_amount}" width="20%" />
-				            <q:column title="贷方" value="${credit_amount}" width="20%" />
-				            <q:column title="方向" value="${_textResource.getSysText('ACCOUNT_BALANCE_DIRECT', balance_direct)}" width="20%" />
-				            <q:column title="实际发生额" value="${amount}" width="20%" hidden=""/>
-				            <q:column title="余额" value="" width="20%" /> 
+				            <q:column title="日期" value="${account_period}" width="20%" dataIndex="account_period"/>
+				            <q:column title="凭证" value="记-${serial_num}" width="20%"  dataIndex="${serial_num}"/>
+				            <q:column title="摘要" value="${summary}" width="20%"  dataIndex="summary"/>
+				            <q:column title="借方" value="${debit_amount}" width="20%"  dataIndex="debit_amount"/>
+				            <q:column title="贷方" value="${credit_amount}" width="20%"  dataIndex="credit_amount"/>
+				            <q:column title="方向" value="${_textResource.getSysText('ACCOUNT_BALANCE_DIRECT', balance_direct)}" width="20%" dataIndex="balance_direct" showValueIndex="ACCOUNT_BALANCE_DIRECT"/>
+				            <q:column title="实际发生额" value="${amount}" width="20%" hidden="amount"/>
+				            <q:column title="余额" value="" width="20%"  dataIndex=""/> 
 						</q:table>
 					</div>
 					
@@ -105,39 +102,30 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-	
-	
-	$(function(){
-		
-		var v_opening_amount = ${openingBalance};
-		console.log('-------'+v_opening_amount);
-		var v_amount;
-		
-		$('#tab tr').each(function(i){ // 遍历 tr
-			$(this).children('td').each(function(j){  // 遍历 tr 的各个 td
-				//console.log("第"+(i+1)+"行，第"+(j+1)+"个td的值："+$(this).text()+"。");
-				
-				if(j==6){
-					v_amount = $(this).text();
-				}
-				if(j==7){
-					v_opening_amount = v_opening_amount-v_amount;
-					$(this).text(v_opening_amount.toFixed(2))
+		$(function(){
+			if(${!paramInit}){
+				$('#companyForm').submit();
+			}
+			
+			var v_opening_amount = ${openingBalance};
+			console.log('-------'+v_opening_amount);
+			var v_amount;
+			
+			$('#tab tr').each(function(i){ // 遍历 tr
+				$(this).children('td').each(function(j){  // 遍历 tr 的各个 td
+					//console.log("第"+(i+1)+"行，第"+(j+1)+"个td的值："+$(this).text()+"。");
 					
-				}
+					if(j==6){
+						v_amount = $(this).text();
+					}
+					if(j==7){
+						v_opening_amount = v_opening_amount-v_amount;
+						$(this).text(v_opening_amount.toFixed(2))
+						
+					}
+				});
 			});
-		});
-	})
-	
-	$('.form_datetime').datetimepicker({
-        format: 'yyyy-mm',
-        autoclose: true,
-        todayBtn: true,
-        startView: 'year',
-        minView:'year',
-        maxView:'decade',
-        language:  'zh-CN',
-    });
+		})
   	</script>
 </body>
 </html>

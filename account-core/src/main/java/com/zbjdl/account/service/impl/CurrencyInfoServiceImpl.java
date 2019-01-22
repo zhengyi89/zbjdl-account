@@ -61,6 +61,11 @@ public class CurrencyInfoServiceImpl implements CurrencyInfoService {
 		}
 		return currencyInfoDtoList;
 	}
+
+	@Override
+	public void initCurrencyForSystem(String systemCode) {
+		currencyInfoManager.initCurrencyForSystem(systemCode);
+	}
 	
 }
 

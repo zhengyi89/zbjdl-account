@@ -21,5 +21,7 @@ public interface AssetClassInfoManager {
 	List<AssetClassInfo> findList(AssetClassInfo assetClassInfo);
 
 	void initAssetClass(String systemCode);
+
+	void delete(Long id);
 	
 }

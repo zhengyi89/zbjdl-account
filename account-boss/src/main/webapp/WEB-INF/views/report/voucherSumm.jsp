@@ -26,9 +26,9 @@
 							<label class="control-label col-lg-2">会计期间（起始）</label>
 							<div class="col-lg-3">
 								<select class="form-control" id="startdate" name="startdate">
-									<c:forEach items="${dateMap}" var="date">
-										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
-											${date.value } 
+									<c:forEach items="${SESSION_ACCOUNTINFO.dateSet}" var="date">
+										<option value="${date}" <c:if test="${date == startdate}">selected</c:if>>
+											${date } 
 										</option>
 									</c:forEach>
 								</select>
@@ -37,9 +37,9 @@
 							<label class="col-lg-2 control-label">会计期间（结束）</label>
 							<div class="col-lg-3">
 								<select class="form-control" id="enddate" name="enddate">
-									<c:forEach items="${dateMap}" var="date">
-										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
-											${date.value } 
+									<c:forEach items="${SESSION_ACCOUNTINFO.dateSet}" var="date">
+										<option value="${date}" <c:if test="${date == enddate }">selected</c:if>>
+											${date } 
 										</option>
 									</c:forEach>
 								</select>
@@ -50,9 +50,6 @@
 							<div class="col-lg-11 align_center">
 								<a onclick="document.getElementById('companyForm').submit();">
 									<button class="btn btn-primary submit ml_20" type="submit">查 询</button>
-								</a>
-								<a onclick="clearAllInput('companyForm');">
-									<button class="btn btn-default button" type="button">清 除</button>
 								</a>
 							</div>
 						</div>
@@ -69,13 +66,13 @@
 				<div class="panel-body">
 					<div class="panel-table">
 						<q:table queryService="queryService" queryKey="queryVoucherSumm" formId="godownForma"
-							class="table table-striped table-bordered" pageSize="20">
+							class="table table-striped table-bordered" pageSize="100" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel">
 							<q:nodata>无符合条件的记录</q:nodata>
 							<q:param name="systemCode" value="${SESSION_ACCOUNTINFO.systemCode}" />
-				            <q:column title="科目编码" value="${subject_code}" width="20%" />
-				            <q:column title="科目名称" value="${subject_name}" width="20%" />
-				            <q:column title="本期借方发生金额" value="${debit_amount}" width="20%" />
-				            <q:column title="本期贷方发生金额" value="${credit_amount}" width="20%" />
+				            <q:column title="科目编码" value="${subject_code}" width="20%" dataIndex="subject_code"/>
+				            <q:column title="科目名称" value="${subject_name}" width="20%" dataIndex="subject_name"/>
+				            <q:column title="本期借方发生金额" value="${debit_amount}" width="20%" dataIndex="debit_amount"/>
+				            <q:column title="本期贷方发生金额" value="${credit_amount}" width="20%" dataIndex="credit_amount"/>
 						</q:table>
 					</div>
 					
@@ -84,15 +81,11 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-		$('.form_datetime').datetimepicker({
-	        format: 'yyyy-mm',
-	        autoclose: true,
-	        todayBtn: true,
-	        startView: 'year',
-	        minView:'year',
-	        maxView:'decade',
-	        language:  'zh-CN',
-	    });
+		$(function(){
+			if(${!paramInit}){
+				$('#companyForm').submit();
+			}
+		})
   	</script>
 </body>
 </html>

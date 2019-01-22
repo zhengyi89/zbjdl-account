@@ -203,7 +203,7 @@
 				$.ajax({
 					async: false,
 					type : 'POST',
-					url : '${pageContext.request.contextPath}/voucher/query?id=${id }',
+					url : '${pageContext.request.contextPath}/voucher/queryDetails?id=${id }&closingFlag=${closingFlag}',
 					success : function(data) {
 						if(data != null){
 							//console.log('data:'+data);

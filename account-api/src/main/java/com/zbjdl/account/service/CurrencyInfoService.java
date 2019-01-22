@@ -16,5 +16,7 @@ public interface CurrencyInfoService {
 	CurrencyInfoDto selectById(Long id);
 	
 	List<CurrencyInfoDto> findList(CurrencyInfoDto currencyInfoDto);
+
+	void initCurrencyForSystem(String systemCode);
 	
 }

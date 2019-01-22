@@ -25,4 +25,6 @@ public interface AssetClassInfoService {
 
 	AssetClassInfoDto assetClassCode(String systemCode, String assetClassCode);
 
+	void delete(Long id);
+
 }

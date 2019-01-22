@@ -28,10 +28,10 @@
 								<input class="form-control" id="companyName" name="companyName" ></input>
 							</div>
 							
-							<label for="status" class="control-label col-lg-2">客户状态</label>
+							<!-- <label for="status" class="control-label col-lg-2">客户状态</label>
 							<div class="col-lg-3">
 								<input class="form-control" id="status" name="status" ></input>
-							</div>
+							</div> -->
 						</div>
 						<div class="form-group">
 							<div class="col-lg-11 align_center">

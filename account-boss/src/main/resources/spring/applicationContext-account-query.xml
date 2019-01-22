@@ -15,6 +15,7 @@
 								 	select * from company_info c
 								 	WHERE 1=1 
 								      /~accountantId: and c.accountant_id = {accountantId} ~/
+								      /~companyName: and c.company_name = {companyName} ~/
   									  order by c.id desc
                                 ]]>
 							</value>
@@ -126,6 +127,7 @@
 								 	WHERE status <> 'DELETE' 
 								 	/~systemCode: and system_code = {systemCode,string} ~/
 								 	/~basicSubject: and basic_subject = {basicSubject,string} ~/
+								 	/~subjectCode: and subject_code like CONCAT('%',{subjectCode,string},'%')  ~/
   									order by subject_code asc
                                 ]]>
 							</value>
@@ -375,9 +377,9 @@
                                 ]]>
 							</value>
 						</property>
-                       	<property name="sumSelect">
+						<property name="sumSelect">
 							<value>
-								select 1 as countnum,2 as sumamount
+								select count(1) as countnum,sum(1) as sumamount
 							</value>
 						</property>
 					</bean>

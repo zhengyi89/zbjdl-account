@@ -60,11 +60,11 @@
 				            <q:column title="科目编码" value="${subject_code}" width="20%" dataIndex="subject_code"/>
 				            <q:column title="名称" value="${subject_name}" width="20%" dataIndex="subject_name"/>
 				            <q:column title="方向" value="${_textResource.getSysText('ACCOUNT_BALANCE_DIRECT', balance_direct)}" width="10%" dataIndex="balance_direct" showValueIndex="ACCOUNT_BALANCE_DIRECT"/>
-				            <q:column title="辅助核算" value="${assist_account}" width="10%" dataIndex="assist_account"/>
-				            <q:column title="期初余额（金额）" value="${opening_balance }" width="20%" />
-				            <q:column title="本年累积借方（金额）" value="${year_debit_amount }" width="20%" />
-				            <q:column title="本年累积贷方（金额）" value="${year_credit_amount }" width="20%" />
-				            <q:column title="年初余额（金额）" value="${year_opening_balance }" width="20%" />
+				            <q:column title="辅助核算" value="${_textResource.getSysText('ACCOUNT_ASSIST_TYPE', assist_account)}" width="10%" dataIndex="assist_account" showValueIndex="ACCOUNT_ASSIST_TYPE"/>
+				            <q:column title="期初余额（金额）" value="${opening_balance }" width="20%" dataIndex="opening_balance"/>
+				            <q:column title="本年累积借方（金额）" value="${year_debit_amount }" width="20%" dataIndex="year_debit_amount"/>
+				            <q:column title="本年累积贷方（金额）" value="${year_credit_amount }" width="20%" dataIndex="year_credit_amount"/>
+				            <q:column title="年初余额（金额）" value="${year_opening_balance }" width="20%" dataIndex="year_opening_balance"/>
 				            <q:column title="操作" escapeHtml="false" width="20%">
 				            	<c:if test="${last_level }">
 				            		<a class="pink" onclick="window.location.href='${ctx}/accountSettle/subjectOpeningEdit/index?subjectId=${subject_id }&id=${id}&assistAccount=${assist_account }'">设置</a>

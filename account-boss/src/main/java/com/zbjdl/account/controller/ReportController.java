@@ -1,12 +1,9 @@
 package com.zbjdl.account.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.alibaba.fastjson.JSON;
 import com.zbjdl.account.controller.frame.AccountBaseController;
 import com.zbjdl.account.dto.AccountSettleInfoDto;
 import com.zbjdl.account.dto.AccountSettleWithSubjectInfoDto;
@@ -26,7 +22,6 @@ import com.zbjdl.account.dto.VoucherInfoDto;
 import com.zbjdl.account.dto.VoucherSubDetailDto;
 import com.zbjdl.account.dto.VoucherSubInfoDto;
 import com.zbjdl.account.dto.request.DetailAccountReportReqDto;
-import com.zbjdl.account.dto.response.CashFlowStatementRespDto;
 import com.zbjdl.account.dto.response.ReportDetailAccountRespDto;
 import com.zbjdl.account.enumtype.SystemEnum;
 import com.zbjdl.account.service.AccountSettleInfoService;
@@ -35,7 +30,6 @@ import com.zbjdl.account.service.CurrencyInfoService;
 import com.zbjdl.account.service.SubjectInfoService;
 import com.zbjdl.account.service.VoucherInfoService;
 import com.zbjdl.account.service.VoucherSubInfoService;
-import com.zbjdl.account.util.AccountUtils;
 import com.zbjdl.account.util.DateUtils;
 import com.zbjdl.account.util.ReportUtils;
 import com.zbjdl.common.amount.Amount;
@@ -81,17 +75,17 @@ public class ReportController extends AccountBaseController {
 	 */
 	@RequestMapping(value = "/ledger", method = RequestMethod.GET)
 	public ModelAndView ledgerIndex(DetailAccountReportReqDto reqDto) {
+		Boolean paramInit = true;
 		ModelAndView mav = new ModelAndView("report/ledgerIndex");
 		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
 		mav.addObject("subjectList", subjectList);
-		
-		if (reqDto.getStartdate()==null) {
+		if (reqDto.getStartdate() == null) {
 			mav.addObject("startdate", getCurrentSystemInfo().getAccountMonth());
 			mav.addObject("enddate", getCurrentSystemInfo().getAccountMonth());
 			mav.addObject("subjectCode", DEFAULT_SUBJECT);
+			paramInit = false;
 		}
-		
-
+		mav.addObject("paramInit", paramInit);
 		return mav;
 	}
 
@@ -101,20 +95,19 @@ public class ReportController extends AccountBaseController {
 	@RequestMapping(value = "/detailAccount", method = RequestMethod.GET)
 	public ModelAndView detailAccount(DetailAccountReportReqDto reqDto) {
 		ModelAndView mav = new ModelAndView("report/detailAccount");
-		
+
 		reqDto.setSystemCode(getCurrentSystemInfo().getSystemCode());
 		SubjectInfoDto subjectDto = subjectInfoService.selectByCode(reqDto.getSubjectCode(), reqDto.getSystemCode());
 		List<SubjectInfoDto> subjectList = subjectInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
 		mav.addObject("subjectList", subjectList);
 		mav.addObject("subject", subjectDto);
-		
-		if (reqDto.getStartdate()==null) {
+
+		if (reqDto.getStartdate() == null) {
 			reqDto.setStartdate(getCurrentSystemInfo().getAccountMonth());
 			reqDto.setEnddate(getCurrentSystemInfo().getAccountMonth());
 			reqDto.setSubjectCode(DEFAULT_SUBJECT);
 		}
-		
-		
+
 		// 根据起始日期查询期初
 		AccountSettleInfoDto accountSettleDto = accountSettleInfoService.findAssistRecord(subjectDto.getId(), reqDto.getAssistCode(),
 				reqDto.getStartdate());
@@ -183,7 +176,7 @@ public class ReportController extends AccountBaseController {
 		}
 
 		mav.addObject("resultList", resultList);
-		
+
 		mav.addObject("startdate", reqDto.getStartdate());
 		mav.addObject("enddate", reqDto.getEnddate());
 		mav.addObject("subjectCode", reqDto.getSubjectCode());
@@ -196,9 +189,15 @@ public class ReportController extends AccountBaseController {
 	 * 科目余额
 	 */
 	@RequestMapping(value = "/subjectBalance", method = RequestMethod.GET)
-	public ModelAndView subjectBalance() {
+	public ModelAndView subjectBalance(String startdate) {
 		ModelAndView mav = new ModelAndView("report/subjectBalance");
-
+		Boolean paramInit = true;
+		if (StringUtils.isBlank(startdate)) {
+			mav.addObject("startdate", getCurrentSystemInfo().getAccountMonth());
+			mav.addObject("enddate", getCurrentSystemInfo().getAccountMonth());
+			paramInit = false;
+		}
+		mav.addObject("paramInit", paramInit);
 		return mav;
 	}
 
@@ -209,22 +208,27 @@ public class ReportController extends AccountBaseController {
 	public ModelAndView voucherSumm(String startdate, String enddate) {
 		ModelAndView mav = new ModelAndView("report/voucherSumm");
 
-		// 查询会计凭证列表
-		List<VoucherInfoDto> voucherList = voucherInfoService.findListMonthBetween(getCurrentSystemInfo().getSystemCode(), startdate,
-				enddate);
+		Boolean paramInit = true;
+		if (StringUtils.isBlank(startdate)) {
+			mav.addObject("startdate", getCurrentSystemInfo().getAccountMonth());
+			mav.addObject("enddate", getCurrentSystemInfo().getAccountMonth());
+			paramInit = false;
+		} else {
+			// 查询会计凭证列表
+			List<VoucherInfoDto> voucherList = voucherInfoService.findListMonthBetween(getCurrentSystemInfo().getSystemCode(), startdate,
+					enddate);
 
-		Integer rows = 0;
-		Integer papers = 0;
-		for (VoucherInfoDto voucherInfoDto : voucherList) {
-			rows++;
-			papers += voucherInfoDto.getVoucherPapers();
+			Integer rows = 0;
+			Integer papers = 0;
+			for (VoucherInfoDto voucherInfoDto : voucherList) {
+				rows++;
+				papers += voucherInfoDto.getVoucherPapers();
+			}
+			mav.addObject("rows", rows);
+			mav.addObject("papers", papers);
+
 		}
-		mav.addObject("rows", rows);
-		mav.addObject("papers", papers);
-
-		Map<String, String> dateMap = DateUtils.genDateSelector(getCurrentSystemInfo().getStartMonth(), getCurrentSystemInfo()
-				.getLatestMonth());
-		mav.addObject("dateMap", dateMap);
+		mav.addObject("paramInit", paramInit);
 
 		return mav;
 	}
@@ -235,26 +239,32 @@ public class ReportController extends AccountBaseController {
 	@RequestMapping(value = "/assistAccountDetail", method = RequestMethod.GET)
 	public ModelAndView assistAccountDetail(String subjectCode, String assistCode, String startdate) {
 		ModelAndView mav = new ModelAndView("report/assistAccountDetail");
-
 		// 查询带有辅助核算科目列表
 		List<SubjectInfoDto> subjectList = subjectInfoService.findListWithAssist(getCurrentSystemInfo().getSystemCode());
 		mav.addObject("subjectList", subjectList);
+		Amount openingBalance = new Amount();
+		Boolean paramInit = true;
+		if (StringUtils.isBlank(startdate)) {
+			mav.addObject("startdate", getCurrentSystemInfo().getAccountMonth());
+			mav.addObject("enddate", getCurrentSystemInfo().getAccountMonth());
+			paramInit = false;
+		} else {
+			// 查询辅助核算列表
+			List<AssistAccountInfoDto> assistList = assistAccountInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
+			mav.addObject("assistList", assistList);
 
-		// 查询辅助核算列表
-		List<AssistAccountInfoDto> assistList = assistAccountInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
-		mav.addObject("assistList", assistList);
+			// 查询科目
+			SubjectInfoDto subject = subjectInfoService.selectByCode(subjectCode, getCurrentSystemInfo().getSystemCode());
 
-		// 查询科目
-		SubjectInfoDto subject = subjectInfoService.selectByCode(subjectCode, getCurrentSystemInfo().getSystemCode());
+			// 查询期初
+			AccountSettleInfoDto dto = accountSettleInfoService.findAssistRecord(subject.getId(), assistCode, startdate);
+			if (dto.getOpeningBalance()!=null) {
+				openingBalance = dto.getOpeningBalance();
+			}
+		}
 
-		// 查询期初
-		AccountSettleInfoDto dto = accountSettleInfoService.findAssistRecord(subject.getId(), assistCode, startdate);
-
-		Map<String, String> dateMap = DateUtils.genDateSelector(getCurrentSystemInfo().getStartMonth(), getCurrentSystemInfo()
-				.getLatestMonth());
-		mav.addObject("dateMap", dateMap);
-		mav.addObject("openingBalance", dto == null ? new Amount() : dto.getOpeningBalance());
-
+		mav.addObject("openingBalance", openingBalance);
+		mav.addObject("paramInit", paramInit);
 		return mav;
 	}
 
@@ -264,6 +274,12 @@ public class ReportController extends AccountBaseController {
 	@RequestMapping(value = "/assistAccountBalance", method = RequestMethod.GET)
 	public ModelAndView assistAccountBalance(String subjectCode, String assistCode, String startdate, String enddate) {
 		ModelAndView mav = new ModelAndView("report/assistAccountBalance");
+		Boolean paramInit = true;
+		if (StringUtils.isBlank(startdate)) {
+			mav.addObject("startdate", getCurrentSystemInfo().getAccountMonth());
+			mav.addObject("enddate", getCurrentSystemInfo().getAccountMonth());
+			paramInit = false;
+		}
 		// 查询带有辅助核算科目列表
 		List<SubjectInfoDto> subjectList = subjectInfoService.findListWithAssist(getCurrentSystemInfo().getSystemCode());
 		mav.addObject("subjectList", subjectList);
@@ -271,10 +287,7 @@ public class ReportController extends AccountBaseController {
 		// 查询辅助核算列表
 		List<AssistAccountInfoDto> assistList = assistAccountInfoService.findBySyscode(getCurrentSystemInfo().getSystemCode());
 		mav.addObject("assistList", assistList);
-
-		Map<String, String> dateMap = DateUtils.genDateSelector(getCurrentSystemInfo().getStartMonth(), getCurrentSystemInfo()
-				.getLatestMonth());
-		mav.addObject("dateMap", dateMap);
+		mav.addObject("paramInit", paramInit);
 
 		return mav;
 	}
@@ -488,14 +501,13 @@ public class ReportController extends AccountBaseController {
 		ModelAndView mav;
 		if (SystemEnum.ACCOUNT_TYPE_GENERAL.getCode().equals(getCurrentSystemInfo().getAccountType())) {
 			mav = ReportUtils.cashFlowStatementGeneral(map);
-		}else {
+		} else {
 			mav = ReportUtils.cashFlowStatementSmall(map);
 		}
-		
+
 		return mav;
 	}
-	
-	
+
 	/*
 	 * 纳税汇总表
 	 */

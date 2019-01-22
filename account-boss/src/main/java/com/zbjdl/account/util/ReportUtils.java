@@ -305,96 +305,203 @@ public class ReportUtils {
 		Amount a2232d = map.get("2232").getDebitAmount();
 		Amount a4104d = map.get("4104").getDebitAmount();
 		Amount a660306d = map.get("660306").getDebitAmount();
+		
+		
+		
+		
+		
+		Amount y22210105 = map.get("22210105").getSumAmount();
+
+		Amount y6001c = map.get("6001").getCreditAmount();
+		Amount y1122c = map.get("1122").getCreditAmount();
+		Amount y1121c = map.get("1121").getCreditAmount();
+		Amount y2203c = map.get("2203").getCreditAmount();
+		Amount y22210102c = map.get("22210102").getCreditAmount();
+		Amount y22210101c = map.get("22210101").getCreditAmount();
+		Amount y6403c = map.get("6403").getCreditAmount();
+		Amount y6301c = map.get("6301").getCreditAmount();
+		Amount y6051c = map.get("6051").getCreditAmount();
+		Amount y1403c = map.get("1403").getCreditAmount();
+		Amount y1405c = map.get("1405").getCreditAmount();
+		Amount y1101c = map.get("1101").getCreditAmount();
+		Amount y1501c = map.get("1501").getCreditAmount();
+		Amount y1503c = map.get("1503").getCreditAmount();
+		Amount y1521c = map.get("1521").getCreditAmount();
+		Amount y1511c = map.get("1511").getCreditAmount();
+		Amount y2001c = map.get("2001").getCreditAmount();
+		Amount y6111c = map.get("6111").getCreditAmount();
+		Amount y1131c = map.get("1131").getCreditAmount();
+		Amount y1132c = map.get("1132").getCreditAmount();
+		Amount y1606c = map.get("1606").getCreditAmount();
+		Amount y1701c = map.get("1701").getCreditAmount();
+		Amount y4001c = map.get("4001").getCreditAmount();
+		Amount y4002c = map.get("4002").getCreditAmount();
+		Amount y2501c = map.get("2501").getCreditAmount();
+		Amount y2502c = map.get("2502").getCreditAmount();
+		Amount y2101c = map.get("2101").getCreditAmount();
+
+		Amount y1621c = map.get("1621").getCreditAmount();
+
+		Amount y6001d = map.get("6001").getDebitAmount();
+		Amount y1403d = map.get("1403").getDebitAmount();
+		Amount y1405d = map.get("1405").getDebitAmount();
+		Amount y22210101d = map.get("22210101").getDebitAmount();
+		Amount y2201d = map.get("2201").getDebitAmount();
+		Amount y2202d = map.get("2202").getDebitAmount();
+		Amount y1123d = map.get("1123").getDebitAmount();
+		Amount y6401d = map.get("6401").getDebitAmount();
+		Amount y6402d = map.get("6402").getDebitAmount();
+		Amount y2211d = map.get("2211").getDebitAmount();
+		Amount y2221d = map.get("2221").getDebitAmount();
+		Amount y6403d = map.get("6403").getDebitAmount();
+		Amount y6711d = map.get("6711").getDebitAmount();
+		Amount y660206d = map.get("660206").getDebitAmount();
+		Amount y660208d = map.get("660208").getDebitAmount();
+		Amount y660212d = map.get("660212").getDebitAmount();
+		Amount y1601d = map.get("1601").getDebitAmount();
+		Amount y1701d = map.get("1701").getDebitAmount();
+		Amount y1604d = map.get("1604").getDebitAmount();
+		Amount y1101d = map.get("1101").getDebitAmount();
+		Amount y1501d = map.get("1501").getDebitAmount();
+		Amount y1503d = map.get("1503").getDebitAmount();
+		Amount y1511d = map.get("1511").getDebitAmount();
+		Amount y1521d = map.get("1521").getDebitAmount();
+		Amount y2001d = map.get("2001").getDebitAmount();
+		Amount y2101d = map.get("2101").getDebitAmount();
+		Amount y2501d = map.get("2501").getDebitAmount();
+		Amount y2502d = map.get("2502").getDebitAmount();
+		Amount y2231d = map.get("2231").getDebitAmount();
+		Amount y2232d = map.get("2232").getDebitAmount();
+		Amount y4104d = map.get("4104").getDebitAmount();
+		Amount y660306d = map.get("660306").getDebitAmount();
 
 		CashFlowStatementRespDto dto1 = new CashFlowStatementRespDto();
 		dto1.setSumAmount(a6001c.add(a1121c).add(a1122c).add(a2203c).add(a22210102c).subtract(a6001d));
+		dto1.setSumYearAmount(y6001c.add(y1121c).add(y1122c).add(y2203c).add(y22210102c).subtract(y6001d));
 
 		CashFlowStatementRespDto dto2 = new CashFlowStatementRespDto();
 		dto2.setSumAmount(a22210105.add(a6403c));
+		dto2.setSumYearAmount(y22210105.add(y6403c));
 
 		CashFlowStatementRespDto dto3 = new CashFlowStatementRespDto();
 		dto3.setSumAmount(a6301c.add(a6051c));
+		dto3.setSumYearAmount(y6301c.add(y6051c));
 
 		CashFlowStatementRespDto dto4 = new CashFlowStatementRespDto();
 		dto4.setSumAmount(dto1.getSumAmount().add(dto2.getSumAmount()).add(dto3.getSumAmount()));
+		dto4.setSumYearAmount(dto1.getSumYearAmount().add(dto2.getSumYearAmount()).add(dto3.getSumYearAmount()));
 		CashFlowStatementRespDto dto5 = new CashFlowStatementRespDto();
 		dto5.setSumAmount(a1403d.add(a1405d).add(a22210101d).add(a6401d).add(a6402d).add(a2201d).add(a2202d).add(a1123d).subtract(a1403c)
 				.subtract(a1405c).subtract(a22210101c));
+		dto5.setSumYearAmount(y1403d.add(y1405d).add(y22210101d).add(y6401d).add(y6402d).add(y2201d).add(y2202d).add(y1123d).subtract(y1403c)
+				.subtract(y1405c).subtract(y22210101c));
 
 		CashFlowStatementRespDto dto6 = new CashFlowStatementRespDto();
 		dto6.setSumAmount(a2211d);
+		dto6.setSumYearAmount(y2211d);
 		CashFlowStatementRespDto dto7 = new CashFlowStatementRespDto();
 		dto7.setSumAmount(a2221d.subtract(a22210101d).add(a6403d));
+		dto7.setSumYearAmount(y2221d.subtract(y22210101d).add(y6403d));
 
 		CashFlowStatementRespDto dto8 = new CashFlowStatementRespDto();
 		dto8.setSumAmount(a6711d.add(a660206d).add(a660208d).add(a660212d));
+		dto8.setSumYearAmount(y6711d.add(y660206d).add(y660208d).add(y660212d));
 
 		CashFlowStatementRespDto dto9 = new CashFlowStatementRespDto();
 		dto9.setSumAmount(dto5.getSumAmount().add(dto6.getSumAmount()).add(dto7.getSumAmount()).add(dto8.getSumAmount()));
+		dto9.setSumYearAmount(dto5.getSumYearAmount().add(dto6.getSumYearAmount()).add(dto7.getSumYearAmount()).add(dto8.getSumYearAmount()));
 		CashFlowStatementRespDto dto10 = new CashFlowStatementRespDto();
 		dto10.setSumAmount(dto4.getSumAmount().subtract(dto9.getSumAmount()));
+		dto10.setSumYearAmount(dto4.getSumYearAmount().subtract(dto9.getSumYearAmount()));
 
 		CashFlowStatementRespDto dto11 = new CashFlowStatementRespDto();
 		dto11.setSumAmount(a1101c.add(a1501c).add(a1503c).add(a1511c).add(a1521c).add(a2001c));
+		dto11.setSumYearAmount(y1101c.add(y1501c).add(y1503c).add(y1511c).add(y1521c).add(y2001c));
 
 		CashFlowStatementRespDto dto12 = new CashFlowStatementRespDto();
 		dto12.setSumAmount(a6111c.add(a1131c).add(a1132c));
+		dto12.setSumYearAmount(y6111c.add(y1131c).add(y1132c));
 
 		CashFlowStatementRespDto dto13 = new CashFlowStatementRespDto();
 		dto13.setSumAmount(a1606c.add(a1701c).add(a1621c));
+		dto13.setSumYearAmount(y1606c.add(y1701c).add(y1621c));
 
 		CashFlowStatementRespDto dto14 = new CashFlowStatementRespDto();
 		dto14.setSumAmount(new Amount());
+		dto14.setSumYearAmount(new Amount());
 		CashFlowStatementRespDto dto15 = new CashFlowStatementRespDto();
 		dto15.setSumAmount(new Amount());
+		dto15.setSumYearAmount(new Amount());
 		CashFlowStatementRespDto dto16 = new CashFlowStatementRespDto();
 		dto16.setSumAmount(dto11.getSumAmount().add(dto12.getSumAmount()).add(dto13.getSumAmount()).add(dto14.getSumAmount())
 				.add(dto15.getSumAmount()));
+		dto16.setSumYearAmount(dto11.getSumYearAmount().add(dto12.getSumYearAmount()).add(dto13.getSumYearAmount()).add(dto14.getSumYearAmount())
+				.add(dto15.getSumYearAmount()));
 
 		CashFlowStatementRespDto dto17 = new CashFlowStatementRespDto();
 		dto17.setSumAmount(a1601d.add(a1701d).add(a1604d));
+		dto17.setSumYearAmount(y1601d.add(y1701d).add(y1604d));
 		CashFlowStatementRespDto dto18 = new CashFlowStatementRespDto();
 		dto18.setSumAmount(a1101d.add(a1501d).add(a1503d).add(a1511d).add(a1521d));
+		dto18.setSumYearAmount(y1101d.add(y1501d).add(y1503d).add(y1511d).add(y1521d));
 
 		CashFlowStatementRespDto dto19 = new CashFlowStatementRespDto();
 		dto19.setSumAmount(new Amount());
+		dto19.setSumYearAmount(new Amount());
 		CashFlowStatementRespDto dto20 = new CashFlowStatementRespDto();
 		dto20.setSumAmount(new Amount());
+		dto20.setSumYearAmount(new Amount());
 		CashFlowStatementRespDto dto21 = new CashFlowStatementRespDto();
 		dto21.setSumAmount(dto17.getSumAmount().add(dto18.getSumAmount()).add(dto19.getSumAmount()).add(dto20.getSumAmount()));
+		dto21.setSumYearAmount(dto17.getSumYearAmount().add(dto18.getSumYearAmount()).add(dto19.getSumYearAmount()).add(dto20.getSumYearAmount()));
 		CashFlowStatementRespDto dto22 = new CashFlowStatementRespDto();
 		dto22.setSumAmount(dto16.getSumAmount().subtract(dto21.getSumAmount()));
+		dto22.setSumYearAmount(dto16.getSumYearAmount().subtract(dto21.getSumYearAmount()));
 		CashFlowStatementRespDto dto23 = new CashFlowStatementRespDto();
 		dto23.setSumAmount(a4001c.add(a4002c));
+		dto23.setSumYearAmount(y4001c.add(y4002c));
 		CashFlowStatementRespDto dto24 = new CashFlowStatementRespDto();
 		dto24.setSumAmount(a2001c.add(a2501c).add(a2502c).add(a2101c));
+		dto24.setSumYearAmount(y2001c.add(y2501c).add(y2502c).add(y2101c));
 		CashFlowStatementRespDto dto25 = new CashFlowStatementRespDto();
 		dto25.setSumAmount(new Amount());
+		dto25.setSumYearAmount(new Amount());
 		CashFlowStatementRespDto dto26 = new CashFlowStatementRespDto();
 		dto26.setSumAmount(dto23.getSumAmount().add(dto24.getSumAmount()).add(dto25.getSumAmount()));
+		dto26.setSumYearAmount(dto23.getSumYearAmount().add(dto24.getSumYearAmount()).add(dto25.getSumYearAmount()));
 
 		CashFlowStatementRespDto dto27 = new CashFlowStatementRespDto();
 		dto27.setSumAmount(a2201d.add(a2501d).add(a2502d).add(a2101d));
+		dto27.setSumYearAmount(y2201d.add(y2501d).add(y2502d).add(y2101d));
 
 		CashFlowStatementRespDto dto28 = new CashFlowStatementRespDto();
 		dto28.setSumAmount(a2232d.add(a2231d).add(a4104d).add(a660306d));
+		dto28.setSumYearAmount(y2232d.add(y2231d).add(y4104d).add(y660306d));
 
 		CashFlowStatementRespDto dto29 = new CashFlowStatementRespDto();
 		dto29.setSumAmount(new Amount());
+		dto29.setSumYearAmount(new Amount());
 		CashFlowStatementRespDto dto30 = new CashFlowStatementRespDto();
 		dto30.setSumAmount(dto27.getSumAmount().add(dto28.getSumAmount()).add(dto29.getSumAmount()));
+		dto30.setSumYearAmount(dto27.getSumYearAmount().add(dto28.getSumYearAmount()).add(dto29.getSumYearAmount()));
 
 		CashFlowStatementRespDto dto31 = new CashFlowStatementRespDto();
 		dto31.setSumAmount(dto26.getSumAmount().subtract(dto30.getSumAmount()));
+		dto31.setSumYearAmount(dto26.getSumYearAmount().subtract(dto30.getSumYearAmount()));
 		CashFlowStatementRespDto dto32 = new CashFlowStatementRespDto();
 		dto32.setSumAmount(new Amount());
+		dto32.setSumYearAmount(new Amount());
 		CashFlowStatementRespDto dto33 = new CashFlowStatementRespDto();
 		dto33.setSumAmount(dto10.getSumAmount().add(dto22.getSumAmount()).add(dto31.getSumAmount()));
+		dto33.setSumYearAmount(dto10.getSumYearAmount().add(dto22.getSumYearAmount()).add(dto31.getSumYearAmount()));
 		CashFlowStatementRespDto dto34 = new CashFlowStatementRespDto();
 		dto34.setSumAmount(map.get("1001").getOpeningBalance().add(map.get("1002").getOpeningBalance())
 				.add(map.get("1012").getOpeningBalance()));
+		dto34.setSumYearAmount(map.get("1001").getOpeningBalance().add(map.get("1002").getOpeningBalance())
+				.add(map.get("1012").getOpeningBalance()));
 		CashFlowStatementRespDto dto35 = new CashFlowStatementRespDto();
 		dto35.setSumAmount(dto33.getSumAmount().add(dto34.getSumAmount()));
+		dto35.setSumYearAmount(dto33.getSumYearAmount().add(dto34.getSumYearAmount()));
 
 		ModelAndView mav = new ModelAndView("report/cashFlowStatementGeneral");
 		mav.addObject("dto1", dto1);

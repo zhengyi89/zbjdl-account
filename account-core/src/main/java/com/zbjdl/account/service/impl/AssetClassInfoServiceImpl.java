@@ -87,6 +87,11 @@ public class AssetClassInfoServiceImpl implements AssetClassInfoService {
 		assetClassInfoDto.setDeprecitionType(deprecitionType);
 		return this.findList(assetClassInfoDto);
 	}
+
+	@Override
+	public void delete(Long id) {
+		assetClassInfoManager.delete(id);
+	}
 	
 }
 

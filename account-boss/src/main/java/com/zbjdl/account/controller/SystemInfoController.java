@@ -27,6 +27,7 @@ import com.zbjdl.account.enumtype.SystemEnum;
 import com.zbjdl.account.service.AccountSettleInfoService;
 import com.zbjdl.account.service.AssetClassInfoService;
 import com.zbjdl.account.service.CompanyInfoService;
+import com.zbjdl.account.service.CurrencyInfoService;
 import com.zbjdl.account.service.SubjectInfoService;
 import com.zbjdl.account.service.SystemInfoService;
 import com.zbjdl.account.util.DateUtils;
@@ -61,6 +62,9 @@ public class SystemInfoController extends AccountBaseController {
 
 	@Autowired
 	private AssetClassInfoService assetClassInfoService;
+	
+	@Autowired
+	private CurrencyInfoService currencyInfoService;
 
 	/*
 	 * 工作台页面
@@ -140,6 +144,7 @@ public class SystemInfoController extends AccountBaseController {
 		// 保存系统信息
 		SystemInfoDto dto = new SystemInfoDto();
 		BeanUtils.copyProperties(systemInfoSaveReqDto, dto);
+		dto.setStandardCoin("人民币");
 		systemInfoService.saveOrUpdate(dto);
 
 		// 根据纳税人类型，预设科目
@@ -161,6 +166,9 @@ public class SystemInfoController extends AccountBaseController {
 			}
 
 		}
+		
+		// 预设币种
+		currencyInfoService.initCurrencyForSystem(systemInfoSaveReqDto.getSystemCode());
 
 		// 初始化科目期初
 		accountSettleInfoService.initSubjectOpening(syscode, DateUtils.DATE_MONTH_FORMAT.format(systemInfoSaveReqDto.getServerStartDate()));

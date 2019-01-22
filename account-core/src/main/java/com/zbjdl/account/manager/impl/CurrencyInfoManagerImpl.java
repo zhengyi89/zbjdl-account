@@ -41,5 +41,10 @@ public class CurrencyInfoManagerImpl implements CurrencyInfoManager {
 		return currencyInfoRepository.findList(currencyInfo);
 	}
 
+	@Override
+	public void initCurrencyForSystem(String systemCode) {
+		currencyInfoRepository.initCurrencyForSystem(systemCode);
+	}
+
 }
 

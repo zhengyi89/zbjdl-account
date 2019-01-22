@@ -96,5 +96,14 @@ public class AssetClassInfoController extends AccountBaseController {
 		return assetClassInfoDto;
 	}
 	
+	/*
+	 * 详情展示
+	 */
+//	@RequestMapping(value = "/delete", method = RequestMethod.GET)
+//	public ModelAndView delete(Long id) {
+//		assetClassInfoService.delete(id);
+//		ModelAndView mav = new ModelAndView("redirect:/assetClass/index");
+//		return mav;
+//	}
 	
 }

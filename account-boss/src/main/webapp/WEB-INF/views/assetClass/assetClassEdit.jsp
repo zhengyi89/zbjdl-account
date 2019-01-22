@@ -53,7 +53,7 @@
 							<div class="col-lg-3">
 								<select class="form-control" id="deprecitionType" name="deprecitionType">
 									<script type="text/javascript">
-										BusinessCode.getSysConfigCode("ACCOUNT_DEPRECITION_TYPE ", "deprecitionType", "${dto.deprecitionType}");
+										BusinessCode.getSysConfigCode("ACCOUNT_ASSET_TYPE ", "deprecitionType", "${dto.deprecitionType}");
 									</script>
 								</select>
 						   </div>

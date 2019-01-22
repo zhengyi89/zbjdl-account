@@ -7,6 +7,7 @@
 package com.zbjdl.account.repository;
 
 import com.zbjdl.common.respository.mybatis.GenericRepository;
+
 import org.springframework.stereotype.Repository;
 
 /**
@@ -16,5 +17,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CurrencyInfoRepository extends GenericRepository {
+
+	void initCurrencyForSystem(String systemCode);
 	
 }

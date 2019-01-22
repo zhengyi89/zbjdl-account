@@ -44,9 +44,9 @@
 							<label class="control-label col-lg-2">会计期间（起始）</label>
 							<div class="col-lg-3">
 								<select class="form-control" id="startdate" name="startdate">
-									<c:forEach items="${dateMap}" var="date">
-										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
-											${date.value } 
+									<c:forEach items="${SESSION_ACCOUNTINFO.dateSet}" var="date">
+										<option value="${date}" <c:if test="${date == startdate}">selected</c:if>>
+											${date } 
 										</option>
 									</c:forEach>
 								</select>
@@ -55,9 +55,9 @@
 							<label class="col-lg-2 control-label">会计期间（结束）</label>
 							<div class="col-lg-3">
 								<select class="form-control" id="enddate" name="enddate">
-									<c:forEach items="${dateMap}" var="date">
-										<option value="${date.key}" <c:if test="${date.key == startdate }">selected</c:if>>
-											${date.value } 
+									<c:forEach items="${SESSION_ACCOUNTINFO.dateSet}" var="date">
+										<option value="${date}" <c:if test="${date == enddate }">selected</c:if>>
+											${date } 
 										</option>
 									</c:forEach>
 								</select>
@@ -68,9 +68,6 @@
 							<div class="col-lg-11 align_center">
 								<a onclick="document.getElementById('companyForm').submit();">
 									<button class="btn btn-primary submit ml_20" type="submit">查 询</button>
-								</a>
-								<a onclick="clearAllInput('companyForm');">
-									<button class="btn btn-default button" type="button">清 除</button>
 								</a>
 							</div>
 						</div>
@@ -83,18 +80,18 @@
 				<div class="panel-body">
 					<div class="panel-table">
 						<q:table queryService="queryService" queryKey="queryAssistAccountBalance" formId="godownForma"
-							class="table table-striped table-bordered" pageSize="20">
+							class="table table-striped table-bordered" pageSize="100" doSum="false" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel">
 							<q:sum title="总笔数(笔)" name="countnum"/>
     						<q:sum title="总金额（元）" name="sumamount"/>
 							<q:nodata>无符合条件的记录</q:nodata>
 							<q:param name="systemCode" value="${SESSION_ACCOUNTINFO.systemCode}" />
-				            <q:column title="客户" value="${assist_code}" width="20%" />
-				            <q:column title="期初余额(借方)" value="${opening_debit_amount}" width="20%" />
-				            <q:column title="期初余额(贷方)" value="${opening_credit_amount}" width="20%" />
-				            <q:column title="本期发生额(借方)" value="${debit_amount}" width="20%" />
-				            <q:column title="本期发生额(贷方)" value="${credit_amount}" width="20%" />
-				            <q:column title="期末余额(借方)" value="${closing_debit_amount}" width="20%" />
-				            <q:column title="期末余额(贷方)" value="${closing_credit_amount }" width="20%" />
+				            <q:column title="客户" value="${assist_code}" width="20%" dataIndex="assist_code"/>
+				            <q:column title="期初余额(借方)" value="${opening_debit_amount}" width="20%" dataIndex="opening_debit_amount"/>
+				            <q:column title="期初余额(贷方)" value="${opening_credit_amount}" width="20%" dataIndex="opening_credit_amount"/>
+				            <q:column title="本期发生额(借方)" value="${debit_amount}" width="20%" dataIndex="debit_amount"/>
+				            <q:column title="本期发生额(贷方)" value="${credit_amount}" width="20%" dataIndex="credit_amount"/>
+				            <q:column title="期末余额(借方)" value="${closing_debit_amount}" width="20%" dataIndex="closing_debit_amount"/>
+				            <q:column title="期末余额(贷方)" value="${closing_credit_amount }" width="20%" dataIndex="closing_credit_amount"/>
 						</q:table>
 					</div>
 					
@@ -102,7 +99,12 @@
 			</div>
 		</div>
 	</div>
-	<script type="text/javascript">
+	<script type="text/javascript">	
+		$(function(){
+			if(${!paramInit}){
+				$('#companyForm').submit();
+			}
+		})
   	</script>
 </body>
 </html>

@@ -128,4 +128,29 @@
     <include refid="Base_Set_Clause"/>
     where ID = #{id,jdbcType=DECIMAL}
   </update>
+  
+  <insert id="initCurrencyForSystem" parameterType="java.lang.String">
+  	INSERT INTO zbjdl_account.currency_info(
+		currency_code ,
+		currency_name ,
+		exchange_rate ,
+		system_code ,
+		STATUS ,
+		create_time ,
+		last_update_time
+	) SELECT
+		currency_code ,
+		currency_name ,
+		exchange_rate ,
+		#{0} ,
+		STATUS ,
+		SYSDATE() ,
+		SYSDATE()
+	FROM
+		currency_info
+	WHERE
+		system_code = 'DEFAULT'
+  </insert>
+  
+  
 </mapper>

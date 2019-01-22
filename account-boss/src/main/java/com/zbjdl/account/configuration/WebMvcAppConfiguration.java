@@ -34,6 +34,7 @@ public class WebMvcAppConfiguration extends WebMvcConfigurerAdapter {
 		// If we do not add path pattern for an interceptor, that will be
 		// available for every request.
 //
+		
 		registry.addInterceptor(new ParametersInterceptor());
 		registry.addInterceptor(new SSOInterceptor());
 		registry.addInterceptor(new MenuInterceptor());

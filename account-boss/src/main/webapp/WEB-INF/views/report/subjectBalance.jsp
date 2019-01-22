@@ -62,17 +62,17 @@
 				<div class="panel-body">
 					<div class="panel-table">
 						<q:table queryService="queryService" queryKey="querySubjectBalance" formId="godownForma"
-							class="table table-striped table-bordered" pageSize="100">
+							class="table table-striped table-bordered" pageSize="100" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel">
 							<q:nodata>无符合条件的记录</q:nodata>
 							<q:param name="systemCode" value="${SESSION_ACCOUNTINFO.systemCode}" />
-				            <q:column title="科目编码" value="${subject_code}" width="20%" />
-				            <q:column title="科目名称" value="${subject_name}" width="20%" />
-				            <q:column title="借方（期初）" value="${opening_debit_amount}" width="20%" />
-				            <q:column title="贷方（期初）" value="${opening_credit_amount}" width="20%" />
-				            <q:column title="借方（本期发生额）" value="${debit_amount}" width="20%" />
-				            <q:column title="贷方（本期发生额）" value="${credit_amount}" width="20%" />
-				            <q:column title="借方（期末）" value="${closing_debit_amount}" width="20%" />
-				            <q:column title="贷方（期末）" value="${closing_credit_amount}" width="20%" />
+				            <q:column title="科目编码" value="${subject_code}" width="20%" dataIndex="subject_code"/>
+				            <q:column title="科目名称" value="${subject_name}" width="20%" dataIndex="subject_name"/>
+				            <q:column title="借方（期初）" value="${opening_debit_amount}" width="20%" dataIndex="opening_debit_amount"/>
+				            <q:column title="贷方（期初）" value="${opening_credit_amount}" width="20%" dataIndex="opening_credit_amount"/>
+				            <q:column title="借方（本期发生额）" value="${debit_amount}" width="20%" dataIndex="debit_amount"/>
+				            <q:column title="贷方（本期发生额）" value="${credit_amount}" width="20%" dataIndex="credit_amount"/>
+				            <q:column title="借方（期末）" value="${closing_debit_amount}" width="20%" dataIndex="closing_debit_amount"/>
+				            <q:column title="贷方（期末）" value="${closing_credit_amount}" width="20%" dataIndex="closing_credit_amount"/>
 						</q:table>
 					</div>
 					
@@ -81,15 +81,11 @@
 		</div>
 	</div>
 	<script type="text/javascript">
-	$('.form_datetime').datetimepicker({
-        format: 'yyyy-mm',
-        autoclose: true,
-        todayBtn: true,
-        startView: 'year',
-        minView:'year',
-        maxView:'decade',
-        language:  'zh-CN',
-    });
+		$(function(){
+			if(${!paramInit}){
+				$('#companyForm').submit();
+			}
+		})
   	</script>
 </body>
 </html>

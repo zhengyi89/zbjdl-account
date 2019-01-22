@@ -58,9 +58,6 @@
 								<a onclick="document.getElementById('companyForm').submit();">
 									<button class="btn btn-primary submit ml_20" type="submit">查 询</button>
 								</a>
-								<a onclick="clearAllInput('companyForm');">
-									<button class="btn btn-default button" type="button">清 除</button>
-								</a>
 							</div>
 						</div>
 					</form>
@@ -72,16 +69,16 @@
 				<div class="panel-body">
 					<div class="panel-table">
 						<q:table queryService="queryService" queryKey="queryLedgerIndex" formId="godownForma"
-							class="table table-striped table-bordered" pageSize="20">
+							class="table table-striped table-bordered" pageSize="100" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel">
 							<q:nodata>无符合条件的记录</q:nodata>
-							<q:param name="systemCode" value="${SESSION_ACCOUNTINFO.systemCode}" />
-				            <q:column title="日期" value="${account_month}" width="20%" />
-				            <q:column title="方向" value="${_textResource.getSysText('ACCOUNT_BALANCE_DIRECT', balance_direct)}" width="20%" />
-				            <q:column title="借方(本期合计)" value="${sum_debit_amount}" width="20%" />
-				            <q:column title="贷方(本期合计)" value="${sum_credit_amount }" width="20%" />
-				            <q:column title="余额" value="${remain_amount }" width="20%" />
-				             <q:column title="借方(本年合计)" value="${year_debit_amount}" width="20%" />
-				            <q:column title="贷方(本年合计)" value="${year_credit_amount}" width="20%" />
+							<q:param name="systemCode" value="${SESSION_ACCOUNTINFO.systemCode}"/>
+				            <q:column title="日期" value="${account_month}" width="20%" dataIndex="account_month"/>
+				            <q:column title="方向" value="${_textResource.getSysText('ACCOUNT_BALANCE_DIRECT', balance_direct)}" width="20%" dataIndex="balance_direct" showValueIndex="ACCOUNT_BALANCE_DIRECT"/>
+				            <q:column title="借方(本期合计)" value="${sum_debit_amount}" width="20%" dataIndex="sum_debit_amount"/>
+				            <q:column title="贷方(本期合计)" value="${sum_credit_amount }" width="20%" dataIndex="sum_credit_amount"/>
+				            <q:column title="余额" value="${remain_amount }" width="20%" dataIndex="remain_amount"/>
+				            <q:column title="借方(本年合计)" value="${year_debit_amount}" width="20%" dataIndex="year_debit_amount"/>
+				            <q:column title="贷方(本年合计)" value="${year_credit_amount}" width="20%" dataIndex="year_credit_amount"/>
 						</q:table>
 					</div>
 					
@@ -90,13 +87,16 @@
 		</div>
 	</div>
 	<script type="text/javascript">
+		$(function(){
+			if(${!paramInit}){
+				$('#companyForm').submit();
+			}
+		})
+		
 		$('#subjectCode').editableSelect(
 		     {
 		       bg_iframe: true,
 		       onSelect: function(list_item) {
-		         // 'this' is a reference to the instance of EditableSelect
-		         // object, so you have full access to everything there
-		        // $('#ddd2').val(this.text.val());
 		       },
 		       case_sensitive: false, // If set to true, the user has to type in an exact
 		                              // match for the item to get highlighted
@@ -105,12 +105,6 @@
 		     }
 		 );
 		
-		
-		function onclick(){
-			 $('#subjectCode_sele').select();
-		}
-		
-	
   	</script>
 </body>
 </html>

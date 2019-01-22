@@ -46,5 +46,10 @@ public class AssetClassInfoManagerImpl implements AssetClassInfoManager {
 		assetClassInfoRepository.initAssetClass(systemCode);
 	}
 
+	@Override
+	public void delete(Long id) {
+		assetClassInfoRepository.delete(id);
+	}
+
 }
 

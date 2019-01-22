@@ -15,7 +15,7 @@
 				<div class="panel-body">
 					<form class="cmxform form-horizontal" action="${pageContext.request.contextPath}/subject/index" 
 					method="get" id="godownForma" name="godownForma">
-					<div class="form-group">
+						<div class="form-group">
 							<label class="col-lg-2 control-label">科目类别</label>
 							<div class="col-lg-3">
 								<select class="form-control" id="basicSubject" name="basicSubject">
@@ -23,6 +23,10 @@
 										BusinessCode.getSysConfigCode("ACCOUNT_SUBJECT_TYPE ", "basicSubject", "$!{query.basicSubject}");
 									</script>
 								</select>
+							</div>
+							<label for="status" class="control-label col-lg-2">科目编码</label>
+							<div class="col-lg-3">
+								<input class="form-control" id="subjectCode" name="subjectCode" ></input>
 							</div>
 						</div>
 						
@@ -39,9 +43,6 @@
 				<div class="panel-heading">查询结果</div>
 				<div class="panel-body">
 					<div class="panel-table">
-						<%-- <q:table queryService="queryService" queryKey="querySubjectList" formId="godownForma"
-							class="table table-striped table-bordered" pageSize="100" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel"> --%>
-							
 						<q:table queryService="queryService" queryKey="querySubjectList" formId="godownForma"
 							class="table table-striped table-bordered" pageSize="100" showExpButton="true" contextUrl="${ctx}/bussinessCode/exportExcel">
 							<q:nodata>无符合条件的记录</q:nodata>
@@ -49,13 +50,13 @@
 				            <q:column title="编码" value="${subject_code}" width="20%" dataIndex="subject_code"/>
 				            <q:column title="名称" value="${subject_name}" width="20%" dataIndex="subject_name"/>
 				            <q:column title="方向" value="${_textResource.getSysText('ACCOUNT_BALANCE_DIRECT', balance_direct)}" width="20%" dataIndex="balance_direct" showValueIndex="ACCOUNT_BALANCE_DIRECT"/>
-				            <q:column title="辅助核算" value="${_textResource.getSysText('ACCOUNT_ASSIST_TYPE', assist_account)}" width="20%" />
-				            <q:column title="数量" value="${account_unit}" width="20%" />
-				            <q:column title="外币" value="${currency_code}" width="20%" />
-				            <q:column title="创建时间"  width="20%" >
+				            <q:column title="辅助核算" value="${_textResource.getSysText('ACCOUNT_ASSIST_TYPE', assist_account)}" width="20%" dataIndex="assist_account" showValueIndex="ACCOUNT_ASSIST_TYPE"/>
+				            <q:column title="数量" value="${account_unit}" width="20%" dataIndex="account_unit"/>
+				            <q:column title="外币" value="${currency_code}" width="20%" dataIndex="currency_code"/>
+				            <q:column title="创建时间"  width="20%" dataIndex="create_time">
 				            	<fmt:formatDate value="${create_time}" pattern="yyyy-MM-dd HH:mm:ss " />
 				            </q:column>
-				            <q:column title="状态" width="10%" >
+				            <q:column title="状态" width="10%" dataIndex="status" showValueIndex="ACCOUNT_DATA_STATUS">
 							  	${_textResource.getSysText('ACCOUNT_DATA_STATUS', status)}
 							</q:column>
 				            <q:column title="操作" escapeHtml="false" width="20%">

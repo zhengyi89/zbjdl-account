@@ -30,7 +30,7 @@
 				            <q:column title="模版名称" value="${template_name}" width="20%" />
 				           
 				            <q:column title="操作" escapeHtml="false" width="20%">
-							    <a class="pink" onclick="window.location.href='${ctx}/voucher/genClosing?id=${id}'">生成凭证</a>
+							    <a class="pink" onclick="window.location.href='${ctx}/voucher//edit/index?closingFlag=1&id=${id}'">生成凭证</a>
 							</q:column>
 						</q:table>
 					</div>

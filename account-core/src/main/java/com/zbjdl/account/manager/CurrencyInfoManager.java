@@ -19,5 +19,7 @@ public interface CurrencyInfoManager {
 	CurrencyInfo selectById(Long id);
 	
 	List<CurrencyInfo> findList(CurrencyInfo currencyInfo);
+
+	void initCurrencyForSystem(String systemCode);
 	
 }
