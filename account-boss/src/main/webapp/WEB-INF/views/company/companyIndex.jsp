@@ -80,6 +80,7 @@
 				   			    	<a class="pink" onclick="window.location.href='${ctx}/company/assign/index?id=${id}'">分配</a>
 				   			    	 &nbsp;
 				   			    </c:if>
+				   			    <a class="pink" onclick="window.location.href='${ctx}/system/console?companyId=${id}&belongSystem=-9992002&_menuId=70&_firstMenuId=-2002'">查看</a>
 							</q:column>
 						</q:table>
 					</div>
